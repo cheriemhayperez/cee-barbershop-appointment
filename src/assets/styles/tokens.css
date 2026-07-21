@@ -1,0 +1,23 @@
+:root {
+  --cb-gold: #c9a227;
+  --cb-gold-rgb: 201, 162, 39;
+  --cb-dark: #1a1a1a;
+  --cb-surface: #242424;
+  --cb-white: #ffffff;
+  --cb-muted: #666666;
+  --cb-border: #e5e5e5;
+  --cb-danger: #c62828;
+  --cb-success: #2e7d32;
+  --cb-warning: #f57f17;
+  --cb-admin-bg: #f5f5f5;
+  --cb-admin-surface: #ffffff;
+  --cb-admin-text: #1a1a1a;
+  --cb-radius-sm: 8px;
+  --cb-radius-md: 12px;
+  --cb-radius-pill: 999px;
+  --cb-btn-height-sm: 32px;
+  --cb-btn-height-md: 40px;
+  --cb-btn-height-lg: 48px;
+  --header-height: 5rem;
+  --header-height-scrolled: 4.75rem;
+}

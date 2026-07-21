@@ -1,0 +1,74 @@
+.intro {
+  color: #666;
+  font-size: 0.9375rem;
+  margin-bottom: 1.25rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.fullWidth {
+  grid-column: 1 / -1;
+}
+
+.help {
+  color: #666;
+  font-size: 0.8125rem;
+  margin-bottom: 1rem;
+}
+
+.hoursTableWrap {
+  overflow-x: auto;
+}
+
+.tableField {
+  margin-bottom: 0;
+  min-width: 8.5rem;
+}
+
+.closedCheckbox {
+  justify-content: center;
+}
+
+.row {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.tagList {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.625rem;
+  border-radius: 999px;
+  background: #fff3e0;
+  color: #e65100;
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.slotsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(7rem, 1fr));
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.empty {
+  color: #888;
+  font-size: 0.8125rem;
+  margin-top: 0.75rem;
+}

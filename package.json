@@ -1,0 +1,50 @@
+{
+  "name": "cee-barbershop",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "sideEffects": [
+    "*.css",
+    "src/assets/styles/global.css"
+  ],
+  "dependencies": {
+    "@reduxjs/toolkit": "^2.12.0",
+    "@supabase/supabase-js": "^2.49.1",
+    "antd": "^6.5.1",
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.4.7",
+    "iconsax-react": "^0.0.8",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "react-redux": "^9.3.0",
+    "react-router-dom": "6.23.1",
+    "tailwind-merge": "^3.6.0"
+  },
+  "scripts": {
+    "start": "vite",
+    "start:deploy": "vite --mode deploy",
+    "build": "vite build",
+    "build:deploy": "vite build --mode deploy",
+    "preview": "vite preview --port 6001",
+    "lint": "eslint src",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@types/node": "^22.20.1",
+    "@types/react": "^18.3.31",
+    "@types/react-dom": "^18.3.7",
+    "@vitejs/plugin-react": "^4.7.0",
+    "autoprefixer": "^10.5.4",
+    "eslint": "^9.39.1",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "jsdom": "^26.1.0",
+    "postcss": "^8.5.21",
+    "tailwindcss": "^3.4.19",
+    "typescript": "^5.9.3",
+    "vite": "^6.3.5",
+    "vitest": "^3.2.4"
+  }
+}

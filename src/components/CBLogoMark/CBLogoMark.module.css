@@ -1,0 +1,21 @@
+.mark {
+  display: inline-flex;
+  flex-shrink: 0;
+  line-height: 0;
+}
+
+.mark svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.sm {
+  width: 2rem;
+  height: 2rem;
+}
+
+.md {
+  width: 2.25rem;
+  height: 2.25rem;
+}

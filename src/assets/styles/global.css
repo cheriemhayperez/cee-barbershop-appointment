@@ -1,0 +1,44 @@
+@import './tokens.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg: #1a1a1a;
+  --surface: #242424;
+  --text: #f5f5f5;
+  --text-dark: #1a1a1a;
+  --muted: #a3a3a3;
+  --gold: #c9a227;
+  --border: #333;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+#about,
+#services,
+#barbers,
+#gallery,
+#contact {
+  scroll-margin-top: var(--header-height-scrolled);
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+}

@@ -1,0 +1,202 @@
+.field {
+  width: 100%;
+}
+
+.fieldLight {
+  margin-bottom: 1rem;
+}
+
+.fieldDark {
+  margin-bottom: 0;
+}
+
+.labelLight {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.labelDark {
+  display: block;
+  margin-bottom: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: rgba(245, 245, 245, 0.92);
+}
+
+.errorLight {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  color: #dc2626;
+}
+
+.errorDark {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  color: #e57373;
+}
+
+.controlLight :global(.ant-input),
+.controlLight :global(.ant-input-affix-wrapper),
+.controlDark :global(.ant-input),
+.controlDark :global(.ant-input-affix-wrapper),
+.controlLight :global(.ant-picker),
+.controlDark :global(.ant-picker),
+.selectLight:global(.ant-select),
+.selectDark:global(.ant-select),
+.selectLight :global(.ant-select-selector),
+.selectDark :global(.ant-select-selector) {
+  height: 2.5rem !important;
+  min-height: 2.5rem !important;
+}
+
+.controlLight :global(.ant-input),
+.controlLight :global(.ant-input-affix-wrapper),
+.controlDark :global(.ant-input),
+.controlDark :global(.ant-input-affix-wrapper),
+.selectLight :global(.ant-select-selector),
+.selectDark :global(.ant-select-selector) {
+  padding-block: 0 !important;
+  padding-inline: 0.75rem !important;
+  border-radius: 8px !important;
+  line-height: 1.4 !important;
+  font-size: 0.9375rem !important;
+}
+
+.controlLight :global(.ant-input[type='date']),
+.controlLight :global(.ant-input[type='time']),
+.controlLight :global(.ant-input[type='datetime-local']) {
+  appearance: none;
+  line-height: 2.5rem !important;
+}
+
+.selectLight:global(.ant-select),
+.selectDark:global(.ant-select) {
+  width: 100%;
+}
+
+.selectLight :global(.ant-select-selector) {
+  display: flex !important;
+  align-items: center !important;
+  padding-inline: 0.75rem !important;
+}
+
+.selectLight :global(.ant-select-selection-wrap),
+.selectLight :global(.ant-select-selection-search),
+.selectLight :global(.ant-select-selection-item) {
+  height: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+.controlLight :global(.ant-input),
+.controlLight :global(.ant-input-affix-wrapper) {
+  background: #fff !important;
+  border-color: #d9d9d9 !important;
+  color: var(--text-dark) !important;
+}
+
+.selectLight :global(.ant-select-selector) {
+  display: flex !important;
+  align-items: center !important;
+  background: #fff !important;
+  border-color: #d9d9d9 !important;
+}
+
+.selectLight :global(.ant-select-selection-item),
+.selectLight :global(.ant-select-arrow) {
+  color: var(--text-dark) !important;
+  line-height: 1 !important;
+}
+
+.selectLight :global(.ant-select-selection-search-input) {
+  height: 100% !important;
+}
+
+.controlLight :global(.ant-input:hover),
+.controlLight :global(.ant-input-affix-wrapper:hover),
+.selectLight :global(.ant-select:hover .ant-select-selector) {
+  border-color: rgba(201, 162, 39, 0.55) !important;
+}
+
+.controlLight :global(.ant-input:focus),
+.controlLight :global(.ant-input-affix-wrapper-focused),
+.selectLight :global(.ant-select-focused .ant-select-selector) {
+  border-color: var(--gold) !important;
+  box-shadow: 0 0 0 2px rgba(201, 162, 39, 0.15) !important;
+}
+
+.selectDark :global(.ant-select-selector) {
+  display: flex !important;
+  align-items: center !important;
+  padding-inline: 0.75rem !important;
+}
+
+.controlDark :global(.ant-input),
+.controlDark :global(.ant-input-affix-wrapper),
+.selectDark :global(.ant-select-selector) {
+  background: var(--bg) !important;
+  border-color: var(--border) !important;
+  color: var(--text) !important;
+}
+
+.selectDark :global(.ant-select-selection-search-input) {
+  height: 2.5rem !important;
+}
+
+.controlDark :global(.ant-input),
+.selectDark :global(.ant-select-selection-item) {
+  font-size: 0.9375rem !important;
+}
+
+.controlDark :global(.ant-input::placeholder) {
+  color: var(--muted) !important;
+}
+
+.controlDark :global(.ant-input:hover),
+.controlDark :global(.ant-input-affix-wrapper:hover),
+.selectDark :global(.ant-select:hover .ant-select-selector) {
+  border-color: rgba(201, 162, 39, 0.45) !important;
+}
+
+.controlDark :global(.ant-input:focus),
+.controlDark :global(.ant-input-affix-wrapper-focused),
+.selectDark :global(.ant-select-focused .ant-select-selector) {
+  border-color: var(--gold) !important;
+  box-shadow: 0 0 0 2px rgba(201, 162, 39, 0.15) !important;
+}
+
+.selectDark :global(.ant-select-arrow),
+.selectDark :global(.ant-select-selection-item) {
+  color: var(--text) !important;
+}
+
+.selectDarkPopup {
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 8px !important;
+  padding: 0.25rem !important;
+}
+
+.selectDarkPopup :global(.ant-select-item),
+.selectDarkPopup :global(.ant-select-item-option-content) {
+  color: rgba(245, 245, 245, 0.92) !important;
+}
+
+.selectDarkPopup :global(.ant-select-item-option-active:not(.ant-select-item-option-disabled)) {
+  background: rgba(201, 162, 39, 0.12) !important;
+}
+
+.selectDarkPopup :global(.ant-select-item-option-selected:not(.ant-select-item-option-disabled)) {
+  background: rgba(201, 162, 39, 0.18) !important;
+  color: var(--gold) !important;
+  font-weight: 600;
+}
+
+.selectDarkPopup :global(.ant-select-item-option-selected .ant-select-item-option-content) {
+  color: var(--gold) !important;
+}

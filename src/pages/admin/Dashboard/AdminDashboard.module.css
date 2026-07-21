@@ -1,0 +1,237 @@
+.page {
+  --dash-row: 2.25rem;
+  width: 100%;
+  padding-top: 1.25rem;
+}
+
+.cardLink {
+  color: #8a6d12;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.cardLink:hover {
+  color: var(--gold);
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.dayModalEmpty {
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+.dayList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  margin-bottom: 1rem;
+}
+
+.dayItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.875rem 1rem;
+  border-radius: 10px;
+  border: 1px solid #eee;
+  background: #fafafa;
+}
+
+.dayItemMain {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.dayItemMain span {
+  font-size: 0.8125rem;
+  color: #666;
+}
+
+.statCardWrap {
+  height: 100%;
+}
+
+.statCardInner {
+  padding: 1.25rem;
+}
+
+.statLabel {
+  font-size: 0.8125rem;
+  color: #666;
+  margin-bottom: 0.375rem;
+}
+
+.statValue {
+  font-size: 1.625rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  line-height: 1.2;
+}
+
+.statHint {
+  font-size: 0.6875rem;
+  color: #999;
+  margin-top: 0.375rem;
+}
+
+.overviewCard {
+  --dash-row: 2.25rem;
+  margin-bottom: 1rem;
+}
+
+.overviewSplit {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.calendarPane {
+  min-width: 0;
+}
+
+.statusPane {
+  border-left: 1px solid #f0f0f0;
+  padding-left: 1.5rem;
+  min-height: calc(var(--dash-row) * 4 + 1rem);
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+}
+
+.statusPaneTitle {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.weekChart {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.5rem;
+  height: 140px;
+  padding-top: 0.5rem;
+}
+
+.weekCol {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+}
+
+.weekBar {
+  width: 100%;
+  max-width: 36px;
+  min-height: 4px;
+  background: linear-gradient(to top, var(--gold), rgba(201, 162, 39, 0.5));
+  border-radius: 4px 4px 0 0;
+  margin-top: auto;
+  transition: height 0.4s ease;
+}
+
+.weekLabel {
+  font-size: 0.6875rem;
+  color: #888;
+  margin-top: 0.375rem;
+}
+
+.weekCount {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.statusList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 0;
+}
+
+.statusRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: var(--dash-row);
+}
+
+.statusDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.statusLabel {
+  flex: 1;
+  font-size: 0.875rem;
+  color: #555;
+}
+
+.statusCount {
+  font-weight: 700;
+  font-size: 0.875rem;
+}
+
+.statusBar {
+  display: flex;
+  height: 8px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: #f0f0f0;
+}
+
+.statusSegment {
+  min-width: 0;
+  transition: width 0.4s ease;
+}
+
+.empty {
+  color: #999;
+  font-size: 0.875rem;
+}
+
+@media (max-width: 900px) {
+  .overviewSplit {
+    grid-template-columns: 1fr;
+  }
+
+  .statusPane {
+    border-left: none;
+    border-top: 1px solid #f0f0f0;
+    padding-left: 0;
+    padding-top: 1.25rem;
+    min-height: auto;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .page {
+    padding-top: 1rem;
+  }
+}

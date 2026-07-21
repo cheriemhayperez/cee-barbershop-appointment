@@ -1,0 +1,43 @@
+.badge {
+  margin: 0;
+  border: none;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.2;
+  padding: 0.25rem 0.625rem;
+  text-transform: capitalize;
+}
+
+.success {
+  background: #e8f5e9 !important;
+  color: #2e7d32 !important;
+}
+
+.warning,
+.pending {
+  background: #fff8e1 !important;
+  color: #f57f17 !important;
+}
+
+.danger {
+  background: #ffebee !important;
+  color: #c62828 !important;
+}
+
+.info,
+.primary {
+  background: #e3f2fd !important;
+  color: #1565c0 !important;
+}
+
+.neutral,
+.secondary {
+  background: #f5f5f5 !important;
+  color: #616161 !important;
+}
+
+.gold {
+  background: #fff8e7 !important;
+  color: #8a6d12 !important;
+}

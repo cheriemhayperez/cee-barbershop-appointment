@@ -1,0 +1,31 @@
+/* Ant Design overrides — layout uses Tailwind utilities in JSX */
+.addBtn:global(.ant-btn-primary) {
+  margin: 0 !important;
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22) !important;
+}
+
+.addBtn:global(.ant-btn-primary:hover:not(:disabled)) {
+  color: #141414 !important;
+  box-shadow:
+    0 4px 14px rgba(201, 162, 39, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28) !important;
+}
+
+.addBtn :global(.ant-btn-icon),
+.iconAction :global(.ant-btn-icon) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+}
+
+.addBtn :global(.ant-btn-icon) {
+  margin-inline-end: 0 !important;
+  background: transparent !important;
+}
+
+.iconAction:global(.ant-btn) {
+  border: none !important;
+}
