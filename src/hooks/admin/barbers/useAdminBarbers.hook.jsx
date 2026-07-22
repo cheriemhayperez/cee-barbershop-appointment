@@ -7,6 +7,11 @@ import {
   removeBarber,
   updateBarber,
 } from '@/reducers/barbers/barbers.slice';
+import {
+  syncAddBarber,
+  syncRemoveBarber,
+  syncUpdateBarber,
+} from '@/services/dataSync';
 
 const emptyForm = {
   name: '',
@@ -22,10 +27,12 @@ export function useAdminBarbers() {
   const [modalOpen, setModalOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [form, setForm] = useState(emptyForm);
+  const [syncError, setSyncError] = useState('');
 
   const openAdd = () => {
     setEditingId(null);
     setForm(emptyForm);
+    setSyncError('');
     setModalOpen(true);
   };
 
@@ -38,31 +45,39 @@ export function useAdminBarbers() {
       specialty: barber.specialty,
       status: barber.status,
     });
+    setSyncError('');
     setModalOpen(true);
   };
 
   const closeModal = () => setModalOpen(false);
 
-  const handleDelete = (id, name) => {
-    if (window.confirm(`Delete barber ${name}?`)) {
-      dispatch(removeBarber(id));
+  const handleDelete = async (id, name) => {
+    if (!window.confirm(`Delete barber ${name}?`)) return;
+    try {
+      await syncRemoveBarber(dispatch, removeBarber, id);
+    } catch (err) {
+      setSyncError(err.message || 'Failed to delete barber.');
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (editingId) {
-      dispatch(updateBarber({ id: editingId, updates: form }));
-    } else {
-      dispatch(
-        addBarber({
+    setSyncError('');
+
+    try {
+      if (editingId) {
+        await syncUpdateBarber(dispatch, updateBarber, editingId, form);
+      } else {
+        await syncAddBarber(dispatch, addBarber, {
           ...form,
           id: form.name.toLowerCase().replace(/\s+/g, '-'),
           photo: images.barbers[0],
-        })
-      );
+        });
+      }
+      setModalOpen(false);
+    } catch (err) {
+      setSyncError(err.message || 'Failed to save barber.');
     }
-    setModalOpen(false);
   };
 
   const handleChange = (e) => {
@@ -74,6 +89,7 @@ export function useAdminBarbers() {
     modalOpen,
     editingId,
     form,
+    syncError,
     openAdd,
     openEdit,
     closeModal,

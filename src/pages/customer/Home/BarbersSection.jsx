@@ -1,9 +1,11 @@
 import FadeIn from '@/components/FadeIn/FadeIn';
-import { barbers } from '@/static/customer/barbers';
+import { useCatalogData } from '@/hooks/shared/useCatalogData.hook';
 import sectionStyles from '@/pages/customer/Home/SectionLayout.module.css';
 import styles from '@/pages/customer/Home/BarbersSection.module.css';
 
 export default function BarbersSection() {
+  const { barbers } = useCatalogData();
+
   return (
     <section id="barbers" className={`${sectionStyles.section} ${sectionStyles.sectionAlt}`}>
       <div className={sectionStyles.sectionInner}>

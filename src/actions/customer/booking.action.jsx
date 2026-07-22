@@ -1,6 +1,9 @@
-import { getBarberLabel } from '@/static/customer/barbers';
 import { invokeSendBookingEmails } from '@/api/customer/booking.api';
+import { APPOINTMENT_STATUS } from '@/constants/data/appointments.data';
+import { getBarberLabel } from '@/hooks/shared/useCatalogData.hook';
 import { isSupabaseConfigured, supabase } from '@/lib/supabase';
+import { addAppointment } from '@/reducers/appointments/appointments.slice';
+import { syncAddAppointment } from '@/services/dataSync';
 
 function emailErrorMessage(raw) {
   if (!raw) return 'Could not send confirmation emails.';
@@ -53,19 +56,42 @@ function bookingMessage(payload, { customerSent, ownerSent }) {
   return `You're booked for ${payload.date} at ${payload.time}.`;
 }
 
-export async function doSubmitBooking(form) {
+async function saveBookingAppointment(form, { dispatch, barbers }) {
+  const appointment = {
+    name: form.name.trim(),
+    email: form.email.trim(),
+    service: form.service,
+    barber: getBarberLabel(barbers, form.barber),
+    date: form.date,
+    time: form.time,
+    status: APPOINTMENT_STATUS.CONFIRMED,
+  };
+
+  if (dispatch) {
+    await syncAddAppointment(dispatch, addAppointment, appointment);
+    return;
+  }
+
+  if (isSupabaseConfigured && supabase) {
+    const { insertAppointment } = await import('@/api/db/appointments.api');
+    await insertAppointment(appointment);
+  }
+}
+
+export async function doSubmitBooking(form, { dispatch, barbers = [] } = {}) {
   const payload = {
     name: form.name.trim(),
     email: form.email.trim(),
     service: form.service,
     barber: form.barber,
-    barberLabel: getBarberLabel(form.barber),
+    barberLabel: getBarberLabel(barbers, form.barber),
     date: form.date,
     time: form.time,
   };
 
   if (!isSupabaseConfigured || !supabase) {
     await new Promise((resolve) => setTimeout(resolve, 600));
+    await saveBookingAppointment(form, { dispatch, barbers });
     return {
       success: true,
       mock: true,
@@ -75,6 +101,7 @@ export async function doSubmitBooking(form) {
   }
 
   const result = await sendBookingEmails(payload);
+  await saveBookingAppointment(form, { dispatch, barbers });
 
   return {
     success: true,

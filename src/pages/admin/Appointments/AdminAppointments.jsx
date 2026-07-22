@@ -82,7 +82,6 @@ export default function AdminAppointments() {
               <CBInput label="Date" name="date" type="date" value={form.date} onChange={handleChange} required />
               <CBInput label="Time" name="time" type="time" value={form.time} onChange={handleChange} required />
               <CBSelect label="Status" name="status" value={form.status} onChange={handleChange}>
-                <option value="pending">Pending</option>
                 <option value="confirmed">Confirmed</option>
                 <option value="completed">Completed</option>
                 <option value="cancelled">Cancelled</option>

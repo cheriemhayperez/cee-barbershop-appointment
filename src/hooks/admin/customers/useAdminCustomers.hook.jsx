@@ -6,6 +6,11 @@ import {
   removeCustomer,
   updateCustomer,
 } from '@/reducers/customers/customers.slice';
+import {
+  syncAddCustomer,
+  syncRemoveCustomer,
+  syncUpdateCustomer,
+} from '@/services/dataSync';
 
 const emptyForm = { name: '', email: '', phone: '', visits: '0', lastVisit: '' };
 
@@ -15,10 +20,12 @@ export function useAdminCustomers() {
   const [modalOpen, setModalOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [form, setForm] = useState(emptyForm);
+  const [syncError, setSyncError] = useState('');
 
   const openAdd = () => {
     setEditingId(null);
     setForm(emptyForm);
+    setSyncError('');
     setModalOpen(true);
   };
 
@@ -31,26 +38,36 @@ export function useAdminCustomers() {
       visits: String(customer.visits),
       lastVisit: customer.lastVisit,
     });
+    setSyncError('');
     setModalOpen(true);
   };
 
   const closeModal = () => setModalOpen(false);
 
-  const handleDelete = (id, name) => {
-    if (window.confirm(`Delete customer ${name}?`)) {
-      dispatch(removeCustomer(id));
+  const handleDelete = async (id, name) => {
+    if (!window.confirm(`Delete customer ${name}?`)) return;
+    try {
+      await syncRemoveCustomer(dispatch, removeCustomer, id);
+    } catch (err) {
+      setSyncError(err.message || 'Failed to delete customer.');
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setSyncError('');
     const payload = { ...form, visits: Number(form.visits) || 0 };
-    if (editingId) {
-      dispatch(updateCustomer({ id: editingId, updates: payload }));
-    } else {
-      dispatch(addCustomer(payload));
+
+    try {
+      if (editingId) {
+        await syncUpdateCustomer(dispatch, updateCustomer, editingId, payload);
+      } else {
+        await syncAddCustomer(dispatch, addCustomer, payload);
+      }
+      setModalOpen(false);
+    } catch (err) {
+      setSyncError(err.message || 'Failed to save customer.');
     }
-    setModalOpen(false);
   };
 
   const handleChange = (e) => {
@@ -62,6 +79,7 @@ export function useAdminCustomers() {
     modalOpen,
     editingId,
     form,
+    syncError,
     openAdd,
     openEdit,
     closeModal,

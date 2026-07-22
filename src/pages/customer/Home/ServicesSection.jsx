@@ -1,10 +1,12 @@
 import { motion } from 'framer-motion';
 import FadeIn from '@/components/FadeIn/FadeIn';
-import { services } from '@/static/customer/homeContent';
+import { useCatalogData } from '@/hooks/shared/useCatalogData.hook';
 import sectionStyles from '@/pages/customer/Home/SectionLayout.module.css';
 import styles from '@/pages/customer/Home/ServicesSection.module.css';
 
 export default function ServicesSection() {
+  const { services } = useCatalogData();
+
   return (
     <section id="services" className={sectionStyles.section}>
       <div className={sectionStyles.sectionInner}>
@@ -14,7 +16,7 @@ export default function ServicesSection() {
         </FadeIn>
         <div className={styles.grid}>
           {services.map((service, index) => (
-            <FadeIn key={service.name} delay={index * 0.08}>
+            <FadeIn key={service.id ?? service.name} delay={index * 0.08}>
               <motion.article
                 className={styles.card}
                 whileHover={{ y: -4, boxShadow: '0 12px 40px rgba(201,162,39,0.12)' }}

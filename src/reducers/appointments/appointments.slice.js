@@ -1,14 +1,14 @@
-import { initialAppointments } from '@/static/admin/initialData';
 import { createListSlice } from '@/reducers/shared/createListSlice';
 
 const slice = createListSlice({
   name: 'appointments',
   listKey: 'appointments',
-  initialItems: initialAppointments,
+  initialItems: [],
 });
 
 export const appointmentsReducer = slice.reducer;
 export const {
+  setAll: setAppointments,
   add: addAppointment,
   update: updateAppointment,
   remove: removeAppointment,

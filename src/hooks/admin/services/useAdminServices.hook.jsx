@@ -6,6 +6,11 @@ import {
   removeService,
   updateService,
 } from '@/reducers/services/services.slice';
+import {
+  syncAddService,
+  syncRemoveService,
+  syncUpdateService,
+} from '@/services/dataSync';
 
 const emptyForm = { name: '', price: '', duration: '', status: 'active' };
 
@@ -15,10 +20,12 @@ export function useAdminServices() {
   const [modalOpen, setModalOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [form, setForm] = useState(emptyForm);
+  const [syncError, setSyncError] = useState('');
 
   const openAdd = () => {
     setEditingId(null);
     setForm(emptyForm);
+    setSyncError('');
     setModalOpen(true);
   };
 
@@ -30,25 +37,35 @@ export function useAdminServices() {
       duration: service.duration,
       status: service.status,
     });
+    setSyncError('');
     setModalOpen(true);
   };
 
   const closeModal = () => setModalOpen(false);
 
-  const handleDelete = (id, name) => {
-    if (window.confirm(`Delete service "${name}"?`)) {
-      dispatch(removeService(id));
+  const handleDelete = async (id, name) => {
+    if (!window.confirm(`Delete service "${name}"?`)) return;
+    try {
+      await syncRemoveService(dispatch, removeService, id);
+    } catch (err) {
+      setSyncError(err.message || 'Failed to delete service.');
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (editingId) {
-      dispatch(updateService({ id: editingId, updates: form }));
-    } else {
-      dispatch(addService(form));
+    setSyncError('');
+
+    try {
+      if (editingId) {
+        await syncUpdateService(dispatch, updateService, editingId, form);
+      } else {
+        await syncAddService(dispatch, addService, form);
+      }
+      setModalOpen(false);
+    } catch (err) {
+      setSyncError(err.message || 'Failed to save service.');
     }
-    setModalOpen(false);
   };
 
   const handleChange = (e) => {
@@ -60,6 +77,7 @@ export function useAdminServices() {
     modalOpen,
     editingId,
     form,
+    syncError,
     openAdd,
     openEdit,
     closeModal,

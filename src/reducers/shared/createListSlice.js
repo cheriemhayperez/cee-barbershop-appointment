@@ -7,6 +7,9 @@ export function createListSlice({ name, listKey, initialItems }) {
     name,
     initialState: { [listKey]: initialItems },
     reducers: {
+      setAll: (state, { payload }) => {
+        state[listKey] = payload;
+      },
       add: (state, { payload }) => {
         state[listKey] = addToList(state[listKey], payload);
       },
