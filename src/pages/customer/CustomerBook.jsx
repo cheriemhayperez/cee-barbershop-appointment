@@ -3,13 +3,13 @@ import { cn } from '@/utils/cn';
 import FadeIn from '@/components/FadeIn/FadeIn';
 import PageTransition from '@/components/PageTransition/PageTransition';
 import { CBButton, CBInput, CBSelect, CBBookingSchedule } from '@/components';
-import { services } from '@/static/customer/homeContent';
 import { useCustomerBook } from '@/hooks/customer/booking';
 import styles from '@/pages/customer/CustomerBook.module.css';
 
 export default function CustomerBook() {
   const {
     barbers,
+    services,
     form,
     submitted,
     isSubmitting,
@@ -50,9 +50,14 @@ export default function CustomerBook() {
             <CBInput label="Name" name="name" value={form.name} onChange={handleChange} variant="dark" required />
             <CBInput label="Email" name="email" type="email" value={form.email} onChange={handleChange} variant="dark" required />
 
-            <CBSelect label="Service" name="service" value={form.service} onChange={handleChange} variant="dark">
+            <CBSelect label="Service" name="service" value={form.service} onChange={handleChange} variant="dark" required>
+              <option value="" disabled>
+                {services.length ? 'Select a service' : 'No services available yet'}
+              </option>
               {services.map((s) => (
-                <option key={s.name}>{s.name}</option>
+                <option key={s.id ?? s.name} value={s.name}>
+                  {s.name}
+                </option>
               ))}
             </CBSelect>
 

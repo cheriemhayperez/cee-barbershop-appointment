@@ -22,7 +22,7 @@ export function getDashboardAnalytics({ appointments, services, barbers, custome
   const priceMap = Object.fromEntries(services.map((s) => [s.name, parsePrice(s.price)]));
 
   const confirmed = appointments.filter((a) => a.status === 'confirmed');
-  const pending = appointments.filter((a) => a.status === 'pending');
+  const completed = appointments.filter((a) => a.status === 'completed');
   const cancelled = appointments.filter((a) => a.status === 'cancelled');
   const todayAppts = appointments.filter((a) => a.date === today);
 
@@ -58,7 +58,7 @@ export function getDashboardAnalytics({ appointments, services, barbers, custome
   const maxBarber = Math.max(...barberBookings.map((b) => b.count), 1);
 
   const upcoming = [...appointments]
-    .filter((a) => a.status !== 'cancelled')
+    .filter((a) => a.status === 'confirmed')
     .sort((a, b) => `${a.date} ${a.time}`.localeCompare(`${b.date} ${b.time}`))
     .slice(0, 5);
 
@@ -70,14 +70,14 @@ export function getDashboardAnalytics({ appointments, services, barbers, custome
   return {
     kpis: [
       { label: "Today's Appointments", value: String(todayAppts.length), hint: todayAppts.length ? 'Scheduled for today' : 'None today' },
-      { label: 'Total Bookings', value: String(appointments.length), hint: `${confirmed.length} confirmed` },
-      { label: 'Pending', value: String(pending.length), hint: 'Awaiting confirmation' },
+      { label: 'Total Bookings', value: String(appointments.length), hint: `${confirmed.length} upcoming` },
+      { label: 'Completed', value: String(completed.length), hint: 'Past visits done' },
       { label: 'Customers', value: String(customers.length), hint: `${avgVisits} avg visits` },
       { label: 'Active Barbers', value: String(activeBarbers), hint: `${services.filter((s) => s.status === 'active').length} services live` },
     ],
     statusBreakdown: [
       { label: 'Confirmed', count: confirmed.length, color: '#2e7d32' },
-      { label: 'Pending', count: pending.length, color: '#f57f17' },
+      { label: 'Completed', count: completed.length, color: '#1565c0' },
       { label: 'Cancelled', count: cancelled.length, color: '#c62828' },
     ],
     popularServices,

@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import App from '@/App';
 import { cbAntdTheme } from '@/constants/theme.config';
+import { DataProvider } from '@/providers/DataProvider';
 import { store } from '@/store/store.config';
 import '@/assets/styles/global.css';
 
@@ -13,7 +14,9 @@ root.render(
   <Provider store={store}>
     <ConfigProvider theme={cbAntdTheme}>
       <BrowserRouter>
-        <App />
+        <DataProvider>
+          <App />
+        </DataProvider>
       </BrowserRouter>
     </ConfigProvider>
   </Provider>

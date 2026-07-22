@@ -7,14 +7,19 @@ import {
   removeAppointment,
   updateAppointment,
 } from '@/reducers/appointments/appointments.slice';
+import {
+  syncAddAppointment,
+  syncRemoveAppointment,
+  syncUpdateAppointment,
+} from '@/services/dataSync';
 
 const emptyForm = {
   name: '',
-  service: 'Classic Cut',
+  service: '',
   barber: 'No preference',
   date: '',
   time: '',
-  status: APPOINTMENT_STATUS.PENDING,
+  status: APPOINTMENT_STATUS.CONFIRMED,
 };
 
 export function useAdminAppointments() {
@@ -25,10 +30,12 @@ export function useAdminAppointments() {
   const [modalOpen, setModalOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [form, setForm] = useState(emptyForm);
+  const [syncError, setSyncError] = useState('');
 
   const openAdd = () => {
     setEditingId(null);
     setForm(emptyForm);
+    setSyncError('');
     setModalOpen(true);
   };
 
@@ -42,25 +49,35 @@ export function useAdminAppointments() {
       time: appointment.time,
       status: appointment.status,
     });
+    setSyncError('');
     setModalOpen(true);
   };
 
   const closeModal = () => setModalOpen(false);
 
-  const handleDelete = (id, name) => {
-    if (window.confirm(`Delete appointment for ${name}?`)) {
-      dispatch(removeAppointment(id));
+  const handleDelete = async (id, name) => {
+    if (!window.confirm(`Delete appointment for ${name}?`)) return;
+    try {
+      await syncRemoveAppointment(dispatch, removeAppointment, id);
+    } catch (err) {
+      setSyncError(err.message || 'Failed to delete appointment.');
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (editingId) {
-      dispatch(updateAppointment({ id: editingId, updates: form }));
-    } else {
-      dispatch(addAppointment(form));
+    setSyncError('');
+
+    try {
+      if (editingId) {
+        await syncUpdateAppointment(dispatch, updateAppointment, editingId, form);
+      } else {
+        await syncAddAppointment(dispatch, addAppointment, form);
+      }
+      setModalOpen(false);
+    } catch (err) {
+      setSyncError(err.message || 'Failed to save appointment.');
     }
-    setModalOpen(false);
   };
 
   const handleChange = (e) => {
@@ -74,6 +91,7 @@ export function useAdminAppointments() {
     modalOpen,
     editingId,
     form,
+    syncError,
     openAdd,
     openEdit,
     closeModal,

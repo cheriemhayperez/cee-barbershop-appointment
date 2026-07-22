@@ -1,7 +1,3 @@
-import { serviceCatalog } from '@/static/services';
-
-export const services = serviceCatalog;
-
 export const testimonials = [
   { name: 'Michael T.', quote: 'Best fade in town. Marcus always nails the lineup. Been coming here 3 years.', rating: 5 },
   { name: 'Sarah L.', quote: 'Booked online for my son\'s first haircut. Super friendly and patient staff.', rating: 5 },

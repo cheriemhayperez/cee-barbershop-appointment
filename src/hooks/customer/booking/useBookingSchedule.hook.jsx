@@ -1,8 +1,11 @@
 import { useCallback, useEffect, useState } from 'react';
 import { SCHEDULE_STORAGE_KEY } from '@/constants/data/schedule.data';
+import { saveSchedule as saveScheduleDb } from '@/api/db/schedule.api';
+import { isSupabaseConfigured } from '@/lib/supabase';
 import { defaultSchedule } from '@/static/shared/scheduleDefaults';
+import { subscribeSchedule } from '@/utils/scheduleBus';
 
-function loadSchedule() {
+function loadLocalSchedule() {
   try {
     const raw = localStorage.getItem(SCHEDULE_STORAGE_KEY);
     if (!raw) return defaultSchedule;
@@ -12,16 +15,48 @@ function loadSchedule() {
   }
 }
 
-function saveSchedule(schedule) {
+function saveLocalSchedule(schedule) {
   localStorage.setItem(SCHEDULE_STORAGE_KEY, JSON.stringify(schedule));
+}
+
+function notifyScheduleUpdated() {
   window.dispatchEvent(new Event('cb-schedule-updated'));
 }
 
+async function persistSchedule(schedule) {
+  if (isSupabaseConfigured) {
+    await saveScheduleDb(schedule);
+  } else {
+    saveLocalSchedule(schedule);
+  }
+  notifyScheduleUpdated();
+}
+
 export function useBookingSchedule() {
-  const [schedule, setSchedule] = useState(loadSchedule);
+  const [schedule, setSchedule] = useState(defaultSchedule);
+  const [loaded, setLoaded] = useState(!isSupabaseConfigured);
 
   useEffect(() => {
-    const sync = () => setSchedule(loadSchedule());
+    if (!isSupabaseConfigured) {
+      setSchedule(loadLocalSchedule());
+      setLoaded(true);
+      return;
+    }
+
+    const unsubscribe = subscribeSchedule((loaded) => {
+      setSchedule(loaded);
+      setLoaded(true);
+    });
+
+    return unsubscribe;
+  }, []);
+
+  useEffect(() => {
+    const sync = () => {
+      if (!isSupabaseConfigured) {
+        setSchedule(loadLocalSchedule());
+      }
+    };
     window.addEventListener('cb-schedule-updated', sync);
     window.addEventListener('storage', sync);
     return () => {
@@ -33,7 +68,7 @@ export function useBookingSchedule() {
   const updateSchedule = useCallback((updater) => {
     setSchedule((prev) => {
       const next = typeof updater === 'function' ? updater(prev) : { ...prev, ...updater };
-      saveSchedule(next);
+      persistSchedule(next);
       return next;
     });
   }, []);
@@ -81,6 +116,7 @@ export function useBookingSchedule() {
 
   return {
     schedule,
+    loaded,
     updateSchedule,
     setWeeklyHours,
     addDisabledDate,

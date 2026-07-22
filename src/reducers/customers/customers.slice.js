@@ -1,14 +1,14 @@
-import { initialCustomers } from '@/static/admin/initialData';
 import { createListSlice } from '@/reducers/shared/createListSlice';
 
 const slice = createListSlice({
   name: 'customers',
   listKey: 'customers',
-  initialItems: initialCustomers,
+  initialItems: [],
 });
 
 export const customersReducer = slice.reducer;
 export const {
+  setAll: setCustomers,
   add: addCustomer,
   update: updateCustomer,
   remove: removeCustomer,
