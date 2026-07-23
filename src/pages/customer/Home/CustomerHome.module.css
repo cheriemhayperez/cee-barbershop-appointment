@@ -1,68 +1,33 @@
 .page {
-  min-height: calc(100vh - 140px);
+  flex: 1;
 }
 
 .eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
   color: var(--gold);
   text-transform: uppercase;
-  letter-spacing: 0.12em;
-  font-size: 0.75rem;
-  font-weight: 600;
+  letter-spacing: 0.14em;
+  font-size: 0.6875rem;
+  font-weight: 700;
   margin-bottom: 0.75rem;
+}
+
+.eyebrow::before {
+  content: '';
+  flex-shrink: 0;
+  width: 2rem;
+  height: 1px;
+  background: var(--gold);
 }
 
 .sectionTitle {
-  font-size: clamp(1.75rem, 4vw, 2.25rem);
+  font-size: clamp(1.625rem, 3.5vw, 2.125rem);
   font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
   margin-bottom: 2.5rem;
-}
-
-/* Hero + About fill full viewport — How It Works starts below fold */
-.aboveFold {
-  height: 100vh;
-  height: 100dvh;
-  max-height: 100dvh;
-  display: grid;
-  grid-template-rows: 55% 45%;
-  overflow: hidden;
-  box-sizing: border-box;
-  isolation: isolate;
-}
-
-.aboveFold .hero {
-  min-height: 0;
-  height: 100%;
-  margin-top: calc(-1 * var(--header-height));
-  padding: calc(var(--header-height) + 1.25rem) 2rem 2rem;
-}
-
-.aboveFold .heroOverlay {
-  background: linear-gradient(
-    to bottom,
-    rgba(26, 26, 26, 0.5) 0%,
-    rgba(26, 26, 26, 0.72) 45%,
-    rgba(26, 26, 26, 0.85) 100%
-  );
-}
-
-.aboveFold .heroBg {
-  background-size: cover;
-  background-position: center 40%;
-}
-
-.aboveFold .heroWave {
-  height: 2.75rem;
-}
-
-.aboveFold .heroTitle {
-  font-size: clamp(2rem, 5vw, 3.25rem);
-  margin-bottom: 0.75rem;
-}
-
-.aboveFold .heroSubtitle {
-  font-size: 0.9375rem;
-  line-height: 1.55;
-  margin-bottom: 1.25rem;
 }
 
 /* Hero */
@@ -71,8 +36,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 55vh;
-  min-height: 55dvh;
   margin-top: calc(-1 * var(--header-height));
   padding: calc(var(--header-height) + 4rem) 2rem 5rem;
   text-align: center;
@@ -80,6 +43,12 @@
   margin-left: 0;
   margin-right: 0;
   overflow: hidden;
+  box-sizing: border-box;
+}
+
+.heroFull {
+  min-height: calc(100vh + var(--header-height));
+  min-height: calc(100dvh + var(--header-height));
 }
 
 .heroBg {
@@ -93,12 +62,20 @@
 .heroOverlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    to bottom,
-    rgba(26, 26, 26, 0.75) 0%,
-    rgba(26, 26, 26, 0.85) 70%,
-    rgba(26, 26, 26, 0.55) 100%
-  );
+  background:
+    radial-gradient(
+      ellipse 90% 70% at 50% 42%,
+      rgba(0, 0, 0, 0.62) 0%,
+      rgba(0, 0, 0, 0.28) 55%,
+      rgba(0, 0, 0, 0.18) 100%
+    ),
+    linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.48) 0%,
+      rgba(0, 0, 0, 0.32) 30%,
+      rgba(0, 0, 0, 0.4) 65%,
+      rgba(0, 0, 0, 0.52) 100%
+    );
   z-index: 1;
 }
 
@@ -114,7 +91,7 @@
 }
 
 .heroWave path {
-  fill: var(--bg);
+  fill: var(--bg-light);
 }
 
 .hero > :last-child,
@@ -129,19 +106,27 @@
 .heroTitle {
   font-size: clamp(2.5rem, 6vw, 4rem);
   font-weight: 800;
-  line-height: 1.1;
+  line-height: 1.05;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
   margin-bottom: 1rem;
+  text-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.85),
+    0 8px 24px rgba(0, 0, 0, 0.55);
 }
 
 .heroSubtitle {
-  color: rgba(255, 255, 255, 0.95);
-  font-size: 1.125rem;
+  color: #ffffff;
+  font-size: clamp(1.0625rem, 2.4vw, 1.3125rem);
+  font-weight: 500;
   margin-bottom: 2rem;
-  line-height: 1.6;
-  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.75);
+  line-height: 1.65;
   max-width: 36rem;
   margin-left: auto;
   margin-right: auto;
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.95),
+    0 4px 14px rgba(0, 0, 0, 0.65);
 }
 
 .heroActions {
@@ -156,45 +141,60 @@
   padding: 0.875rem 1.75rem;
   border-radius: 999px;
   background: var(--gold);
-  color: #1a1a1a;
+  color: #141414;
   font-weight: 700;
+  font-size: 0.8125rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   text-decoration: none;
+  transition: background 0.2s ease;
 }
 
-.ctaSecondary {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.875rem 1.75rem;
-  border-radius: 999px;
-  border: 1px solid #fff;
-  color: var(--text);
-  font-weight: 600;
-  text-decoration: none;
-  transition: border-color 0.2s;
-}
-
-.ctaSecondary:hover {
-  border-color: var(--gold);
-  color: var(--gold);
+.ctaPrimary:hover {
+  background: var(--gold-hover);
+  color: #141414;
 }
 
 /* Testimonials */
 .testimonialsSection {
-  padding: 4rem 2rem;
+  position: relative;
+  z-index: 1;
+  box-sizing: border-box;
+  min-height: 90dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 4.5rem 2rem 3rem;
   background: var(--surface);
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
+  border-top: none;
+  border-bottom: none;
 }
 
 .testimonialsInner {
   max-width: 1080px;
+  width: 100%;
   margin: 0 auto 2rem;
-  padding: 0 2rem;
+  padding: 0;
+  flex-shrink: 0;
+  text-align: center;
+}
+
+.testimonialsInner .eyebrow {
+  justify-content: center;
+}
+
+.testimonialsInner .sectionTitle {
+  margin-bottom: 0;
 }
 
 .testimonialsMarquee {
-  overflow: hidden;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  overflow-x: hidden;
+  overflow-y: visible;
   width: 100%;
+  min-height: 0;
   mask-image: linear-gradient(
     90deg,
     transparent,
@@ -213,9 +213,9 @@
 
 .testimonialsTrack {
   display: flex;
-  gap: 1.25rem;
+  gap: 1.5rem;
   width: max-content;
-  animation: testimonialMarquee 36s linear infinite;
+  animation: testimonialMarquee 40s linear infinite;
 }
 
 .testimonialsTrack:hover {
@@ -233,48 +233,38 @@
 }
 
 .testimonialCard {
-  flex: 0 0 min(320px, 78vw);
-  padding: 1.75rem;
-  border-radius: 12px;
+  flex: 0 0 min(480px, 88vw);
+  min-height: 14rem;
+  padding: 2.25rem 2.5rem;
+  border-radius: 0;
   background: var(--bg);
-  border: 1px solid var(--border);
+  border: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1.125rem;
 }
 
 .stars {
   color: var(--gold);
-  font-size: 1rem;
-  margin-bottom: 0.75rem;
-  letter-spacing: 2px;
+  font-size: 1.5rem;
+  margin-bottom: 0;
+  letter-spacing: 3px;
 }
 
 .testimonialCard p {
-  color: var(--muted);
-  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 1.1875rem;
+  line-height: 1.75;
   font-style: italic;
-  margin-bottom: 1rem;
+  margin-bottom: 0;
+  flex: 1;
+  overflow-wrap: break-word;
 }
 
 .testimonialCard footer {
   font-weight: 600;
-  font-size: 0.875rem;
-}
-
-/* Booking banner */
-.bookingBanner {
-  padding: 4rem 2rem;
-  text-align: center;
-  background: linear-gradient(135deg, rgba(201, 162, 39, 0.15), rgba(201, 162, 39, 0.05));
-  border-top: 1px solid var(--border);
-}
-
-.bookingBanner h2 {
-  font-size: clamp(1.5rem, 4vw, 2rem);
-  margin-bottom: 0.5rem;
-}
-
-.bookingBanner p {
-  color: var(--muted);
-  margin-bottom: 1.5rem;
+  font-size: 1.125rem;
+  color: var(--text);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -282,44 +272,145 @@
     animation: none;
     flex-wrap: wrap;
     width: 100%;
+    padding: 0 1.25rem;
+    box-sizing: border-box;
   }
 
   .testimonialCard {
-    flex: 1 1 260px;
+    flex: 1 1 320px;
+  }
+
+  .testimonialCard:nth-child(n + 5) {
+    display: none;
+  }
+}
+
+@media (min-width: 1025px) {
+  .testimonialCard {
+    flex: 0 0 540px;
+    min-height: 15.5rem;
+    padding: 2.5rem 2.75rem;
+  }
+
+  .testimonialCard p {
+    font-size: 1.3125rem;
+  }
+
+  .testimonialCard footer {
+    font-size: 1.1875rem;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .heroActions {
+    gap: 0.75rem;
+  }
+
+  .testimonialsSection {
+    padding: 2.5rem 1.5rem;
   }
 }
 
 @media (max-width: 768px) {
-  .aboveFold {
-    height: auto;
-    max-height: none;
-    display: block;
-    overflow: visible;
-  }
-
-  .aboveFold .hero {
-    min-height: 55vh;
-    min-height: 55dvh;
-    height: auto;
-    margin-top: calc(-1 * var(--header-height));
-    padding: calc(var(--header-height) + 1.5rem) 1.25rem 3rem;
-  }
-
   .hero {
-    min-height: 55vh;
-    min-height: 55dvh;
-    padding: 3rem 1.25rem 4rem;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .heroFull {
+    min-height: 85svh;
+    min-height: 85dvh;
+    padding: calc(var(--header-height) + 2rem) 1.25rem 2.5rem;
   }
 
   .heroWave {
-    height: 3rem;
+    display: none;
   }
 
   .testimonialsSection {
-    padding: 3rem 0;
+    min-height: auto;
+    justify-content: flex-start;
+    padding: 3.5rem 0 3.5rem;
+  }
+
+  .testimonialsMarquee {
+    flex: initial;
+    align-items: stretch;
+    overflow: visible;
+    mask-image: none;
+    -webkit-mask-image: none;
+  }
+
+  .testimonialsTrack {
+    animation: none;
+    flex-direction: column;
+    width: 100%;
+    padding: 0 1.25rem;
+    gap: 1rem;
+    box-sizing: border-box;
+  }
+
+  .testimonialCard {
+    flex: none;
+    width: 100%;
+    min-height: auto;
+    padding: 1.75rem 1.5rem;
+    gap: 1rem;
+    box-sizing: border-box;
+  }
+
+  .testimonialCard:nth-child(n + 5) {
+    display: none;
+  }
+
+  .stars {
+    font-size: 1.3125rem;
+    letter-spacing: 2px;
+  }
+
+  .testimonialCard p {
+    font-size: 1.0625rem;
+    line-height: 1.7;
+  }
+
+  .testimonialCard footer {
+    font-size: 1rem;
   }
 
   .testimonialsInner {
     padding: 0 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .heroActions {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    max-width: 20rem;
+    margin: 0 auto;
+  }
+
+  .ctaPrimary {
+    justify-content: center;
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero {
+    padding-bottom: 4rem;
+  }
+
+  .testimonialCard {
+    padding: 1.5rem 1.25rem;
+  }
+
+  .testimonialCard p {
+    font-size: 1rem;
+    line-height: 1.65;
+  }
+
+  .testimonialCard footer {
+    font-size: 0.9375rem;
   }
 }

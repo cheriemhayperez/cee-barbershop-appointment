@@ -1,42 +1,41 @@
 import FadeIn from '@/components/FadeIn/FadeIn';
+import { aboutContent } from '@/static/customer/homeContent';
 import { images } from '@/static/shared/images';
+import sectionStyles from '@/pages/customer/Home/SectionLayout.module.css';
 import styles from '@/pages/customer/Home/AboutSection.module.css';
-
-const stats = [
-  { value: '6+', label: 'Years of craft' },
-  { value: '4', label: 'Expert barbers' },
-  { value: '5k+', label: 'Happy clients' },
-];
 
 export default function AboutSection() {
   return (
-    <section id="about" className={styles.compactSection}>
-      <div className={styles.compactInner}>
-        <div className={`${styles.grid} ${styles.compactGrid}`}>
+    <section className={`${sectionStyles.section} ${sectionStyles.sectionLight} ${styles.section}`}>
+      <div className={sectionStyles.sectionInner}>
+        <FadeIn>
+          <p className={sectionStyles.eyebrow}>About Us</p>
+          <h1 className={sectionStyles.sectionTitle}>More than just a haircut</h1>
+        </FadeIn>
+
+        <div className={styles.grid}>
           <FadeIn delay={0.1}>
-            <div className={styles.compactLeft}>
-              <div className={styles.compactCopy}>
-                <p className={styles.compactEyebrow}>About Us</p>
-                <h2 className={styles.compactTitle}>More than just a haircut</h2>
-                <p className={styles.compactLead}>
-                  Walk into a clean shop, sit with a barber who listens, and leave looking your best.
+            <div className={styles.copy}>
+              <p className={styles.lead}>{aboutContent.lead}</p>
+              <p className={styles.support}>{aboutContent.support}</p>
+              {aboutContent.paragraphs.map((paragraph) => (
+                <p key={paragraph} className={styles.body}>
+                  {paragraph}
                 </p>
-                <p className={styles.compactSupport}>
-                  Fades, classic cuts, beard work, and hot-towel shaves — every time.
-                </p>
-                <div className={`${styles.stats} ${styles.compactStats}`}>
-                  {stats.map((stat) => (
-                    <div key={stat.label} className={styles.stat}>
-                      <span className={styles.statValue}>{stat.value}</span>
-                      <span className={styles.statLabel}>{stat.label}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              ))}
+              <ul className={styles.highlights}>
+                {aboutContent.highlights.map((item) => (
+                  <li key={item.title} className={styles.highlightItem}>
+                    <span className={styles.highlightTitle}>{item.title}</span>
+                    <span className={styles.highlightText}>{item.text}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
           </FadeIn>
+
           <FadeIn delay={0.2}>
-            <div className={`${styles.imageWrap} ${styles.compactImageWrap}`}>
+            <div className={styles.imageWrap}>
               <img src={images.aboutShop} alt="Barber at work in Cee Barbershop" className={styles.image} />
             </div>
           </FadeIn>

@@ -1,22 +1,33 @@
+.section {
+  padding-top: calc(var(--header-height) + 2rem);
+  padding-bottom: 3rem;
+}
+
+@media (min-width: 769px) {
+  .section {
+    min-height: 47rem;
+  }
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 2rem;
 }
 
-.block h3 {
+.blockTitle {
   font-size: 1.125rem;
   margin-bottom: 1rem;
   color: var(--gold);
 }
 
 .block p {
-  color: var(--muted);
+  color: var(--muted-light);
   line-height: 1.7;
 }
 
 .link {
-  color: var(--text);
+  color: var(--text-dark);
   text-decoration: none;
   transition: color 0.2s;
 }
@@ -32,40 +43,64 @@
 .hoursList li {
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
   gap: 1rem;
   padding: 0.5rem 0;
-  border-bottom: 1px solid var(--border);
-  color: var(--muted);
+  border-bottom: 1px solid var(--border-light);
+  color: var(--muted-light);
   font-size: 0.9375rem;
 }
 
+.hoursList li span:first-child {
+  flex: 1;
+  min-width: 0;
+}
+
 .hoursList li span:last-child {
-  color: var(--text);
+  color: var(--text-dark);
   white-space: nowrap;
+  text-align: right;
 }
 
-.socialLinks {
-  display: flex;
-  gap: 0.75rem;
-  margin-top: 1rem;
+.mapWrap {
+  position: relative;
+  width: 100%;
+  margin-top: 2.5rem;
+  aspect-ratio: 16 / 9;
+  min-height: 17.5rem;
+  border: 1px solid var(--border-light);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  background: var(--surface-light, #f5f5f5);
 }
 
-.socialLinks a {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: var(--muted);
-  text-decoration: none;
-  transition: all 0.2s;
+.mapWrap iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
 }
 
-.socialLinks a:hover {
-  border-color: var(--gold);
-  color: var(--gold);
+@media (min-width: 769px) and (max-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding-top: calc(var(--header-height) + 1.5rem);
+  }
+
+  .hoursList li {
+    font-size: 0.875rem;
+    gap: 0.75rem;
+  }
+
+  .hoursList li span:last-child {
+    white-space: normal;
+    max-width: 9.5rem;
+  }
 }

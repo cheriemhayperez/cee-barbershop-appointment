@@ -1,6 +1,6 @@
 import FadeIn from '@/components/FadeIn/FadeIn';
 import { useBookingSchedule } from '@/hooks/customer/booking';
-import { shop, phoneHref } from '@/static/shop';
+import { shop, phoneHref, mapsEmbedUrl } from '@/static/shop';
 import { formatWeeklyHoursForDisplay } from '@/utils/scheduleUtils';
 import sectionStyles from '@/pages/customer/Home/SectionLayout.module.css';
 import styles from '@/pages/customer/Home/ContactSection.module.css';
@@ -10,16 +10,16 @@ export default function ContactSection() {
   const businessHours = formatWeeklyHoursForDisplay(schedule);
 
   return (
-    <section id="contact" className={sectionStyles.section}>
+    <section className={`${sectionStyles.section} ${sectionStyles.sectionLight} ${styles.section}`}>
       <div className={sectionStyles.sectionInner}>
         <FadeIn>
           <p className={sectionStyles.eyebrow}>Contact</p>
-          <h2 className={sectionStyles.sectionTitle}>Visit us or get in touch</h2>
+          <h1 className={sectionStyles.sectionTitle}>Visit us or get in touch</h1>
         </FadeIn>
         <div className={styles.grid}>
           <FadeIn delay={0.1}>
             <div className={styles.block}>
-              <h3>Shop Address</h3>
+              <h2 className={styles.blockTitle}>Shop Address</h2>
               <p>{shop.address}<br />{shop.city}</p>
               <a href={shop.mapsUrl} target="_blank" rel="noreferrer" className={styles.link}>
                 Get Directions →
@@ -29,7 +29,7 @@ export default function ContactSection() {
 
           <FadeIn delay={0.15}>
             <div className={styles.block}>
-              <h3>Business Hours</h3>
+              <h2 className={styles.blockTitle}>Business Hours</h2>
               <ul className={styles.hoursList}>
                 {businessHours.map((row) => (
                   <li key={row.day}>
@@ -43,7 +43,7 @@ export default function ContactSection() {
 
           <FadeIn delay={0.2}>
             <div className={styles.block}>
-              <h3>Phone & Email</h3>
+              <h2 className={styles.blockTitle}>Phone & Email</h2>
               <p>
                 <a href={`tel:${phoneHref()}`} className={styles.link}>
                   {shop.phone}
@@ -57,6 +57,18 @@ export default function ContactSection() {
             </div>
           </FadeIn>
         </div>
+
+        <FadeIn delay={0.25}>
+          <div className={styles.mapWrap}>
+            <iframe
+              title={`${shop.name} location on Google Maps`}
+              src={mapsEmbedUrl()}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              allowFullScreen
+            />
+          </div>
+        </FadeIn>
       </div>
     </section>
   );
