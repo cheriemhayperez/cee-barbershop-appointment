@@ -6,3 +6,4 @@ dist
 .env.deploy
 .env.*.local
 supabase/.temp
+.vercel
