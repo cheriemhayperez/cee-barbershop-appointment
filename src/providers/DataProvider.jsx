@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { fetchAllData } from '@/api/db';
+import { CBLoaderBackdrop } from '@/components';
 import { isSupabaseConfigured } from '@/lib/supabase';
 import { setAppointments } from '@/reducers/appointments/appointments.slice';
 import { setBarbers } from '@/reducers/barbers/barbers.slice';
@@ -24,19 +25,7 @@ function clearStore(dispatch) {
 }
 
 function LoadingScreen() {
-  return (
-    <div
-      style={{
-        display: 'grid',
-        placeItems: 'center',
-        minHeight: '100vh',
-        color: '#666',
-        fontSize: '0.875rem',
-      }}
-    >
-      Loading shop data…
-    </div>
-  );
+  return <CBLoaderBackdrop label="Loading shop data" />;
 }
 
 function SetupScreen({ title, message }) {

@@ -51,6 +51,16 @@ export function useCustomerBook() {
     setError('');
     setScheduleError('');
 
+    if (!services.length) {
+      setError('No services are available to book yet.');
+      return;
+    }
+
+    if (!form.service) {
+      setError('Please select a service.');
+      return;
+    }
+
     if (!form.date || !isDateSelectable(form.date, schedule)) {
       setScheduleError('Please select an available date.');
       return;

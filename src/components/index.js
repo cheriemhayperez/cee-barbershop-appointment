@@ -1,3 +1,4 @@
+export { default as CBLoader, CBLoaderBackdrop } from '@/components/CBLoader/CBLoader';
 export { default as CBButton } from '@/components/CBButton/CBButton';
 export { IconAdd, IconEdit, IconTrash } from '@/components/CBIcon/CBIcon';
 export { default as CBInput, CBSelect } from '@/components/CBInput/CBInput';

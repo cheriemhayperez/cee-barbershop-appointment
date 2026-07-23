@@ -10,8 +10,3 @@ export function scrollToSection(sectionId) {
   window.history.replaceState(null, '', `#${sectionId}`);
   return true;
 }
-
-export function parseSectionId(href) {
-  const hash = href.includes('#') ? href.split('#')[1] : href;
-  return hash?.split('?')[0] || '';
-}

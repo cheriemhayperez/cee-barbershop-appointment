@@ -11,6 +11,7 @@ export default function CBInput({
   id,
   variant = 'light',
   size,
+  required,
   ...rest
 }) {
   const inputId = id || rest.name;
@@ -30,6 +31,11 @@ export default function CBInput({
           className={isDark ? styles.labelDark : styles.labelLight}
         >
           {label}
+          {required && (
+            <span className={styles.requiredMark} aria-hidden="true">
+              *
+            </span>
+          )}
         </label>
       )}
       <div className={isDark ? styles.controlDark : styles.controlLight}>
@@ -58,17 +64,23 @@ export function CBSelect({
   onChange,
   name,
   value,
+  placeholder,
+  emptyMessage = 'No options available',
   variant = 'light',
   size,
+  disabled,
+  required,
   ...rest
 }) {
   const selectId = id || name;
   const isDark = variant === 'dark';
   const options = Children.toArray(children)
     .filter(isValidElement)
+    .filter((child) => child.props.value !== '' && child.props.value != null)
     .map((child) => ({
       value: child.props.value ?? child.props.children,
       label: child.props.children,
+      disabled: Boolean(child.props.disabled),
     }));
 
   const handleChange = (nextValue) => {
@@ -89,6 +101,11 @@ export function CBSelect({
           className={isDark ? styles.labelDark : styles.labelLight}
         >
           {label}
+          {required && (
+            <span className={styles.requiredMark} aria-hidden="true">
+              *
+            </span>
+          )}
         </label>
       )}
       <div className={isDark ? styles.controlDark : styles.controlLight}>
@@ -112,7 +129,15 @@ export function CBSelect({
           }
           status={error ? 'error' : undefined}
           options={options}
-          value={value}
+          placeholder={placeholder}
+          value={value || undefined}
+          disabled={disabled}
+          aria-required={required || undefined}
+          notFoundContent={
+            <span className={isDark ? styles.selectEmptyMessage : styles.selectEmptyMessageLight}>
+              {emptyMessage}
+            </span>
+          }
           onChange={handleChange}
           {...rest}
         />

@@ -16,6 +16,12 @@
   margin-bottom: 0.75rem;
 }
 
+.requiredMark {
+  margin-left: 0.125rem;
+  color: var(--gold);
+  font-weight: 700;
+}
+
 .calendar {
   padding: 1rem;
   border-radius: 12px;
