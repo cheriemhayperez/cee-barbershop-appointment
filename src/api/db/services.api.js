@@ -21,8 +21,7 @@ export async function updateService(id, updates) {
   const payload = {};
   if (updates.name !== undefined) payload.name = updates.name;
   if (updates.price !== undefined) payload.price = updates.price;
-  if (updates.duration !== undefined) payload.duration = updates.duration;
-  if (updates.description !== undefined) payload.description = updates.description;
+  if (updates.category !== undefined) payload.category = updates.category;
   if (updates.status !== undefined) payload.status = updates.status;
 
   const { data, error } = await supabase

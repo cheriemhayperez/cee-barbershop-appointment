@@ -1,4 +1,7 @@
+import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
+
+import { getCategoryIcon } from '@/static/customer/serviceCatalog';
 
 export function useCatalogData() {
   const services = useSelector((state) =>
@@ -8,13 +11,17 @@ export function useCatalogData() {
     state.barbers.barbers.filter((b) => b.status === 'active')
   );
 
-  const catalogServices = services.map((service) => ({
-    id: service.id,
-    name: service.name,
-    price: service.price,
-    duration: service.duration,
-    desc: service.description ?? '',
-  }));
+  const catalogServices = useMemo(
+    () =>
+      services.map((service) => ({
+        id: service.id,
+        name: service.name,
+        price: service.price,
+        category: service.category ?? 'head',
+        icon: getCategoryIcon(service.category),
+      })),
+    [services]
+  );
 
   return { services: catalogServices, barbers };
 }

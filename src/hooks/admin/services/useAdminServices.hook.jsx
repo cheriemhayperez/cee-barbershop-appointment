@@ -11,8 +11,16 @@ import {
   syncRemoveService,
   syncUpdateService,
 } from '@/services/dataSync';
+import {
+  DEFAULT_SERVICE_CATEGORY,
+} from '@/static/customer/serviceCatalog';
 
-const emptyForm = { name: '', price: '', duration: '', status: 'active' };
+const emptyForm = {
+  name: '',
+  price: '',
+  category: DEFAULT_SERVICE_CATEGORY,
+  status: 'active',
+};
 
 export function useAdminServices() {
   const dispatch = useDispatch();
@@ -34,7 +42,7 @@ export function useAdminServices() {
     setForm({
       name: service.name,
       price: service.price,
-      duration: service.duration,
+      category: service.category ?? DEFAULT_SERVICE_CATEGORY,
       status: service.status,
     });
     setSyncError('');

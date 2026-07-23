@@ -1,6 +1,7 @@
 import { Table } from 'antd';
 
 import { cn } from '@/utils/cn';
+import styles from '@/components/CBTable/CBTable.module.css';
 
 function normalizeColumns(columns) {
   return columns.map((column) => {
@@ -22,14 +23,17 @@ export default function CBTable({
   pagination = false,
 }) {
   return (
-    <Table
-      className={cn('cb-table', className)}
-      columns={normalizeColumns(columns)}
-      dataSource={dataSource}
-      rowKey={rowKey}
-      bordered={bordered}
-      pagination={pagination}
-      locale={emptyMessage ? { emptyText: emptyMessage } : undefined}
-    />
+    <div className={styles.wrap}>
+      <Table
+        className={cn('cb-table', className)}
+        columns={normalizeColumns(columns)}
+        dataSource={dataSource}
+        rowKey={rowKey}
+        bordered={bordered}
+        pagination={pagination}
+        scroll={{ x: 'max-content' }}
+        locale={emptyMessage ? { emptyText: emptyMessage } : undefined}
+      />
+    </div>
   );
 }

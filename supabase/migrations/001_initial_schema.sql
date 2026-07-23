@@ -21,8 +21,7 @@ create table services (
   id text primary key,
   name text not null,
   price text not null,
-  duration text not null,
-  description text not null default '',
+  category text not null default 'head',
   status text not null default 'active',
   created_at timestamptz not null default now()
 );

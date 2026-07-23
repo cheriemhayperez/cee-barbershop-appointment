@@ -25,13 +25,16 @@ export function mapBarberToDb(barber) {
   };
 }
 
+import { DEFAULT_SERVICE_CATEGORY, getCategoryIcon } from '@/static/customer/serviceCatalog';
+
 export function mapServiceFromDb(row) {
+  const category = row.category ?? DEFAULT_SERVICE_CATEGORY;
   return {
     id: row.id,
     name: row.name,
     price: row.price,
-    duration: row.duration,
-    description: row.description ?? '',
+    category,
+    icon: getCategoryIcon(category),
     status: row.status,
   };
 }
@@ -41,8 +44,7 @@ export function mapServiceToDb(service) {
     id: service.id,
     name: service.name,
     price: service.price,
-    duration: service.duration,
-    description: service.description ?? '',
+    category: service.category ?? DEFAULT_SERVICE_CATEGORY,
     status: service.status,
   };
 }

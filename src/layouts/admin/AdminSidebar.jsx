@@ -6,9 +6,8 @@ import styles from '@/layouts/admin/AdminSidebar.module.css';
 export default function AdminSidebar() {
   return (
     <aside className={styles.sidebar}>
-      <Link to="/admin" className={styles.brand}>
-        <CBLogoMark className={styles.logoMark} />
-        <span className={styles.brandName}>Cee Barbershop</span>
+      <Link to="/admin" className={styles.brand} aria-label="CEE Barbershop admin">
+        <CBLogoMark size="lg" className={styles.logoMark} alt="" />
       </Link>
 
       <nav className={styles.nav}>

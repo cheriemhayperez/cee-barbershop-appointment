@@ -2,6 +2,10 @@ import { AnimatePresence } from 'framer-motion';
 import { AdminPageHeader, RowActions, CBBadge, CBInput, CBModal, CBModalForm, CBSelect, CBTable } from '@/components';
 import PageTransition from '@/components/PageTransition/PageTransition';
 import { useAdminServices } from '@/hooks/admin/services';
+import {
+  getCategoryLabel,
+  SERVICE_CATEGORIES,
+} from '@/static/customer/serviceCatalog';
 import styles from '@/pages/admin/AdminPage.module.css';
 
 export default function AdminServices() {
@@ -24,8 +28,12 @@ export default function AdminServices() {
       <CBTable
         columns={[
           { title: 'Service', dataIndex: 'name', key: 'name' },
+          {
+            title: 'Category',
+            key: 'category',
+            render: (_, s) => getCategoryLabel(s.category),
+          },
           { title: 'Price', dataIndex: 'price', key: 'price' },
-          { title: 'Duration', dataIndex: 'duration', key: 'duration' },
           {
             title: 'Status',
             key: 'status',
@@ -48,8 +56,14 @@ export default function AdminServices() {
           <CBModal title={editingId ? 'Edit Service' : 'Add Service'} onClose={closeModal}>
             <CBModalForm onSubmit={handleSubmit} onCancel={closeModal} editing={Boolean(editingId)}>
               <CBInput label="Service Name" name="name" value={form.name} onChange={handleChange} required />
+              <CBSelect label="Category" name="category" value={form.category} onChange={handleChange} required>
+                {SERVICE_CATEGORIES.map((category) => (
+                  <option key={category.value} value={category.value}>
+                    {category.label}
+                  </option>
+                ))}
+              </CBSelect>
               <CBInput label="Price" name="price" value={form.price} onChange={handleChange} placeholder="$25" required />
-              <CBInput label="Duration" name="duration" value={form.duration} onChange={handleChange} placeholder="30 min" required />
               <CBSelect label="Status" name="status" value={form.status} onChange={handleChange}>
                 <option value="active">Active</option>
                 <option value="inactive">Inactive</option>
