@@ -13,13 +13,19 @@ const AdminSettings = lazy(() => import('@/pages/admin/Settings/AdminSettings'))
 const AdminSettingsLayout = lazy(() => import('@/pages/admin/Settings/AdminSettingsLayout'));
 const AdminScheduleMaintenance = lazy(() => import('@/pages/admin/Settings/AdminScheduleMaintenance'));
 const CustomerHome = lazy(() => import('@/pages/customer/Home/CustomerHome'));
+const CustomerAbout = lazy(() => import('@/pages/customer/CustomerAbout'));
 const CustomerBook = lazy(() => import('@/pages/customer/CustomerBook'));
+const CustomerServices = lazy(() => import('@/pages/customer/CustomerServices'));
+const CustomerContact = lazy(() => import('@/pages/customer/CustomerContact'));
 
 export default function AppRoutes() {
   return (
     <Routes>
       <Route path="/" element={<CustomerLayout />}>
         <Route index element={<CustomerHome />} />
+        <Route path="about" element={<CustomerAbout />} />
+        <Route path="services" element={<CustomerServices />} />
+        <Route path="contact" element={<CustomerContact />} />
         <Route path="book" element={<CustomerBook />} />
       </Route>
 

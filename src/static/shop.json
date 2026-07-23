@@ -2,6 +2,7 @@
   "name": "Cee Barbershop",
   "address": "123 Main Street, Suite 4",
   "city": "Downtown, CA 90210",
+  "footerLocation": "Downtown, CA",
   "phone": "+1 (555) 123-4567",
   "email": "hello@ceebarbershop.com",
   "mapsUrl": "https://maps.google.com/?q=123+Main+Street+Downtown+CA"

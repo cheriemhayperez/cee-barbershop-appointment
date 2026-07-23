@@ -1,0 +1,144 @@
+.page {
+  flex: 1;
+  min-height: 100dvh;
+}
+
+.section {
+  padding-top: calc(var(--header-height) + 2rem);
+  padding-bottom: 3rem;
+}
+
+@media (min-width: 769px) {
+  .section {
+    min-height: calc(100dvh - var(--header-height));
+  }
+}
+
+.menuPanel {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  align-content: start;
+  gap: 1.75rem 2rem;
+  width: 100%;
+  height: fit-content;
+  min-height: calc(100dvh - var(--header-height) - 14rem);
+  background: #000000;
+  padding: 2rem;
+}
+
+.menuColumn {
+  min-width: 0;
+  height: auto;
+}
+
+.menuPanel > * {
+  height: auto;
+  align-self: start;
+}
+
+.menuHeading {
+  margin-bottom: 1.25rem;
+  color: #ffffff;
+  font-size: 0.9375rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.menuList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.menuRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.875rem;
+}
+
+.menuIcon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  margin-top: 0.125rem;
+  color: var(--gold);
+}
+
+.menuCopy {
+  flex-shrink: 0;
+  max-width: 14rem;
+}
+
+.menuName {
+  display: block;
+  color: #ffffff;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1.35;
+}
+
+.menuDots {
+  flex: 1;
+  min-width: 1rem;
+  margin-top: 0.85rem;
+  border-bottom: 1px dotted rgba(255, 255, 255, 0.28);
+}
+
+.menuPrice {
+  flex-shrink: 0;
+  margin-top: 0.125rem;
+  color: #ffffff;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.emptyState {
+  text-align: center;
+  color: var(--muted-light);
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  padding: 2rem 1rem;
+  min-height: calc(100dvh - var(--header-height) - 14rem);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000000;
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding-top: calc(var(--header-height) + 1.5rem);
+    min-height: calc(100dvh - var(--header-height));
+  }
+
+  .menuPanel {
+    grid-template-columns: 1fr;
+    padding: 1.5rem 1.25rem;
+    gap: 1.5rem;
+    min-height: calc(100dvh - var(--header-height) - 12rem);
+  }
+
+  .emptyState {
+    min-height: calc(100dvh - var(--header-height) - 12rem);
+  }
+
+  .menuCopy {
+    max-width: none;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .menuRow {
+    gap: 0.625rem;
+  }
+}

@@ -8,28 +8,68 @@
   border-bottom: 1px solid var(--border);
 }
 
+.sectionLight {
+  background: var(--bg-light);
+  color: var(--text-dark);
+  border-top: 1px solid var(--border-light);
+  border-bottom: 1px solid var(--border-light);
+}
+
 .sectionInner {
   max-width: 1080px;
   margin: 0 auto;
 }
 
 .eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
   color: var(--gold);
   text-transform: uppercase;
-  letter-spacing: 0.12em;
-  font-size: 0.75rem;
-  font-weight: 600;
-  margin-bottom: 0.75rem;
+  letter-spacing: 0.14em;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  margin-bottom: 0.875rem;
+}
+
+.eyebrow::before {
+  content: '';
+  flex-shrink: 0;
+  width: 2rem;
+  height: 1px;
+  background: var(--gold);
 }
 
 .sectionTitle {
-  font-size: clamp(1.75rem, 4vw, 2.25rem);
+  font-size: clamp(1.625rem, 3.5vw, 2.125rem);
   font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
   margin-bottom: 2.5rem;
+}
+
+.sectionLight .sectionTitle {
+  color: var(--text-dark);
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .section {
+    padding: 3.5rem 1.5rem;
+  }
 }
 
 @media (max-width: 768px) {
   .section {
     padding: 3rem 1.25rem;
+  }
+
+  .eyebrow,
+  .sectionTitle {
+    text-align: center;
+  }
+
+  .eyebrow {
+    justify-content: center;
   }
 }

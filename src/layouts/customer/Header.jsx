@@ -1,68 +1,112 @@
-import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
+import { HambergerMenu, CloseCircle } from 'iconsax-react';
 import CBLogoMark from '@/components/CBLogoMark/CBLogoMark';
-import { appName } from '@/constants/app.config';
-import useSectionNav from '@/hooks/customer/useSectionNav.hook';
+import { useCustomerHeader } from '@/hooks/customer/layout';
 import styles from '@/layouts/customer/Header.module.css';
 
 const customerNav = [
-  { to: '/#about', label: 'About' },
-  { to: '/#services', label: 'Services' },
-  { to: '/#barbers', label: 'Barbers' },
-  { to: '/#gallery', label: 'Gallery' },
-  { to: '/#contact', label: 'Contact' },
+  { to: '/', label: 'Home' },
+  { to: '/about', label: 'About' },
+  { to: '/services', label: 'Services' },
+  { to: '/contact', label: 'Contact' },
 ];
 
-const SCROLL_THRESHOLD = 48;
+function navLinkClass(baseClass, activeClass, isActive) {
+  return [baseClass, isActive ? activeClass : ''].filter(Boolean).join(' ');
+}
 
 export default function Header() {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const goToSection = useSectionNav();
-
-  useEffect(() => {
-    const onScroll = () => {
-      setIsScrolled(window.scrollY > SCROLL_THRESHOLD);
-    };
-
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+  const {
+    isScrolled,
+    menuOpen,
+    toggleMenu,
+    closeMenu,
+    isLightPage,
+    isHomeHero,
+    isNavActive,
+  } = useCustomerHeader();
 
   const headerClassName = [
     styles.header,
     styles.customer,
     isScrolled ? styles.scrolled : '',
+    !isScrolled && isLightPage ? styles.lightPage : '',
+    isHomeHero ? styles.homeHero : '',
+    menuOpen ? styles.menuOpen : '',
   ]
     .filter(Boolean)
     .join(' ');
 
   return (
     <header className={headerClassName}>
-      <Link to="/" className={styles.logo}>
-        <CBLogoMark size="sm" className={styles.logoMark} />
-        {appName}
-      </Link>
-
-      <nav className={styles.nav}>
-        {customerNav.map((item) => (
-          <a
-            key={item.to}
-            href={item.to}
-            className={styles.navLink}
-            onClick={(event) => goToSection(item.to, event)}
-          >
-            {item.label}
-          </a>
-        ))}
-      </nav>
-
-      <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-        <Link to="/book" className={styles.headerCta}>
-          Book Appointment
+      <div className={styles.headerInner}>
+        <Link to="/" className={styles.logo} aria-label="CEE Barbershop home">
+          <CBLogoMark size="header" className={styles.logoMark} alt="" />
         </Link>
-      </motion.div>
+
+        <nav className={styles.nav} aria-label="Main navigation">
+          {customerNav.map((item) => (
+            <Link
+              key={item.to}
+              to={item.to}
+              className={navLinkClass(
+                styles.navLink,
+                styles.navLinkActive,
+                isNavActive(item.to)
+              )}
+            >
+              {item.label}
+            </Link>
+          ))}
+        </nav>
+
+        <div className={styles.actions}>
+          <button
+            type="button"
+            className={styles.menuToggle}
+            aria-expanded={menuOpen}
+            aria-controls="mobile-nav"
+            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+            onClick={toggleMenu}
+          >
+            {menuOpen ? (
+              <CloseCircle size={22} color="currentColor" variant="Bold" />
+            ) : (
+              <HambergerMenu size={22} color="currentColor" variant="Bold" />
+            )}
+          </button>
+        </div>
+
+        <AnimatePresence>
+          {menuOpen && (
+            <motion.nav
+              id="mobile-nav"
+              className={styles.mobileNav}
+              aria-label="Mobile navigation"
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.2 }}
+            >
+              {customerNav.map((item) => (
+                <Link
+                  key={item.to}
+                  to={item.to}
+                  className={navLinkClass(
+                    styles.mobileNavLink,
+                    styles.mobileNavLinkActive,
+                    isNavActive(item.to)
+                  )}
+                  onClick={closeMenu}
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </motion.nav>
+          )}
+        </AnimatePresence>
+      </div>
     </header>
   );
 }

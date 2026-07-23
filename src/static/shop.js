@@ -9,3 +9,8 @@ export function fullAddress() {
 export function phoneHref() {
   return shop.phone.replace(/\D/g, '');
 }
+
+export function mapsEmbedUrl() {
+  const query = encodeURIComponent(fullAddress());
+  return `https://maps.google.com/maps?q=${query}&output=embed`;
+}
