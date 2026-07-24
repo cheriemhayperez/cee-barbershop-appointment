@@ -20,10 +20,6 @@ export function useCustomerHeader() {
   }, []);
 
   useEffect(() => {
-    setMenuOpen(false);
-  }, [location.pathname]);
-
-  useEffect(() => {
     if (!menuOpen) return undefined;
 
     const onKeyDown = (event) => {
@@ -35,7 +31,6 @@ export function useCustomerHeader() {
   }, [menuOpen]);
 
   const toggleMenu = useCallback(() => setMenuOpen((open) => !open), []);
-  const closeMenu = useCallback(() => setMenuOpen(false), []);
 
   const isLightPage = useMemo(
     () => LIGHT_PAGES.includes(location.pathname),
@@ -53,7 +48,6 @@ export function useCustomerHeader() {
     isScrolled,
     menuOpen,
     toggleMenu,
-    closeMenu,
     isLightPage,
     isHomeHero,
     isNavActive,

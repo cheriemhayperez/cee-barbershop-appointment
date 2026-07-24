@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import { AnimatePresence, motion } from 'framer-motion';
 import { HambergerMenu, CloseCircle } from 'iconsax-react';
 import CBLogoMark from '@/components/CBLogoMark/CBLogoMark';
 import { useCustomerHeader } from '@/hooks/customer/layout';
@@ -21,7 +20,6 @@ export default function Header() {
     isScrolled,
     menuOpen,
     toggleMenu,
-    closeMenu,
     isLightPage,
     isHomeHero,
     isNavActive,
@@ -78,34 +76,27 @@ export default function Header() {
           </button>
         </div>
 
-        <AnimatePresence>
-          {menuOpen && (
-            <motion.nav
-              id="mobile-nav"
-              className={styles.mobileNav}
-              aria-label="Mobile navigation"
-              initial={{ opacity: 0, y: -8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.2 }}
-            >
-              {customerNav.map((item) => (
-                <Link
-                  key={item.to}
-                  to={item.to}
-                  className={navLinkClass(
-                    styles.mobileNavLink,
-                    styles.mobileNavLinkActive,
-                    isNavActive(item.to)
-                  )}
-                  onClick={closeMenu}
-                >
-                  {item.label}
-                </Link>
-              ))}
-            </motion.nav>
-          )}
-        </AnimatePresence>
+        {menuOpen && (
+          <nav
+            id="mobile-nav"
+            className={styles.mobileNav}
+            aria-label="Mobile navigation"
+          >
+            {customerNav.map((item) => (
+              <Link
+                key={item.to}
+                to={item.to}
+                className={navLinkClass(
+                  styles.mobileNavLink,
+                  styles.mobileNavLinkActive,
+                  isNavActive(item.to)
+                )}
+              >
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+        )}
       </div>
     </header>
   );

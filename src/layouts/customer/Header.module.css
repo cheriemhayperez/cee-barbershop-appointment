@@ -164,11 +164,15 @@
 }
 
 .customer.menuOpen {
-  background: rgba(26, 26, 26, 0.96);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border-bottom-color: rgba(255, 255, 255, 0.06);
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.22);
+  background: #111111;
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.customer.lightPage.menuOpen {
+  background: var(--bg-light);
+  border-bottom-color: var(--border-light);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
 }
 
 .mobileNav {
@@ -181,11 +185,16 @@
   padding: 0.625rem 0 0.75rem;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   box-sizing: border-box;
+  background: transparent;
+}
+
+.customer.lightPage.menuOpen .mobileNav {
+  border-top-color: var(--border-light);
 }
 
 .mobileNavLink {
   display: block;
-  padding: 0.75rem 0;
+  padding: 0.75rem 0.875rem;
   color: rgba(245, 245, 245, 0.92);
   text-decoration: none;
   font-weight: 500;
@@ -194,9 +203,17 @@
   transition: background 0.2s ease, color 0.2s ease;
 }
 
+.customer.lightPage.menuOpen .mobileNavLink {
+  color: rgba(20, 20, 20, 0.88);
+}
+
 .mobileNavLink:hover {
   color: var(--gold);
   background: rgba(201, 162, 39, 0.1);
+}
+
+.customer.lightPage.menuOpen .mobileNavLink:hover {
+  background: rgba(196, 161, 114, 0.14);
 }
 
 .mobileNavLinkActive {
@@ -226,6 +243,12 @@
   .customer.scrolled {
     min-height: var(--header-height);
     padding: 0.625rem 1.5rem;
+  }
+
+  .customer.menuOpen,
+  .customer.lightPage.menuOpen {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
   }
 
   .nav {
