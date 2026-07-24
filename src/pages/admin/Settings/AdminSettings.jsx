@@ -1,6 +1,5 @@
 import { Fragment } from 'react';
 import { Link } from 'react-router-dom';
-import FadeIn from '@/components/FadeIn/FadeIn';
 import { CBCard } from '@/components';
 import { useBookingSchedule } from '@/hooks/customer/booking';
 import { shop, fullAddress } from '@/static/shop';
@@ -12,8 +11,7 @@ export default function AdminSettings() {
   const businessHours = formatWeeklyHoursForDisplay(schedule);
 
   return (
-    <FadeIn>
-      <div className={styles.settingsGrid}>
+    <div className={styles.settingsGrid}>
         <CBCard title="Shop Info">
           <dl className={styles.dl}>
             <dt>Name</dt><dd>{shop.name}</dd>
@@ -39,6 +37,5 @@ export default function AdminSettings() {
           </p>
         </CBCard>
       </div>
-    </FadeIn>
   );
 }

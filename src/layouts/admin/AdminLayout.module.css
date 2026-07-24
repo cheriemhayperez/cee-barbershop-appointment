@@ -1,8 +1,8 @@
 .layout {
   display: flex;
   min-height: 100vh;
-  background: #f5f5f5;
-  color: var(--text-dark);
+  background: var(--cb-admin-bg);
+  color: var(--cb-admin-text);
 }
 
 .main {
@@ -10,18 +10,74 @@
   display: flex;
   flex-direction: column;
   min-width: 0;
+  margin-left: var(--cb-admin-sidebar-width);
+  transition: margin-left 0.3s ease;
+}
+
+.layoutCollapsed .main {
+  margin-left: var(--cb-admin-sidebar-collapsed-width);
 }
 
 .topbar {
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  gap: 0.75rem;
   padding: 1rem 3rem;
-  background: #fff;
-  border-bottom: 1px solid #e5e5e5;
+  background: var(--cb-admin-surface);
+  border-bottom: 1px solid var(--cb-admin-border);
   position: sticky;
   top: 0;
   z-index: 5;
+}
+
+.topbarActions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-left: auto;
+}
+
+.menuBtn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  flex-shrink: 0;
+  margin-right: auto;
+  border: 1px solid var(--cb-admin-border);
+  border-radius: var(--cb-radius-sm);
+  background: var(--cb-admin-bg);
+  color: var(--cb-admin-text);
+  cursor: pointer;
+}
+
+.viewSiteMobile {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--cb-radius-sm);
+  border: 1px solid var(--cb-admin-border);
+  color: var(--cb-admin-muted);
+  text-decoration: none;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.viewSiteMobile:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  border: none;
+  background: rgba(0, 0, 0, 0.45);
+  cursor: pointer;
 }
 
 .userIcon {
@@ -30,11 +86,11 @@
   justify-content: center;
   width: 2rem;
   height: 2rem;
-  border-radius: 999px;
-  background: #f5f5f5;
-  color: #666;
+  border-radius: var(--cb-radius-pill);
+  background: var(--cb-admin-bg);
+  color: var(--cb-admin-muted);
   font-size: 0.9375rem;
-  border: 1px solid #e5e5e5;
+  border: 1px solid var(--cb-admin-border);
 }
 
 .content {
@@ -42,16 +98,48 @@
   padding: 0 3rem 2rem;
 }
 
-@media (max-width: 768px) {
+.routeFallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40vh;
+}
+
+@media (max-width: 1280px) {
+  .topbar {
+    padding: 1rem 1.5rem;
+  }
+
+  .content {
+    padding: 0 1.5rem 1.5rem;
+  }
+}
+
+@media (max-width: 1024px) {
   .layout {
     flex-direction: column;
   }
 
-  .content {
-    padding: 0 1.75rem 1.5rem;
+  .main,
+  .layoutCollapsed .main {
+    margin-left: 0;
   }
 
   .topbar {
-    padding: 0.875rem 1.75rem;
+    justify-content: flex-end;
+    gap: 0.625rem;
+    padding: 0.875rem 1rem;
+  }
+
+  .menuBtn {
+    display: inline-flex;
+  }
+
+  .topbarActions {
+    margin-left: auto;
+  }
+
+  .content {
+    padding: 0 1rem 1.5rem;
   }
 }

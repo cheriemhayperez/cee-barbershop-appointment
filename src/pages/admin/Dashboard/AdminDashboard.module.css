@@ -5,7 +5,7 @@
 }
 
 .cardLink {
-  color: #8a6d12;
+  color: #8a7048;
   font-size: 0.875rem;
   font-weight: 600;
   text-decoration: none;
@@ -43,8 +43,8 @@
   gap: 1rem;
   padding: 0.875rem 1rem;
   border-radius: 10px;
-  border: 1px solid #eee;
-  background: #fafafa;
+  border: 1px solid var(--cb-admin-border);
+  background: var(--cb-admin-bg);
 }
 
 .dayItemMain {
@@ -102,7 +102,7 @@
 }
 
 .statusPane {
-  border-left: 1px solid #f0f0f0;
+  border-left: 1px solid var(--cb-admin-border);
   padding-left: 1.5rem;
   min-height: calc(var(--dash-row) * 4 + 1rem);
   display: flex;
@@ -145,7 +145,7 @@
   width: 100%;
   max-width: 36px;
   min-height: 4px;
-  background: linear-gradient(to top, var(--gold), rgba(201, 162, 39, 0.5));
+  background: linear-gradient(to top, var(--gold), rgba(var(--cb-gold-rgb), 0.45));
   border-radius: 4px 4px 0 0;
   margin-top: auto;
   transition: height 0.4s ease;
@@ -199,7 +199,7 @@
   height: 8px;
   border-radius: 999px;
   overflow: hidden;
-  background: #f0f0f0;
+  background: var(--cb-admin-border);
 }
 
 .statusSegment {
@@ -212,14 +212,14 @@
   font-size: 0.875rem;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
   .overviewSplit {
     grid-template-columns: 1fr;
   }
 
   .statusPane {
     border-left: none;
-    border-top: 1px solid #f0f0f0;
+    border-top: 1px solid var(--cb-admin-border);
     padding-left: 0;
     padding-top: 1.25rem;
     min-height: auto;
@@ -233,5 +233,33 @@
 @media (max-width: 640px) {
   .page {
     padding-top: 1rem;
+  }
+
+  .stats {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .statCardWrap {
+    width: 100%;
+  }
+
+  .statValue {
+    font-size: 1.375rem;
+  }
+
+  .weekChart {
+    height: 120px;
+    gap: 0.25rem;
+  }
+
+  .weekLabel {
+    font-size: 0.625rem;
+  }
+
+  .dayItem {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.625rem;
   }
 }

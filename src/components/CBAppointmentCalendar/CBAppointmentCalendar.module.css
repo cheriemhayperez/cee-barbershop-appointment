@@ -31,7 +31,7 @@
   height: 2rem !important;
   min-height: 2rem !important;
   padding: 0 !important;
-  border-radius: 8px !important;
+  border-radius: var(--cb-radius-sm) !important;
   font-size: 1.125rem !important;
   line-height: 1 !important;
 }
@@ -52,7 +52,7 @@
   text-align: center;
   font-size: 0.6875rem;
   font-weight: 600;
-  color: #888;
+  color: var(--cb-admin-muted);
   text-transform: uppercase;
 }
 
@@ -68,8 +68,8 @@
   border-radius: 6px !important;
   box-shadow: none !important;
   border-color: transparent !important;
-  background: #fafafa !important;
-  color: #1a1a1a !important;
+  background: var(--cb-admin-bg) !important;
+  color: var(--cb-admin-text) !important;
 }
 
 .dayBtn {
@@ -81,24 +81,24 @@
 }
 
 .dayBtn:global(.ant-btn:hover:not(:disabled)) {
-  border-color: rgba(201, 162, 39, 0.45) !important;
-  background: #fafafa !important;
-  color: #1a1a1a !important;
+  border-color: rgba(var(--cb-gold-rgb), 0.45) !important;
+  background: var(--cb-admin-bg) !important;
+  color: var(--cb-admin-text) !important;
 }
 
 .dayHasAppointments:global(.ant-btn) {
-  background: #fffdf5 !important;
-  border-color: rgba(201, 162, 39, 0.25) !important;
+  background: var(--cb-admin-highlight) !important;
+  border-color: rgba(var(--cb-gold-rgb), 0.25) !important;
 }
 
 .daySelected:global(.ant-btn) {
-  background: #fff8e7 !important;
-  border-color: #c9a227 !important;
-  box-shadow: 0 0 0 1px #c9a227 !important;
+  background: var(--cb-admin-highlight-strong) !important;
+  border-color: var(--gold) !important;
+  box-shadow: 0 0 0 1px var(--gold) !important;
 }
 
 .dayToday .dayNumber {
-  color: #c9a227;
+  color: var(--gold);
 }
 
 .dayNumber {
@@ -114,13 +114,43 @@
   min-width: 0.875rem;
   height: 0.875rem;
   padding: 0 0.125rem;
-  border-radius: 999px;
-  background: #c9a227;
-  color: #1a1a1a;
+  border-radius: var(--cb-radius-pill);
+  background: var(--gold);
+  color: var(--cb-admin-text);
   font-size: 0.5rem;
   font-weight: 800;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   line-height: 1;
+}
+
+@media (max-width: 640px) {
+  .calendar {
+    --dash-row: 2rem;
+  }
+
+  .weekdayRow,
+  .daysGrid {
+    gap: 0.25rem;
+  }
+
+  .weekday {
+    font-size: 0.625rem;
+  }
+
+  .monthLabel {
+    font-size: 0.875rem;
+    min-width: 7.5rem;
+  }
+
+  .dayNumber {
+    font-size: 0.6875rem;
+  }
+
+  .countBadge {
+    min-width: 0.75rem;
+    height: 0.75rem;
+    font-size: 0.4375rem;
+  }
 }

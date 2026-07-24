@@ -123,6 +123,7 @@ export default function AdminDashboard() {
           <CBTable
             bordered={false}
             pagination={false}
+            minHeight={false}
             columns={[
               { title: 'Customer', dataIndex: 'name', key: 'name' },
               { title: 'Service', dataIndex: 'service', key: 'service' },

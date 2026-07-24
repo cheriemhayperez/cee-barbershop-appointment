@@ -18,12 +18,13 @@ export default function CBTable({
   dataSource = [],
   rowKey = 'id',
   emptyMessage,
-  bordered = true,
+  bordered = false,
   className,
   pagination = false,
+  minHeight = true,
 }) {
   return (
-    <div className={styles.wrap}>
+    <div className={cn(styles.wrap, minHeight && styles.wrapMinHeight)}>
       <Table
         className={cn('cb-table', className)}
         columns={normalizeColumns(columns)}

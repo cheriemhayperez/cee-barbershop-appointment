@@ -33,6 +33,14 @@ export const adminNavItems = [
   { to: "/admin/settings", label: "Settings", end: false, Icon: Setting2 },
 ];
 
+export function getAdminPageTitle(pathname) {
+  const match = adminNavItems.find(({ to, end }) =>
+    end ? pathname === to : pathname === to || pathname.startsWith(`${to}/`)
+  );
+
+  return match?.label ?? "Admin";
+}
+
 export function NavIcon({ Icon, ...props }) {
   return (
     <Icon

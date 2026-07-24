@@ -1,8 +1,7 @@
-import { Suspense, useEffect } from 'react';
+import { useEffect } from 'react';
 
 import AppRoutes from '@/routes/index';
 import ErrorBoundary from '@/components/ErrorBoundary/ErrorBoundary';
-import { CBLoaderBackdrop } from '@/components';
 import { appName } from '@/constants/app.config';
 
 export default function App() {
@@ -12,9 +11,7 @@ export default function App() {
 
   return (
     <ErrorBoundary>
-      <Suspense fallback={<CBLoaderBackdrop label="Loading page" />}>
-        <AppRoutes />
-      </Suspense>
+      <AppRoutes />
     </ErrorBoundary>
   );
 }

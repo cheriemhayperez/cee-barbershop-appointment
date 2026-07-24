@@ -7,23 +7,21 @@ import styles from '@/components/CBToolbar/CBToolbar.module.css';
 
 export function AdminPageHeader({ title, subtitle, onAdd, addLabel = 'Add New' }) {
   return (
-    <div className="mb-5 flex flex-col gap-3.5">
-      <div>
-        <h1 className="m-0 text-2xl font-bold leading-tight text-cb-dark">{title}</h1>
+    <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+      <div className="min-w-0 flex-1">
+        <h1 className="m-0 text-xl font-bold leading-tight text-cb-dark sm:text-2xl">{title}</h1>
         {subtitle && <p className="mb-0 mt-1 text-sm text-cb-muted">{subtitle}</p>}
       </div>
       {onAdd && (
-        <div className="flex justify-end">
-          <CBButton
-            variant="add"
-            size="small"
-            onClick={onAdd}
-            icon={<IconAdd />}
-            className={styles.addBtn}
-          >
-            {addLabel}
-          </CBButton>
-        </div>
+        <CBButton
+          variant="add"
+          size="small"
+          onClick={onAdd}
+          icon={<IconAdd />}
+          className={cn(styles.addBtn, 'w-full shrink-0 sm:w-auto')}
+        >
+          {addLabel}
+        </CBButton>
       )}
     </div>
   );

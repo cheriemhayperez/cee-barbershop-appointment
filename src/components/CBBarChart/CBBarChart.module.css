@@ -21,7 +21,7 @@
 
 .barTrack {
   height: 8px;
-  background: #f0f0f0;
+  background: var(--cb-admin-border);
   border-radius: 999px;
   overflow: hidden;
 }
@@ -40,8 +40,30 @@
   text-align: right;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
   .barRow {
     grid-template-columns: 80px 1fr 24px;
+  }
+}
+
+@media (max-width: 640px) {
+  .barRow {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      'label value'
+      'track track';
+    row-gap: 0.25rem;
+  }
+
+  .barLabel {
+    grid-area: label;
+  }
+
+  .barTrack {
+    grid-area: track;
+  }
+
+  .barValue {
+    grid-area: value;
   }
 }

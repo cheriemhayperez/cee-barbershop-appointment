@@ -1,6 +1,5 @@
 import { useMemo } from 'react';
 
-import FadeIn from '@/components/FadeIn/FadeIn';
 import {
   CBButton,
   CBCheckbox,
@@ -37,7 +36,7 @@ export default function AdminScheduleMaintenance() {
         key: 'label',
       },
       {
-        title: 'Open',
+        title: 'Start',
         key: 'open',
         render: (_, entry) => (
           <CBInput
@@ -50,7 +49,7 @@ export default function AdminScheduleMaintenance() {
         ),
       },
       {
-        title: 'Close',
+        title: 'End',
         key: 'close',
         render: (_, entry) => (
           <CBInput
@@ -81,7 +80,7 @@ export default function AdminScheduleMaintenance() {
   );
 
   return (
-    <FadeIn>
+    <>
       <p className={scheduleStyles.intro}>
         Maintenance for customer booking — controls which dates and times appear on the book page.
       </p>
@@ -97,6 +96,7 @@ export default function AdminScheduleMaintenance() {
               dataSource={schedule.weeklyHours}
               rowKey="day"
               pagination={false}
+              minHeight={false}
             />
           </div>
         </CBCard>
@@ -167,6 +167,6 @@ export default function AdminScheduleMaintenance() {
           )}
         </CBCard>
       </div>
-    </FadeIn>
+    </>
   );
 }

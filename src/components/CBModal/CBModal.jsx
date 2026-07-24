@@ -20,8 +20,10 @@ export default function CBModal({
       onCancel={onClose}
       footer={footer ?? null}
       width={width}
-      className={cn(className)}
+      wrapClassName={styles.modalWrap}
+      className={cn(styles.modal, className)}
       destroyOnClose
+      centered
     >
       {children}
     </Modal>

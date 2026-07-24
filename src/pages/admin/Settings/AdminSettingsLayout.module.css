@@ -12,10 +12,10 @@
 
 .tab {
   padding: 0.5rem 1rem;
-  border-radius: 999px;
-  border: 1px solid #e0e0e0;
-  background: #fff;
-  color: #555;
+  border-radius: var(--cb-radius-pill);
+  border: 1px solid var(--cb-admin-border);
+  background: var(--cb-admin-surface);
+  color: var(--cb-admin-muted);
   text-decoration: none;
   font-size: 0.875rem;
   font-weight: 600;
@@ -23,12 +23,40 @@
 }
 
 .tab:hover {
-  border-color: #c9a227;
-  color: #1a1a1a;
+  border-color: var(--gold);
+  color: var(--cb-admin-text);
 }
 
 .tabActive {
-  background: #fff8e7;
-  border-color: #c9a227;
-  color: #1a1a1a;
+  background: var(--cb-admin-highlight);
+  border-color: var(--gold);
+  color: var(--cb-admin-text);
+}
+
+.tabFallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 16rem;
+}
+
+@media (max-width: 640px) {
+  .tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.25rem;
+  }
+
+  .tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tab {
+    flex-shrink: 0;
+    padding: 0.5rem 0.875rem;
+    font-size: 0.8125rem;
+  }
 }

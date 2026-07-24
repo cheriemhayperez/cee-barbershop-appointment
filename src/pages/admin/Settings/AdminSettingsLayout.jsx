@@ -1,6 +1,6 @@
-import { NavLink, Outlet } from 'react-router-dom';
-import { AdminPageHeader } from '@/components';
-import PageTransition from '@/components/PageTransition/PageTransition';
+import { Suspense } from 'react';
+import { NavLink, Outlet, useLocation } from 'react-router-dom';
+import { AdminPageHeader, CBLoader } from '@/components';
 import styles from '@/pages/admin/Settings/AdminSettingsLayout.module.css';
 
 const tabs = [
@@ -8,9 +8,19 @@ const tabs = [
   { to: '/admin/settings/schedule', label: 'Booking Schedule', end: false },
 ];
 
-export default function AdminSettingsLayout() {
+function SettingsTabFallback() {
   return (
-    <PageTransition className={styles.page}>
+    <div className={styles.tabFallback} aria-live="polite">
+      <CBLoader size="md" label="Loading settings" />
+    </div>
+  );
+}
+
+export default function AdminSettingsLayout() {
+  const location = useLocation();
+
+  return (
+    <div className={styles.page}>
       <AdminPageHeader
         title="Settings"
         subtitle="Shop configuration and booking maintenance."
@@ -31,7 +41,9 @@ export default function AdminSettingsLayout() {
         ))}
       </nav>
 
-      <Outlet />
-    </PageTransition>
+      <Suspense fallback={<SettingsTabFallback />}>
+        <Outlet key={location.pathname} />
+      </Suspense>
+    </div>
   );
 }

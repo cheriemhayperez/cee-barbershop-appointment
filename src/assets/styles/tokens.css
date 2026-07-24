@@ -14,9 +14,18 @@
   --cb-danger: #c62828;
   --cb-success: #2e7d32;
   --cb-warning: #f57f17;
-  --cb-admin-bg: #f5f5f5;
+  --cb-admin-bg: #f8f6f2;
   --cb-admin-surface: #ffffff;
-  --cb-admin-text: #1a1a1a;
+  --cb-admin-text: #141414;
+  --cb-admin-border: #e5e0d8;
+  --cb-admin-muted: #5c5c5c;
+  --cb-admin-highlight: rgba(var(--cb-gold-rgb), 0.12);
+  --cb-admin-highlight-strong: rgba(var(--cb-gold-rgb), 0.18);
+  --cb-admin-sidebar-width: 260px;
+  --cb-admin-sidebar-collapsed-width: 72px;
+  --cb-table-min-height: 570px;
+  /* Keep in sync with src/constants/admin/breakpoints.js */
+  --cb-admin-mobile-breakpoint: 1024px;
   --cb-radius-sm: 8px;
   --cb-radius-md: 12px;
   --cb-radius-pill: 999px;
