@@ -1,7 +1,13 @@
 .wrap {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1rem;
+}
+
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
 }
 
 .fieldset {
@@ -13,7 +19,7 @@
 .legend {
   font-weight: 600;
   font-size: 0.875rem;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
 }
 
 .requiredMark {
@@ -128,7 +134,7 @@
 .hoursHint {
   color: var(--muted);
   font-size: 0.875rem;
-  margin-bottom: 0.75rem;
+  margin: 0;
 }
 
 .slotsGrid {
@@ -163,7 +169,8 @@
 }
 
 .error {
-  color: #e57373;
-  font-size: 0.875rem;
-  margin: 0;
+  display: block;
+  margin: 0.5rem 0 0;
+  font-size: 0.75rem;
+  color: #dc2626;
 }

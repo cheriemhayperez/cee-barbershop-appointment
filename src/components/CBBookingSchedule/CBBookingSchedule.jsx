@@ -6,7 +6,14 @@ import styles from '@/components/CBBookingSchedule/CBBookingSchedule.module.css'
 
 const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-export default function CBBookingSchedule({ date, time, onDateChange, onTimeChange, error }) {
+export default function CBBookingSchedule({
+  date,
+  time,
+  onDateChange,
+  onTimeChange,
+  dateError,
+  timeError,
+}) {
   const { schedule } = useBookingSchedule();
   const {
     today,
@@ -23,12 +30,13 @@ export default function CBBookingSchedule({ date, time, onDateChange, onTimeChan
 
   return (
     <div className={styles.wrap}>
-      <fieldset className={styles.fieldset}>
-        <legend className={styles.legend}>
-          Pick a date
-          <span className={styles.requiredMark} aria-hidden="true">*</span>
-        </legend>
-        <div className={styles.calendar}>
+      <div className={styles.fieldGroup}>
+        <fieldset className={styles.fieldset}>
+          <legend className={styles.legend}>
+            Pick a date
+            <span className={styles.requiredMark} aria-hidden="true">*</span>
+          </legend>
+          <div className={styles.calendar}>
           <div className={styles.calendarHeader}>
             <CBButton
               type="button"
@@ -90,13 +98,16 @@ export default function CBBookingSchedule({ date, time, onDateChange, onTimeChan
             })}
           </div>
         </div>
-      </fieldset>
+        </fieldset>
+        {dateError && <p className={styles.error}>{dateError}</p>}
+      </div>
 
-      <fieldset className={styles.fieldset}>
-        <legend className={styles.legend}>
-          Pick a time
-          <span className={styles.requiredMark} aria-hidden="true">*</span>
-        </legend>
+      <div className={styles.fieldGroup}>
+        <fieldset className={styles.fieldset}>
+          <legend className={styles.legend}>
+            Pick a time
+            <span className={styles.requiredMark} aria-hidden="true">*</span>
+          </legend>
         {!date ? (
           <p className={styles.hint}>Select a date first to see available times.</p>
         ) : slots.length === 0 ? (
@@ -123,9 +134,9 @@ export default function CBBookingSchedule({ date, time, onDateChange, onTimeChan
             </div>
           </>
         )}
-      </fieldset>
-
-      {error && <p className={styles.error}>{error}</p>}
+        </fieldset>
+        {timeError && <p className={styles.error}>{timeError}</p>}
+      </div>
     </div>
   );
 }

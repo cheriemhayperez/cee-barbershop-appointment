@@ -19,7 +19,8 @@ export default function CustomerBook() {
     fieldErrors,
     confirmationMessage,
     emailsSent,
-    scheduleError,
+    dateError,
+    timeError,
     getBarberLabel,
     handleChange,
     handleBarberSelect,
@@ -125,7 +126,8 @@ export default function CustomerBook() {
               time={form.time}
               onDateChange={handleDateChange}
               onTimeChange={handleTimeChange}
-              error={scheduleError}
+              dateError={dateError}
+              timeError={timeError}
             />
 
             {error && <p className={styles.error}>{error}</p>}

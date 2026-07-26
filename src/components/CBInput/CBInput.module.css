@@ -34,14 +34,14 @@
 
 .errorLight {
   display: block;
-  margin-top: 0.25rem;
+  margin-top: 0.5rem;
   font-size: 0.75rem;
   color: #dc2626;
 }
 
 .errorDark {
   display: block;
-  margin-top: 0.25rem;
+  margin-top: 0.5rem;
   font-size: 0.75rem;
   color: #e57373;
 }

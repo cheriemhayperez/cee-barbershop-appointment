@@ -69,7 +69,7 @@
 
 .submitBtn:global(.ant-btn) {
   width: 100%;
-  margin-top: 0.25rem;
+  margin-top: 1rem;
   height: 2.75rem !important;
   min-height: 2.75rem !important;
   padding: 0 1.25rem !important;
@@ -322,7 +322,7 @@
 .error {
   color: #e57373;
   font-size: 0.875rem;
-  margin: 0;
+  margin: 0.5rem 0 0;
 }
 
 .emailNote {
