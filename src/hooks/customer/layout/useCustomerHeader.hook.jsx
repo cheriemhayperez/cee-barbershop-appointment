@@ -20,6 +20,10 @@ export function useCustomerHeader() {
   }, []);
 
   useEffect(() => {
+    setMenuOpen(false);
+  }, [location.pathname]);
+
+  useEffect(() => {
     if (!menuOpen) return undefined;
 
     const onKeyDown = (event) => {

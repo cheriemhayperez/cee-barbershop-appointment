@@ -6,7 +6,10 @@ import App from '@/App';
 import { cbAntdTheme } from '@/constants/theme.config';
 import { DataProvider } from '@/providers/DataProvider';
 import { store } from '@/store/store.config';
+import { preventPinchZoom } from '@/utils/preventPinchZoom';
 import '@/assets/styles/global.css';
+
+preventPinchZoom();
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 

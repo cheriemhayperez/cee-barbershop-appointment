@@ -11,6 +11,7 @@ export function useVisualViewportHeaderFix() {
     const sync = () => {
       const keyboardOpen = viewport.height < window.innerHeight * 0.82;
       header.style.top = `${viewport.offsetTop}px`;
+      header.style.left = `${viewport.offsetLeft}px`;
       header.style.width = `${viewport.width}px`;
       document.documentElement.classList.toggle('keyboard-open', keyboardOpen);
     };
@@ -23,6 +24,7 @@ export function useVisualViewportHeaderFix() {
       viewport.removeEventListener('scroll', sync);
       viewport.removeEventListener('resize', sync);
       header.style.top = '';
+      header.style.left = '';
       header.style.width = '';
       document.documentElement.classList.remove('keyboard-open');
     };
