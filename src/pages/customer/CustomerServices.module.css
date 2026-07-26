@@ -19,12 +19,12 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
   align-items: start;
   align-content: start;
-  gap: 1.75rem 2rem;
+  gap: 2.5rem 3rem;
   width: 100%;
   height: fit-content;
   min-height: calc(100dvh - var(--header-height) - 14rem);
   background: #000000;
-  padding: 2rem;
+  padding: 3rem 2.75rem;
 }
 
 .menuColumn {
@@ -38,11 +38,11 @@
 }
 
 .menuHeading {
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.5rem;
   color: #ffffff;
-  font-size: 0.9375rem;
+  font-size: clamp(1.25rem, 2.2vw, 1.625rem);
   font-weight: 800;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
 }
 
@@ -52,13 +52,13 @@
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.375rem;
 }
 
 .menuRow {
   display: flex;
   align-items: flex-start;
-  gap: 0.875rem;
+  gap: 1rem;
 }
 
 .menuIcon {
@@ -66,20 +66,20 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 2rem;
+  width: 2.75rem;
   margin-top: 0.125rem;
   color: var(--gold);
 }
 
 .menuCopy {
   flex-shrink: 0;
-  max-width: 14rem;
+  max-width: 18rem;
 }
 
 .menuName {
   display: block;
   color: #ffffff;
-  font-size: 0.8125rem;
+  font-size: clamp(0.875rem, 1.4vw, 1rem);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -89,7 +89,7 @@
 .menuDots {
   flex: 1;
   min-width: 1rem;
-  margin-top: 0.85rem;
+  margin-top: 1rem;
   border-bottom: 1px dotted rgba(255, 255, 255, 0.28);
 }
 
@@ -97,7 +97,7 @@
   flex-shrink: 0;
   margin-top: 0.125rem;
   color: #ffffff;
-  font-size: 0.8125rem;
+  font-size: clamp(0.875rem, 1.4vw, 1rem);
   font-weight: 700;
   letter-spacing: 0.04em;
 }
@@ -123,8 +123,8 @@
 
   .menuPanel {
     grid-template-columns: 1fr;
-    padding: 1.5rem 1.25rem;
-    gap: 1.5rem;
+    padding: 2rem 1.5rem;
+    gap: 2rem;
     min-height: calc(100dvh - var(--header-height) - 12rem);
   }
 

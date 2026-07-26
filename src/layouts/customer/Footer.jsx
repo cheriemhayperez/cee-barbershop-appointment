@@ -1,3 +1,4 @@
+import { cn } from '@/utils/cn';
 import { Link } from 'react-router-dom';
 import { ArrowUp2 } from 'iconsax-react';
 import CBLogoMark from '@/components/CBLogoMark/CBLogoMark';
@@ -11,6 +12,7 @@ export default function Footer() {
     businessHours,
     footerLocation,
     hideVisitSection,
+    hideBookButton,
     scrollToTop,
     showBackToTop,
   } = useCustomerFooter();
@@ -45,7 +47,7 @@ export default function Footer() {
             Where style meets tradition in {footerLocation}.
           </h2>
 
-          <div className={styles.footerGrid}>
+          <div className={cn(styles.footerGrid, hideBookButton && styles.footerGridNoBook)}>
             <div className={styles.logoCol}>
               <Link to="/" className={styles.logoLink} aria-label={`${shop.name} home`}>
                 <CBLogoMark size="lg" className={styles.footerLogo} alt="" />
@@ -77,11 +79,13 @@ export default function Footer() {
               </ul>
             </div>
 
-            <div className={styles.actionsCol}>
-              <Link to="/book" className={styles.bookBtn}>
-                Book Appointment
-              </Link>
-            </div>
+            {!hideBookButton && (
+              <div className={styles.actionsCol}>
+                <Link to="/book" className={styles.bookBtn}>
+                  Book Appointment
+                </Link>
+              </div>
+            )}
           </div>
         </div>
 

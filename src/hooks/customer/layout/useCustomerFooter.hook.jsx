@@ -4,7 +4,7 @@ import { useBookingSchedule } from '@/hooks/customer/booking';
 import { shop } from '@/static/shop';
 import { formatWeeklyHoursForDisplay } from '@/utils/scheduleUtils';
 
-const PAGES_WITHOUT_VISIT_BAND = ['/book', '/services'];
+const PAGES_WITHOUT_VISIT_BAND = ['/book'];
 
 export function useCustomerFooter() {
   const { schedule } = useBookingSchedule();
@@ -17,6 +17,7 @@ export function useCustomerFooter() {
   );
 
   const hideVisitSection = PAGES_WITHOUT_VISIT_BAND.includes(pathname);
+  const hideBookButton = pathname === '/book';
 
   const footerLocation = shop.footerLocation || shop.city;
 
@@ -38,6 +39,7 @@ export function useCustomerFooter() {
     businessHours,
     footerLocation,
     hideVisitSection,
+    hideBookButton,
     scrollToTop,
     showBackToTop,
   };

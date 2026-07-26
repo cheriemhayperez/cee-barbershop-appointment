@@ -28,7 +28,7 @@ export default function CustomerServices() {
                       {category.services.map((service) => (
                         <li key={service.id ?? service.name} className={styles.menuRow}>
                           <span className={styles.menuIcon}>
-                            <ServiceIcon icon={service.icon} size={28} />
+                            <ServiceIcon icon={service.icon} size={40} />
                           </span>
                           <div className={styles.menuCopy}>
                             <span className={styles.menuName}>{service.name}</span>

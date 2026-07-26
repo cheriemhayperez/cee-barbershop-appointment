@@ -114,6 +114,10 @@
   align-items: start;
 }
 
+.footerGridNoBook {
+  grid-template-columns: minmax(7rem, 0.85fr) 1.2fr 1.2fr;
+}
+
 .logoCol {
   display: flex;
   justify-content: center;
