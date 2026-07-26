@@ -1,3 +1,5 @@
+export { EMAIL_BRAND } from '@/constants/email.brand';
+
 export const BADGE_VARIANTS = {
   PRIMARY: 'primary',
   SECONDARY: 'secondary',

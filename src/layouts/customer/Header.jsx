@@ -1,14 +1,14 @@
 import { Link } from 'react-router-dom';
 import { HambergerMenu, CloseCircle } from 'iconsax-react';
 import CBLogoMark from '@/components/CBLogoMark/CBLogoMark';
-import { useCustomerHeader } from '@/hooks/customer/layout';
+import { useCustomerHeader, useVisualViewportHeaderFix } from '@/hooks/customer/layout';
 import styles from '@/layouts/customer/Header.module.css';
 
 const customerNav = [
   { to: '/', label: 'Home' },
   { to: '/about', label: 'About' },
   { to: '/services', label: 'Services' },
-  { to: '/contact', label: 'Contact' },
+  { to: '/contact', label: 'Contact Us' },
 ];
 
 function navLinkClass(baseClass, activeClass, isActive) {
@@ -24,6 +24,7 @@ export default function Header() {
     isHomeHero,
     isNavActive,
   } = useCustomerHeader();
+  const headerRef = useVisualViewportHeaderFix();
 
   const headerClassName = [
     styles.header,
@@ -37,7 +38,7 @@ export default function Header() {
     .join(' ');
 
   return (
-    <header className={headerClassName}>
+    <header ref={headerRef} className={headerClassName}>
       <div className={styles.headerInner}>
         <Link to="/" className={styles.logo} aria-label="CEE Barbershop home">
           <CBLogoMark size="header" className={styles.logoMark} alt="" />

@@ -33,6 +33,18 @@
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
   overflow: visible;
+  z-index: 100;
+}
+
+html.keyboard-open .customer.lightPage:not(.scrolled) {
+  background: #000000;
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+html.keyboard-open .customer.lightPage:not(.scrolled) .menuToggle {
+  border-color: rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(245, 245, 245, 0.95);
 }
 
 .customer.scrolled {

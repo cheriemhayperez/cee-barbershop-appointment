@@ -13,7 +13,7 @@ export default function ContactSection() {
     <section className={`${sectionStyles.section} ${sectionStyles.sectionLight} ${styles.section}`}>
       <div className={sectionStyles.sectionInner}>
         <FadeIn>
-          <p className={sectionStyles.eyebrow}>Contact</p>
+          <p className={sectionStyles.eyebrow}>Contact Us</p>
           <h1 className={sectionStyles.sectionTitle}>Visit us or get in touch</h1>
         </FadeIn>
         <div className={styles.grid}>

@@ -2,6 +2,7 @@ import { Children, isValidElement } from 'react';
 import { Input, Select } from 'antd';
 
 import { cn } from '@/utils/cn';
+import { handleMobileInputFocus } from '@/utils/mobileInputScroll';
 import styles from '@/components/CBInput/CBInput.module.css';
 
 export default function CBInput({
@@ -12,10 +13,16 @@ export default function CBInput({
   variant = 'light',
   size,
   required,
+  onFocus,
   ...rest
 }) {
   const inputId = id || rest.name;
   const isDark = variant === 'dark';
+
+  const handleFocus = (event) => {
+    onFocus?.(event);
+    handleMobileInputFocus(event);
+  };
 
   return (
     <div
@@ -43,6 +50,7 @@ export default function CBInput({
           id={inputId}
           size={size || 'middle'}
           status={error ? 'error' : undefined}
+          onFocus={handleFocus}
           {...rest}
         />
       </div>

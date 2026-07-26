@@ -48,6 +48,27 @@ Uses `VITE_` prefix. Copy from `.env.example`.
 
 Supabase vars optional unless you need booking emails.
 
+### Booking emails
+
+Supabase Edge Function `send-booking-emails` sends mail via [Resend](https://resend.com).
+
+**Supabase → Edge Functions → Secrets**
+
+| Secret | Example |
+|--------|---------|
+| `RESEND_API_KEY` | `re_...` |
+| `FROM_EMAIL` | `bookings@ceebarbershop.com` |
+| `FROM_NAME` | `Cee Barbershop` |
+| `SHOP_OWNER_EMAIL` | owner Gmail |
+
+Redeploy after changes:
+
+```bash
+supabase functions deploy send-booking-emails
+```
+
+**Setup:** verify `ceebarbershop.com` in Resend (DNS in Cloudflare) → set secrets → redeploy.
+
 ## Scripts
 
 - `npm start` — local dev server

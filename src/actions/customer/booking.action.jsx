@@ -9,11 +9,15 @@ function emailErrorMessage(raw) {
   if (!raw) return 'Could not send confirmation emails.';
 
   if (raw.includes('only send testing emails')) {
-    return 'Resend test mode: book with the email you used on Resend, or verify a domain at resend.com/domains.';
+    return 'Could not send to this email address. Verify your domain in Resend and check Supabase email secrets.';
   }
 
-  if (raw.includes('gmail.com domain is not verified')) {
-    return 'Sender email is wrong on the server. FROM must be onboarding@resend.dev until you verify a domain.';
+  if (raw.includes('domain is not verified')) {
+    return 'Your sending domain is not verified. Check Resend DNS and set FROM_EMAIL to bookings@ceebarbershop.com in Supabase.';
+  }
+
+  if (raw.includes('Missing RESEND_API_KEY, SHOP_OWNER_EMAIL, or FROM_EMAIL')) {
+    return 'Email is not configured on the server. Add Supabase Edge Function secrets and redeploy.';
   }
 
   return raw;
@@ -46,7 +50,7 @@ function bookingMessage(payload, { customerSent, ownerSent }) {
   }
 
   if (ownerSent) {
-    return 'Booking confirmed. Shop owner notified. Customer email skipped (Resend test mode).';
+    return 'Booking confirmed. The shop owner was notified, but the customer confirmation email could not be sent.';
   }
 
   if (customerSent) {

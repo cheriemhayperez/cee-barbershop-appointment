@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { doSubmitBooking } from '@/actions/customer/booking.action';
 import { getBarberLabel, useCatalogData } from '@/hooks/shared/useCatalogData.hook';
 import { isSupabaseConfigured } from '@/lib/supabase';
-import { isDateSelectable, isSlotEnabled } from '@/utils/scheduleUtils';
+import { validateBookingField, validateSubmitBooking } from '@/validations';
 import { useBookingSchedule } from '@/hooks/customer/booking/useBookingSchedule.hook';
 
 const initialForm = {
@@ -16,6 +16,16 @@ const initialForm = {
   time: '',
 };
 
+function clearFieldError(errors, name) {
+  if (!errors[name]) {
+    return errors;
+  }
+
+  const next = { ...errors };
+  delete next[name];
+  return next;
+}
+
 export function useCustomerBook() {
   const dispatch = useDispatch();
   const { barbers, services } = useCatalogData();
@@ -23,13 +33,31 @@ export function useCustomerBook() {
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
+  const [fieldErrors, setFieldErrors] = useState({});
   const [confirmationMessage, setConfirmationMessage] = useState('');
   const [emailsSent, setEmailsSent] = useState(false);
   const [form, setForm] = useState(initialForm);
-  const [scheduleError, setScheduleError] = useState('');
 
   const handleChange = (e) => {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    const { name, value } = e.target;
+    const nextForm = { ...form, [name]: value };
+
+    setForm(nextForm);
+    setFieldErrors((prev) => {
+      if (!prev[name]) {
+        return prev;
+      }
+
+      const { errors } = validateBookingField(name, value, {
+        form: nextForm,
+        schedule,
+      });
+      if (errors[name]) {
+        return { ...prev, [name]: errors[name] };
+      }
+
+      return clearFieldError(prev, name);
+    });
   };
 
   const handleBarberSelect = (barberId) => {
@@ -37,36 +65,33 @@ export function useCustomerBook() {
   };
 
   const handleDateChange = (date) => {
-    setScheduleError('');
     setForm((prev) => ({ ...prev, date, time: '' }));
+    setFieldErrors((prev) => {
+      const next = clearFieldError(prev, 'date');
+      return clearFieldError(next, 'time');
+    });
   };
 
   const handleTimeChange = (time) => {
-    setScheduleError('');
     setForm((prev) => ({ ...prev, time }));
+    setFieldErrors((prev) => clearFieldError(prev, 'time'));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    setScheduleError('');
 
-    if (!services.length) {
-      setError('No services are available to book yet.');
-      return;
-    }
+    const { errors, valid } = validateSubmitBooking(form, {
+      schedule,
+      hasServices: services.length > 0,
+    });
 
-    if (!form.service) {
-      setError('Please select a service.');
-      return;
-    }
+    setFieldErrors(errors);
 
-    if (!form.date || !isDateSelectable(form.date, schedule)) {
-      setScheduleError('Please select an available date.');
-      return;
-    }
-    if (!form.time || !isSlotEnabled(form.date, form.time, schedule)) {
-      setScheduleError('Please select an available time slot.');
+    if (!valid) {
+      if (errors._form) {
+        setError(errors._form);
+      }
       return;
     }
 
@@ -91,9 +116,10 @@ export function useCustomerBook() {
     submitted,
     isSubmitting,
     error,
+    fieldErrors,
     confirmationMessage,
     emailsSent,
-    scheduleError,
+    scheduleError: fieldErrors.date || fieldErrors.time || '',
     isSupabaseConfigured,
     getBarberLabel: (id) => getBarberLabel(barbers, id),
     handleChange,

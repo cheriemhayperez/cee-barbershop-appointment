@@ -16,6 +16,7 @@ export default function CustomerBook() {
     submitted,
     isSubmitting,
     error,
+    fieldErrors,
     confirmationMessage,
     emailsSent,
     scheduleError,
@@ -52,14 +53,32 @@ export default function CustomerBook() {
             </FadeIn>
 
             <form className={styles.form} onSubmit={handleSubmit}>
-            <CBInput label="Name" name="name" value={form.name} onChange={handleChange} required />
-            <CBInput label="Email" name="email" type="email" value={form.email} onChange={handleChange} required />
+            <CBInput
+              label="Name"
+              name="name"
+              value={form.name}
+              onChange={handleChange}
+              error={fieldErrors.name}
+              placeholder="John Doe"
+              required
+            />
+            <CBInput
+              label="Email"
+              name="email"
+              type="email"
+              value={form.email}
+              onChange={handleChange}
+              error={fieldErrors.email}
+              placeholder="you@example.com"
+              required
+            />
 
             <CBSelect
               label="Service"
               name="service"
               value={form.service}
               onChange={handleChange}
+              error={fieldErrors.service}
               required
               placeholder="Please select service"
               emptyMessage="No services available yet"

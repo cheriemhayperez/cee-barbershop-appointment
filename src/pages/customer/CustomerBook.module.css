@@ -55,12 +55,16 @@
 .form {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 1rem;
   padding: 1.5rem;
   border-radius: 12px;
   background: #ffffff;
   border: 1px solid var(--border-light);
   box-shadow: 0 1px 3px rgba(20, 20, 20, 0.06);
+}
+
+.form :global([class*='fieldLight']) {
+  margin-bottom: 0;
 }
 
 .submitBtn:global(.ant-btn) {
@@ -100,14 +104,14 @@
 .barberLegend {
   font-weight: 600;
   font-size: 0.875rem;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.5rem;
   color: var(--text-dark);
 }
 
 .barberHint {
   color: var(--muted);
   font-size: 0.8125rem;
-  margin-bottom: 0.875rem;
+  margin-bottom: 0.625rem;
 }
 
 .barberGrid {
