@@ -130,11 +130,16 @@
   opacity: 0.28 !important;
 }
 
-.hint,
-.hoursHint {
+.hint {
   color: var(--muted);
   font-size: 0.875rem;
   margin: 0;
+}
+
+.hoursHint {
+  color: var(--muted);
+  font-size: 0.875rem;
+  margin: 0 0 0.75rem;
 }
 
 .slotsGrid {
@@ -173,4 +178,10 @@
   margin: 0.5rem 0 0;
   font-size: 0.75rem;
   color: #dc2626;
+}
+
+@media (max-width: 768px) {
+  .wrap {
+    gap: 0.75rem;
+  }
 }

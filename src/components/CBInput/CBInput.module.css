@@ -159,6 +159,19 @@
   color: var(--text-dark) !important;
 }
 
+.controlLight :global(.ant-input-status-error),
+.controlLight :global(.ant-input-affix-wrapper-status-error) {
+  border-color: #ff4d4f !important;
+}
+
+.controlLight :global(.ant-input-status-error:hover),
+.controlLight :global(.ant-input-affix-wrapper-status-error:hover),
+.controlLight :global(.ant-input-status-error:focus),
+.controlLight :global(.ant-input-affix-wrapper-status-error-focused) {
+  border-color: #ff4d4f !important;
+  box-shadow: 0 0 0 2px rgba(255, 77, 79, 0.12) !important;
+}
+
 .selectLight :global(.ant-select-selector) {
   display: flex !important;
   align-items: center !important;
@@ -197,6 +210,19 @@
   background-color: var(--bg) !important;
   border-color: var(--border) !important;
   color: var(--text) !important;
+}
+
+.controlDark :global(.ant-input-status-error),
+.controlDark :global(.ant-input-affix-wrapper-status-error) {
+  border-color: #ff4d4f !important;
+}
+
+.controlDark :global(.ant-input-status-error:hover),
+.controlDark :global(.ant-input-affix-wrapper-status-error:hover),
+.controlDark :global(.ant-input-status-error:focus),
+.controlDark :global(.ant-input-affix-wrapper-status-error-focused) {
+  border-color: #ff4d4f !important;
+  box-shadow: 0 0 0 2px rgba(255, 77, 79, 0.12) !important;
 }
 
 .selectDark:global(.ant-select-disabled .ant-select-selector) {
@@ -304,4 +330,17 @@
   color: var(--muted);
   font-size: 0.875rem;
   text-align: center;
+}
+
+@media (max-width: 768px) {
+  .controlLight :global(.ant-input),
+  .controlLight :global(.ant-input-affix-wrapper),
+  .controlDark :global(.ant-input),
+  .controlDark :global(.ant-input-affix-wrapper),
+  .selectLight :global(.ant-select-selector),
+  .selectDark :global(.ant-select-selector),
+  .controlDark :global(.ant-input),
+  .selectDark :global(.ant-select-selection-item) {
+    font-size: 1rem !important;
+  }
 }

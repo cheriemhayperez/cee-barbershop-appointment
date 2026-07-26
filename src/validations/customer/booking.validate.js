@@ -53,11 +53,15 @@ function dateError(value, schedule) {
 }
 
 function timeError(value, form, schedule) {
+  if (isEmpty(form?.date)) {
+    return '';
+  }
+
   if (isEmpty(value)) {
     return 'Please select an available time slot.';
   }
 
-  if (schedule && form.date && !isSlotEnabled(form.date, value, schedule)) {
+  if (schedule && !isSlotEnabled(form.date, value, schedule)) {
     return 'Please select an available time slot.';
   }
 
