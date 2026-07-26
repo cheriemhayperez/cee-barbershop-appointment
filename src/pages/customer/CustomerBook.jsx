@@ -21,6 +21,7 @@ export default function CustomerBook() {
     emailsSent,
     dateError,
     timeError,
+    compactAboveTime,
     getBarberLabel,
     handleChange,
     handleBarberSelect,
@@ -121,6 +122,7 @@ export default function CustomerBook() {
               </div>
             </fieldset>
 
+            <div className={styles.scheduleSection}>
             <CBBookingSchedule
               date={form.date}
               time={form.time}
@@ -128,7 +130,9 @@ export default function CustomerBook() {
               onTimeChange={handleTimeChange}
               dateError={dateError}
               timeError={timeError}
+              compactAboveTime={compactAboveTime}
             />
+            </div>
 
             {error && <p className={styles.error}>{error}</p>}
 

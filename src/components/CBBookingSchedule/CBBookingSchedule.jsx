@@ -13,6 +13,7 @@ export default function CBBookingSchedule({
   onTimeChange,
   dateError,
   timeError,
+  compactAboveTime = false,
 }) {
   const { schedule } = useBookingSchedule();
   const {
@@ -20,6 +21,7 @@ export default function CBBookingSchedule({
     weeks,
     slots,
     daySchedule,
+    selectedDate,
     monthLabel,
     goMonth,
     canGoPrev,
@@ -29,7 +31,13 @@ export default function CBBookingSchedule({
   } = useBookingCalendar({ date, schedule, onDateChange, onTimeChange });
 
   return (
-    <div className={styles.wrap}>
+    <div
+      className={cn(
+        styles.wrap,
+        compactAboveTime && styles.wrapCompactAboveTime,
+        date && slots.length > 0 && styles.wrapWithSlots
+      )}
+    >
       <div className={styles.fieldGroup}>
         <fieldset className={styles.fieldset}>
           <legend className={styles.legend}>
@@ -68,41 +76,45 @@ export default function CBBookingSchedule({
             ))}
           </div>
 
-          <div className={styles.daysGrid}>
-            {weeks.flat().map((cell, index) => {
-              if (!cell) {
-                return <span key={`empty-${index}`} className={styles.dayEmpty} />;
-              }
+          <div className={styles.daysWrap}>
+            {weeks.map((week, weekIndex) => (
+              <div key={`week-${weekIndex}`} className={styles.daysGrid}>
+                {week.map((cell, index) => {
+                  if (!cell) {
+                    return <span key={`empty-${weekIndex}-${index}`} className={styles.dayEmpty} />;
+                  }
 
-              const selectable = isDateSelectable(cell.dateStr);
-              const selected = date === cell.dateStr;
-              const isToday = cell.dateStr === toDateString(today);
+                  const selectable = isDateSelectable(cell.dateStr);
+                  const selected = selectedDate === cell.dateStr;
+                  const isToday = cell.dateStr === toDateString(today);
 
-              return (
-                <CBButton
-                  key={cell.dateStr}
-                  type="button"
-                  variant="secondary"
-                  className={cn(
-                    styles.dayBtn,
-                    selected && styles.daySelected,
-                    isToday && styles.dayToday,
-                    !selectable && styles.dayDisabled
-                  )}
-                  disabled={!selectable}
-                  onClick={() => handleDateSelect(cell.dateStr)}
-                >
-                  {cell.date.getDate()}
-                </CBButton>
-              );
-            })}
+                  return (
+                    <CBButton
+                      key={cell.dateStr}
+                      type="button"
+                      variant="secondary"
+                      className={cn(
+                        styles.dayBtn,
+                        selected && styles.daySelected,
+                        isToday && styles.dayToday,
+                        !selectable && styles.dayDisabled
+                      )}
+                      disabled={!selectable}
+                      onClick={() => handleDateSelect(cell.dateStr)}
+                    >
+                      {cell.date.getDate()}
+                    </CBButton>
+                  );
+                })}
+              </div>
+            ))}
           </div>
         </div>
         </fieldset>
         {dateError && <p className={styles.error}>{dateError}</p>}
       </div>
 
-      <div className={styles.fieldGroup}>
+      <div className={cn(styles.fieldGroup, styles.timeFieldGroup)}>
         <fieldset className={styles.fieldset}>
           <legend className={styles.legend}>
             Pick a time

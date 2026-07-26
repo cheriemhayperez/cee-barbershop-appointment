@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import {
   formatMonthYear,
@@ -12,6 +12,11 @@ export function useBookingCalendar({ date, schedule, onDateChange, onTimeChange 
   const today = new Date();
   const [viewMonth, setViewMonth] = useState(today.getMonth());
   const [viewYear, setViewYear] = useState(today.getFullYear());
+  const [selectedDate, setSelectedDate] = useState(date);
+
+  useEffect(() => {
+    setSelectedDate(date);
+  }, [date]);
 
   const weeks = useMemo(
     () => getCalendarWeeks(viewYear, viewMonth),
@@ -19,12 +24,12 @@ export function useBookingCalendar({ date, schedule, onDateChange, onTimeChange 
   );
 
   const slots = useMemo(
-    () => (date ? getAvailableSlots(date, schedule) : []),
-    [date, schedule]
+    () => (selectedDate ? getAvailableSlots(selectedDate, schedule) : []),
+    [selectedDate, schedule]
   );
 
-  const daySchedule = date
-    ? schedule.weeklyHours.find((d) => d.day === new Date(`${date}T12:00:00`).getDay())
+  const daySchedule = selectedDate
+    ? schedule.weeklyHours.find((d) => d.day === new Date(`${selectedDate}T12:00:00`).getDay())
     : null;
 
   const goMonth = (delta) => {
@@ -35,8 +40,8 @@ export function useBookingCalendar({ date, schedule, onDateChange, onTimeChange 
 
   const handleDateSelect = (dateStr) => {
     if (!isDateSelectable(dateStr, schedule)) return;
+    setSelectedDate(dateStr);
     onDateChange(dateStr);
-    onTimeChange('');
   };
 
   const canGoPrev =
@@ -48,6 +53,7 @@ export function useBookingCalendar({ date, schedule, onDateChange, onTimeChange 
     weeks,
     slots,
     daySchedule,
+    selectedDate,
     monthLabel: formatMonthYear(viewYear, viewMonth),
     goMonth,
     canGoPrev,

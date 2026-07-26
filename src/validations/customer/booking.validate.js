@@ -2,7 +2,12 @@ import { isDateSelectable, isSlotEnabled } from '@/utils/scheduleUtils';
 import { isEmpty } from '@/validations';
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const NAME_REGEX = /^[\p{L}\s'.-]+$/u;
 const MIN_NAME_LENGTH = 2;
+
+export function sanitizeBookingName(value) {
+  return String(value ?? '').replace(/[^\p{L}\s'.-]/gu, '');
+}
 
 function nameError(value) {
   const name = String(value ?? '').trim();
@@ -11,8 +16,17 @@ function nameError(value) {
     return 'This field is required.';
   }
 
-  if (name.length < MIN_NAME_LENGTH) {
-    return `Enter at least ${MIN_NAME_LENGTH} characters.`;
+  if (/\d/.test(name)) {
+    return 'Name cannot contain numbers.';
+  }
+
+  if (!NAME_REGEX.test(name)) {
+    return 'Use letters only. Hyphens, apostrophes, and periods are allowed.';
+  }
+
+  const letterCount = (name.match(/\p{L}/gu) || []).length;
+  if (letterCount < MIN_NAME_LENGTH) {
+    return `Enter at least ${MIN_NAME_LENGTH} letters.`;
   }
 
   return '';

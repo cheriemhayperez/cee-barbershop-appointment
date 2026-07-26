@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { doSubmitBooking } from '@/actions/customer/booking.action';
 import { getBarberLabel, useCatalogData } from '@/hooks/shared/useCatalogData.hook';
 import { isSupabaseConfigured } from '@/lib/supabase';
-import { validateBookingField, validateSubmitBooking } from '@/validations';
+import { validateBookingField, validateSubmitBooking, sanitizeBookingName } from '@/validations';
 import { useBookingSchedule } from '@/hooks/customer/booking/useBookingSchedule.hook';
 
 const initialForm = {
@@ -37,9 +37,11 @@ export function useCustomerBook() {
   const [confirmationMessage, setConfirmationMessage] = useState('');
   const [emailsSent, setEmailsSent] = useState(false);
   const [form, setForm] = useState(initialForm);
+  const [hasDateValidationBeenShown, setHasDateValidationBeenShown] = useState(false);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value: rawValue } = e.target;
+    const value = name === 'name' ? sanitizeBookingName(rawValue) : rawValue;
     const nextForm = { ...form, [name]: value };
 
     setForm(nextForm);
@@ -88,6 +90,10 @@ export function useCustomerBook() {
 
     setFieldErrors(errors);
 
+    if (errors.date) {
+      setHasDateValidationBeenShown(true);
+    }
+
     if (!valid) {
       if (errors._form) {
         setError(errors._form);
@@ -121,6 +127,7 @@ export function useCustomerBook() {
     emailsSent,
     dateError: fieldErrors.date || '',
     timeError: fieldErrors.time || '',
+    compactAboveTime: !hasDateValidationBeenShown,
     isSupabaseConfigured,
     getBarberLabel: (id) => getBarberLabel(barbers, id),
     handleChange,
