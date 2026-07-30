@@ -24,9 +24,9 @@ const VARIANT_CLASS = {
   dark: '!bg-cb-dark hover:!bg-black border-cb-dark',
   add: cn(
     'inline-flex h-[2.625rem] min-h-[2.625rem] items-center gap-2.5 rounded-[10px] border border-gold',
-    'bg-gold px-4 pl-2.5 text-sm font-semibold text-[#141414]',
+    'bg-gold px-4 pl-2.5 text-sm font-semibold text-white',
     'shadow-[0_1px_2px_rgba(0,0,0,0.06)] transition-all',
-    'hover:bg-gold-hover hover:border-gold-hover hover:shadow-gold active:translate-y-px'
+    'hover:bg-gold-hover hover:border-gold-hover hover:!text-white hover:shadow-gold active:translate-y-px'
   ),
   inline: '!h-auto !min-h-0 !p-0 !shadow-none !border-0 bg-transparent text-inherit hover:!bg-transparent',
 };

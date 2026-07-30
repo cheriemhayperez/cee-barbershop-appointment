@@ -1,7 +1,61 @@
 .form {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
+  min-height: 22rem;
+  max-height: min(72vh, 42rem);
+}
+
+.formScroll {
+  flex: 1 1 auto;
+  min-height: 16rem;
+  max-height: min(56vh, 34rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  margin-right: -0.25rem;
+  padding-right: 0.25rem;
+}
+
+.formScroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.formScroll::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgba(20, 20, 20, 0.16);
+}
+
+.formFields {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+  min-height: 100%;
+}
+
+.formOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--cb-radius-sm);
+  background: rgba(255, 255, 255, 0.82);
+}
+
+.formError {
+  margin: 0 0 0.75rem;
+  padding: 0.75rem 0.875rem;
+  border-radius: var(--cb-radius-sm);
+  background: rgba(198, 40, 40, 0.08);
+  color: var(--cb-danger);
+  font-size: 0.8125rem;
+  line-height: 1.5;
 }
 
 .modalWrap :global(.ant-modal) {
@@ -11,8 +65,45 @@
   padding-bottom: 0;
 }
 
+.modalWrapWide :global(.ant-modal) {
+  width: min(var(--cb-modal-width, 860px), calc(100vw - 2rem)) !important;
+}
+
 .modalWrap :global(.ant-modal-content) {
   border-radius: var(--cb-radius-md);
+  max-height: calc(100vh - 2rem);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.modalWrap :global(.ant-modal-header) {
+  padding: 1.125rem 3.25rem 0.75rem 1.25rem;
+  margin-bottom: 0;
+}
+
+.modalWrap :global(.ant-modal-close) {
+  top: 0.875rem;
+  inset-inline-end: 0.875rem;
+  width: 2rem;
+  height: 2rem;
+}
+
+.modalWrap :global(.ant-modal-close-x) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  font-size: 0.875rem;
+  line-height: 1;
+}
+
+.modalWrap :global(.ant-modal-body) {
+  padding: 0 1.25rem 1.25rem;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .footer {
@@ -20,9 +111,11 @@
   justify-content: flex-end;
   align-items: center;
   gap: 0.75rem;
+  flex-shrink: 0;
   margin-top: 1rem;
   padding-top: 1rem;
   border-top: 1px solid var(--cb-admin-border);
+  background: var(--cb-admin-surface);
 }
 
 .footer :global(.ant-btn) {
@@ -34,17 +127,30 @@
   font-weight: 600 !important;
 }
 
-.footer :global(.ant-btn-primary) {
+.footer :global(.ant-btn-primary:not(.ant-btn-dangerous)) {
   background: var(--gold) !important;
-  color: var(--cb-admin-text) !important;
+  color: #ffffff !important;
   border: 1px solid var(--gold) !important;
   box-shadow: none !important;
 }
 
-.footer :global(.ant-btn-primary:hover:not(:disabled)) {
+.footer :global(.ant-btn-primary:not(.ant-btn-dangerous):hover:not(:disabled)) {
   background: var(--gold-hover) !important;
-  color: var(--cb-admin-text) !important;
+  color: #ffffff !important;
   border-color: var(--gold-hover) !important;
+}
+
+.footer :global(.ant-btn-dangerous) {
+  background: var(--cb-danger) !important;
+  border-color: var(--cb-danger) !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
+}
+
+.footer :global(.ant-btn-dangerous:hover:not(:disabled)) {
+  background: #b71c1c !important;
+  border-color: #b71c1c !important;
+  color: #ffffff !important;
 }
 
 .footer :global(.ant-btn-default) {
@@ -58,6 +164,16 @@
 }
 
 @media (max-width: 480px) {
+  .form {
+    min-height: 18rem;
+    max-height: calc(100vh - 6rem);
+  }
+
+  .formScroll {
+    min-height: 12rem;
+    max-height: calc(100vh - 12rem);
+  }
+
   .footer {
     flex-direction: column-reverse;
     align-items: stretch;

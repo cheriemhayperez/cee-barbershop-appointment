@@ -138,9 +138,11 @@ export function CBSelect({
           status={error ? 'error' : undefined}
           options={options}
           placeholder={placeholder}
-          value={value || undefined}
+          value={value === '' || value == null ? undefined : value}
           disabled={disabled}
           aria-required={required || undefined}
+          defaultActiveFirstOption={false}
+          autoComplete="off"
           notFoundContent={
             <span className={isDark ? styles.selectEmptyMessage : styles.selectEmptyMessageLight}>
               {emptyMessage}
