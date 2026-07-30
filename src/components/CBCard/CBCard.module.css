@@ -1,0 +1,11 @@
+.card:global(.ant-card),
+.card {
+  border: none !important;
+  border-radius: 14px;
+  box-shadow: var(--cb-admin-card-shadow);
+  overflow: hidden;
+}
+
+.card :global(.ant-card-head) {
+  border-bottom: none !important;
+}
