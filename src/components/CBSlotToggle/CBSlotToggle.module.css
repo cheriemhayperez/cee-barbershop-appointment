@@ -19,13 +19,13 @@
 }
 
 .on {
-  border-color: #a5d6a7 !important;
-  background: #e8f5e9 !important;
-  color: #2e7d32 !important;
+  border-color: rgba(46, 125, 50, 0.28) !important;
+  background: rgba(46, 125, 50, 0.08) !important;
+  color: var(--cb-success) !important;
 }
 
 .off {
-  border-color: #ef9a9a !important;
-  background: #ffebee !important;
-  color: #c62828 !important;
+  border-color: rgba(138, 112, 72, 0.28) !important;
+  background: rgba(138, 112, 72, 0.08) !important;
+  color: #8a7048 !important;
 }

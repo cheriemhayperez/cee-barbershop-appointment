@@ -3,6 +3,22 @@
   padding-top: 1.25rem;
 }
 
+.content {
+  position: relative;
+}
+
+.pageOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 8rem;
+  background: rgba(248, 246, 242, 0.88);
+  border-radius: 14px;
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -20,6 +36,14 @@
   border-radius: 50%;
   object-fit: cover;
   margin-bottom: 0.75rem;
+}
+
+.tableAvatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
 }
 
 .meta {
@@ -63,6 +87,132 @@
   font-size: 0.8125rem;
   color: #666;
   line-height: 1.5;
+}
+
+.editLink {
+  color: var(--gold);
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.editLink:hover {
+  color: #8a7048;
+}
+
+.hoursEditNote {
+  margin: 1.25rem 0 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+.settingsLoading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 16rem;
+}
+
+.shopForm {
+  position: relative;
+}
+
+.shopFormOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: rgba(248, 246, 242, 0.88);
+}
+
+.shopFormFields {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.formError {
+  margin: 0 0 0.75rem;
+  padding: 0.75rem 0.875rem;
+  border-radius: var(--cb-radius-sm);
+  background: rgba(198, 40, 40, 0.08);
+  color: var(--cb-danger);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+.shopFormActions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--cb-admin-border);
+}
+
+.shopFormActions :global(.ant-btn-primary) {
+  background: var(--gold) !important;
+  border-color: var(--gold) !important;
+  color: #ffffff !important;
+}
+
+.shopFormActions :global(.ant-btn-primary:hover:not(:disabled)) {
+  background: var(--gold-hover) !important;
+  border-color: var(--gold-hover) !important;
+  color: #ffffff !important;
+}
+
+.saveStatus {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.375rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.saveStatusSaving {
+  background: rgba(var(--cb-gold-rgb), 0.14);
+  color: #8a7048;
+}
+
+.saveStatusSaved {
+  background: rgba(46, 125, 50, 0.1);
+  color: var(--cb-success);
+}
+
+.saveStatusError {
+  background: rgba(198, 40, 40, 0.08);
+  color: var(--cb-danger);
+}
+
+.emptyState {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 16rem;
+  padding: 2.5rem 1.5rem;
+  background: var(--cb-admin-surface);
+  border-radius: 14px;
+  box-shadow: var(--cb-admin-card-shadow);
+  text-align: center;
+}
+
+.emptyStateText {
+  margin: 0;
+  color: var(--cb-admin-muted);
+  font-size: 0.875rem;
+  font-weight: 500;
 }
 
 @media (max-width: 1024px) {

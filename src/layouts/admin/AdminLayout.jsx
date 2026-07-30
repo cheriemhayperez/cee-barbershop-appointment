@@ -58,9 +58,15 @@ export default function AdminLayout() {
                 <ExportSquare size={20} color="currentColor" variant="Outline" />
               </Link>
             )}
-            <span className={styles.userIcon} aria-label="Admin user">
-              <IconUser />
-            </span>
+            <div className={styles.userGreeting} aria-label="Hi, Cherie, Admin">
+              <span className={styles.userAvatar} aria-hidden="true">
+                <IconUser />
+              </span>
+              <span className={styles.userMeta}>
+                <span className={styles.userGreetingLine}>Hi, Cherie</span>
+                <span className={styles.userRole}>Admin</span>
+              </span>
+            </div>
           </div>
         </header>
 

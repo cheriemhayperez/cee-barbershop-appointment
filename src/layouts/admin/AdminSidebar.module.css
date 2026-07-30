@@ -1,12 +1,19 @@
 .sidebar {
   width: var(--cb-admin-sidebar-width);
   min-height: 100vh;
-  background: var(--cb-surface);
-  color: var(--cb-white);
+  background: linear-gradient(
+    180deg,
+    var(--cb-admin-sidebar-bg-top) 0%,
+    var(--cb-admin-sidebar-bg) 38%,
+    var(--cb-admin-sidebar-bg-mid) 72%,
+    var(--cb-admin-sidebar-bg-deep) 100%
+  );
+  color: var(--cb-admin-sidebar-text);
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
-  border-right: 1px solid var(--cb-border);
+  border-right: 1px solid var(--cb-admin-sidebar-border);
+  box-shadow: inset -1px 0 0 rgba(255, 255, 255, 0.06);
   position: fixed;
   top: 0;
   left: 0;
@@ -27,7 +34,6 @@
   padding: 1.75rem 1rem;
   text-decoration: none;
   color: inherit;
-  border-bottom: 1px solid var(--cb-border);
   flex-shrink: 0;
 }
 
@@ -61,7 +67,7 @@
   font-size: 0.6875rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: var(--cb-muted);
+  color: rgba(255, 255, 255, 0.42);
   padding: 0 0.75rem;
   margin-bottom: 0.5rem;
   white-space: nowrap;
@@ -89,9 +95,9 @@
   gap: 0.75rem;
   padding: 0.75rem 0.875rem;
   border-radius: var(--cb-radius-sm);
-  color: #aaa;
+  color: var(--cb-admin-sidebar-text);
   text-decoration: none;
-  font-size: 0.9375rem;
+  font-size: 0.875rem;
   font-weight: 500;
   transition: background 0.2s, color 0.2s, padding 0.3s ease;
   white-space: nowrap;
@@ -104,13 +110,23 @@
 }
 
 .navLink:hover {
-  background: #242424;
-  color: var(--cb-white);
+  background: var(--cb-admin-sidebar-hover-bg);
+  color: var(--cb-admin-sidebar-active);
+}
+
+.navLink:hover .icon {
+  opacity: 1;
 }
 
 .active {
-  background: var(--cb-admin-highlight-strong);
-  color: var(--gold);
+  background: var(--cb-admin-sidebar-active-bg);
+  color: var(--cb-admin-sidebar-active);
+  box-shadow: inset 3px 0 0 var(--cb-gold);
+}
+
+.active:hover {
+  background: rgba(255, 255, 255, 0.18);
+  color: var(--cb-admin-sidebar-active);
 }
 
 .active .icon {
@@ -138,13 +154,16 @@
 }
 
 .footer {
-  padding: 0.75rem 0.75rem 0;
-  border-top: 1px solid var(--cb-border);
+  padding: 0.75rem;
+  border-top: 1px solid var(--cb-admin-sidebar-border);
   flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .sidebarCollapsed .footer {
-  padding: 0.5rem 0.5rem 0;
+  padding: 0.5rem;
 }
 
 .viewSite {
@@ -153,19 +172,20 @@
   justify-content: center;
   padding: 0.625rem 0.875rem;
   border-radius: var(--cb-radius-sm);
-  border: 1px solid #333;
-  color: #ccc;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: var(--cb-admin-sidebar-text-strong);
   text-decoration: none;
   font-size: 0.8125rem;
+  font-weight: 500;
   text-align: center;
-  transition: border-color 0.2s, color 0.2s;
-  margin-bottom: 0.5rem;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
   min-height: 2.5rem;
 }
 
 .viewSite:hover {
-  border-color: var(--gold);
-  color: var(--gold);
+  border-color: rgba(255, 255, 255, 0.28);
+  color: var(--cb-admin-sidebar-active);
+  background: var(--cb-admin-sidebar-hover-bg);
 }
 
 .viewSiteText {
@@ -177,19 +197,19 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  min-height: 3rem;
-  padding: 0.75rem;
+  min-height: 2.5rem;
+  padding: 0.625rem;
   border: none;
-  border-top: 1px solid var(--cb-border);
-  background: #242424;
-  color: #aaa;
+  border-radius: var(--cb-radius-sm);
+  background: rgba(0, 0, 0, 0.18);
+  color: var(--cb-admin-sidebar-text-strong);
   cursor: pointer;
   transition: color 0.2s, background 0.2s;
 }
 
 .collapseBtn:hover {
-  color: var(--gold);
-  background: #2a2a2a;
+  color: var(--cb-admin-sidebar-active);
+  background: var(--cb-admin-sidebar-hover-bg);
 }
 
 .collapseIcon {
@@ -216,7 +236,7 @@
 
   .sidebarMobileOpen {
     transform: translateX(0);
-    box-shadow: 8px 0 32px rgba(0, 0, 0, 0.35);
+    box-shadow: 8px 0 32px rgba(0, 0, 0, 0.28);
   }
 
   .sidebarCollapsed {
@@ -268,8 +288,8 @@
   }
 
   .footer {
-    display: block;
-    padding: 0.75rem 0.75rem 0;
+    display: flex;
+    padding: 0.75rem;
   }
 
   .collapseBtn {

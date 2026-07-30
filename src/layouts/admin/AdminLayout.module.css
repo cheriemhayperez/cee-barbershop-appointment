@@ -80,22 +80,55 @@
   cursor: pointer;
 }
 
-.userIcon {
+.userGreeting {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0;
+  border: none;
+  background: transparent;
+}
+
+.userAvatar {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2rem;
-  height: 2rem;
-  border-radius: var(--cb-radius-pill);
-  background: var(--cb-admin-bg);
+  width: 2.125rem;
+  height: 2.125rem;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--cb-admin-accent-soft);
+  color: var(--cb-admin-accent);
+  border: none;
+}
+
+.userMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.0625rem;
+  min-width: 0;
+  padding-right: 0.125rem;
+}
+
+.userGreetingLine {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--cb-admin-text);
+  white-space: nowrap;
+}
+
+.userRole {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  line-height: 1.2;
   color: var(--cb-admin-muted);
-  font-size: 0.9375rem;
-  border: 1px solid var(--cb-admin-border);
+  white-space: nowrap;
 }
 
 .content {
   flex: 1;
-  padding: 0 3rem 2rem;
+  padding: 1.75rem 3rem 2rem;
 }
 
 .routeFallback {
@@ -111,7 +144,7 @@
   }
 
   .content {
-    padding: 0 1.5rem 1.5rem;
+    padding: 1.5rem 1.5rem 1.5rem;
   }
 }
 
@@ -140,6 +173,10 @@
   }
 
   .content {
-    padding: 0 1rem 1.5rem;
+    padding: 1.25rem 1rem 1.5rem;
+  }
+
+  .userGreeting {
+    padding: 0;
   }
 }
