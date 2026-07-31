@@ -18,12 +18,14 @@ const getWeekDates = () => {
 
 export function getDashboardAnalytics({ appointments, services, barbers, customers }) {
   const today = todayIso();
+  const currentMonth = today.slice(0, 7);
   const weekDates = getWeekDates();
   const priceMap = Object.fromEntries(services.map((s) => [s.name, parsePrice(s.price)]));
 
-  const confirmed = appointments.filter((a) => a.status === 'confirmed');
-  const completed = appointments.filter((a) => a.status === 'completed');
-  const cancelled = appointments.filter((a) => a.status === 'cancelled');
+  const monthAppointments = appointments.filter((a) => a.date.startsWith(currentMonth));
+  const confirmed = monthAppointments.filter((a) => a.status === 'confirmed');
+  const completed = monthAppointments.filter((a) => a.status === 'completed');
+  const cancelled = monthAppointments.filter((a) => a.status === 'cancelled');
   const todayAppts = appointments.filter((a) => a.date === today);
 
   const serviceCounts = appointments.reduce((acc, a) => {
@@ -45,7 +47,8 @@ export function getDashboardAnalytics({ appointments, services, barbers, custome
 
   const barberBookings = Object.entries(barberCounts)
     .map(([name, count]) => ({ name, count }))
-    .sort((a, b) => b.count - a.count);
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 5);
 
   const weeklyTrend = weekDates.map((date) => ({
     date,
@@ -63,17 +66,14 @@ export function getDashboardAnalytics({ appointments, services, barbers, custome
     .slice(0, 5);
 
   const activeBarbers = barbers.filter((b) => b.status === 'active').length;
-  const avgVisits = customers.length
-    ? (customers.reduce((s, c) => s + c.visits, 0) / customers.length).toFixed(1)
-    : '0';
 
   return {
     kpis: [
-      { label: "Today's Appointments", value: String(todayAppts.length), hint: todayAppts.length ? 'Scheduled for today' : 'None today' },
-      { label: 'Total Bookings', value: String(appointments.length), hint: `${confirmed.length} upcoming` },
-      { label: 'Completed', value: String(completed.length), hint: 'Past visits done' },
-      { label: 'Customers', value: String(customers.length), hint: `${avgVisits} avg visits` },
-      { label: 'Active Barbers', value: String(activeBarbers), hint: `${services.filter((s) => s.status === 'active').length} services live` },
+      { label: 'Today', value: String(todayAppts.length), accent: 'gold', icon: 'calendar' },
+      { label: 'Bookings', value: String(appointments.length), accent: 'blue', icon: 'bookings' },
+      { label: 'Completed', value: String(completed.length), accent: 'green', icon: 'completed' },
+      { label: 'Customers', value: String(customers.length), accent: 'violet', icon: 'customers' },
+      { label: 'Barbers', value: String(activeBarbers), accent: 'bronze', icon: 'barbers' },
     ],
     statusBreakdown: [
       { label: 'Confirmed', count: confirmed.length, color: '#2e7d32' },
