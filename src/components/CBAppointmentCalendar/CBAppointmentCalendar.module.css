@@ -81,14 +81,14 @@
 }
 
 .dayBtn:global(.ant-btn:hover:not(:disabled)) {
-  border-color: rgba(var(--cb-gold-rgb), 0.45) !important;
-  background: var(--cb-admin-bg) !important;
+  border-color: var(--cb-admin-accent-border) !important;
+  background: var(--cb-admin-highlight) !important;
   color: var(--cb-admin-text) !important;
 }
 
 .dayHasAppointments:global(.ant-btn) {
   background: var(--cb-admin-highlight) !important;
-  border-color: rgba(var(--cb-gold-rgb), 0.25) !important;
+  border-color: var(--cb-admin-accent-border) !important;
 }
 
 .daySelected:global(.ant-btn) {
@@ -116,7 +116,7 @@
   padding: 0 0.125rem;
   border-radius: var(--cb-radius-pill);
   background: var(--gold);
-  color: var(--cb-admin-text);
+  color: #1a1a1a;
   font-size: 0.5rem;
   font-weight: 800;
   display: inline-flex;

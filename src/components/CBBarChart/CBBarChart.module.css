@@ -4,16 +4,31 @@
   gap: 0.625rem;
 }
 
+.barChartFixed {
+  --bar-row-height: 1.25rem;
+  --bar-row-gap: 0.625rem;
+  min-height: calc(
+    (var(--bar-row-height) * var(--bar-min-rows, 5)) +
+    (var(--bar-row-gap) * (var(--bar-min-rows, 5) - 1))
+  );
+}
+
 .barRow {
   display: grid;
   grid-template-columns: 100px 1fr 28px;
   align-items: center;
   gap: 0.625rem;
+  min-height: var(--bar-row-height, 1.25rem);
+}
+
+.barRowPlaceholder .barLabel,
+.barRowPlaceholder .barValue {
+  visibility: hidden;
 }
 
 .barLabel {
   font-size: 0.75rem;
-  color: #555;
+  color: var(--cb-admin-muted);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -28,7 +43,11 @@
 
 .barFill {
   height: 100%;
-  background: var(--gold);
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--bar-fill-color, var(--gold)) 72%, #ffffff),
+    var(--bar-fill-color, var(--gold))
+  );
   border-radius: 999px;
   min-width: 4px;
   transition: width 0.4s ease;
@@ -38,6 +57,7 @@
   font-size: 0.75rem;
   font-weight: 700;
   text-align: right;
+  color: var(--cb-admin-text);
 }
 
 @media (max-width: 1024px) {
