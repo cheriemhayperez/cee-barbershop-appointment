@@ -1,6 +1,9 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { useFormFieldErrors } from '@/hooks/useFormFieldErrors';
+import { useConfirmDelete } from '@/hooks/useConfirmDelete';
+import { useSubmitting } from '@/hooks/useSubmitting';
 import {
   addCustomer,
   removeCustomer,
@@ -11,8 +14,14 @@ import {
   syncRemoveCustomer,
   syncUpdateCustomer,
 } from '@/services/dataSync';
+import {
+  validateAdminCustomerField,
+  validateSubmitAdminCustomer,
+} from '@/validations/admin/customers.validate';
+import { hasFormChanges } from '@/utils/hasFormChanges';
 
-const emptyForm = { name: '', email: '', phone: '', visits: '0', lastVisit: '' };
+const emptyForm = { name: '', email: '', phone: '' };
+const formKeys = ['name', 'email', 'phone'];
 
 export function useAdminCustomers() {
   const dispatch = useDispatch();
@@ -20,70 +29,126 @@ export function useAdminCustomers() {
   const [modalOpen, setModalOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [form, setForm] = useState(emptyForm);
+  const [originalForm, setOriginalForm] = useState(null);
   const [syncError, setSyncError] = useState('');
+  const { isSubmitting, runIfChanged } = useSubmitting();
+  const {
+    fieldErrors,
+    resetFieldErrors,
+    validateOnChange,
+    runSubmitValidation,
+  } = useFormFieldErrors(validateAdminCustomerField, validateSubmitAdminCustomer);
 
-  const openAdd = () => {
+  const openAdd = useCallback(() => {
     setEditingId(null);
     setForm(emptyForm);
+    setOriginalForm(null);
     setSyncError('');
+    resetFieldErrors();
     setModalOpen(true);
-  };
+  }, [resetFieldErrors]);
 
-  const openEdit = (customer) => {
-    setEditingId(customer.id);
-    setForm({
+  const openEdit = useCallback((customer) => {
+    const snapshot = {
       name: customer.name,
       email: customer.email,
       phone: customer.phone,
-      visits: String(customer.visits),
-      lastVisit: customer.lastVisit,
-    });
+    };
+    setEditingId(customer.id);
+    setForm(snapshot);
+    setOriginalForm(snapshot);
     setSyncError('');
+    resetFieldErrors();
     setModalOpen(true);
-  };
+  }, [resetFieldErrors]);
 
-  const closeModal = () => setModalOpen(false);
+  const closeModal = useCallback(() => {
+    if (isSubmitting) return;
+    setModalOpen(false);
+  }, [isSubmitting]);
 
-  const handleDelete = async (id, name) => {
-    if (!window.confirm(`Delete customer ${name}?`)) return;
+  const performDelete = useCallback(async (id) => {
     try {
       await syncRemoveCustomer(dispatch, removeCustomer, id);
     } catch (err) {
       setSyncError(err.message || 'Failed to delete customer.');
+      throw err;
     }
-  };
+  }, [dispatch]);
 
-  const handleSubmit = async (e) => {
+  const {
+    deleteConfirmOpen,
+    deleteTargetName,
+    requestDelete,
+    closeDeleteConfirm,
+    confirmDelete,
+    deleteLoading,
+  } = useConfirmDelete(performDelete);
+
+  const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
     setSyncError('');
-    const payload = { ...form, visits: Number(form.visits) || 0 };
+
+    if (!runSubmitValidation(form)) {
+      return;
+    }
+
+    const payload = editingId
+      ? { ...form }
+      : { ...form, visits: 0, lastVisit: '' };
+    const hasChanges = !editingId || hasFormChanges(form, originalForm, formKeys);
 
     try {
-      if (editingId) {
-        await syncUpdateCustomer(dispatch, updateCustomer, editingId, payload);
-      } else {
-        await syncAddCustomer(dispatch, addCustomer, payload);
-      }
-      setModalOpen(false);
+      await runIfChanged({
+        hasChanges,
+        onUnchanged: () => setModalOpen(false),
+        onChanged: async () => {
+          if (editingId) {
+            await syncUpdateCustomer(dispatch, updateCustomer, editingId, payload);
+          } else {
+            await syncAddCustomer(dispatch, addCustomer, payload);
+          }
+          setModalOpen(false);
+        },
+      });
     } catch (err) {
       setSyncError(err.message || 'Failed to save customer.');
     }
-  };
+  }, [
+    dispatch,
+    editingId,
+    form,
+    originalForm,
+    runIfChanged,
+    runSubmitValidation,
+  ]);
 
-  const handleChange = (e) => {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
+  const handleChange = useCallback((e) => {
+    const { name, value } = e.target;
+    setForm((prev) => {
+      const next = { ...prev, [name]: value };
+      validateOnChange(name, value, next);
+      return next;
+    });
+  }, [validateOnChange]);
 
   return {
     customers,
     modalOpen,
     editingId,
     form,
+    fieldErrors,
     syncError,
     openAdd,
     openEdit,
     closeModal,
-    handleDelete,
+    handleDelete: requestDelete,
+    deleteConfirmOpen,
+    deleteTargetName,
+    closeDeleteConfirm,
+    confirmDelete,
+    deleteLoading,
+    isSubmitting,
     handleSubmit,
     handleChange,
   };

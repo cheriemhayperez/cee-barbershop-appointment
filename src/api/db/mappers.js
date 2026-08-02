@@ -7,20 +7,22 @@ export function mapBarberFromDb(row) {
     role: row.role,
     exp: row.exp,
     specialty: row.specialty,
-    photo: images.barbers[row.photo_index] ?? images.barbers[0],
+    photo: row.photo_url || (images.barbers[row.photo_index] ?? images.barbers[0]),
     status: row.status,
   };
 }
 
 export function mapBarberToDb(barber) {
-  const photoIndex = images.barbers.indexOf(barber.photo);
+  const isStaticPhoto = images.barbers.includes(barber.photo);
+
   return {
     id: barber.id,
     name: barber.name,
     role: barber.role,
     exp: barber.exp,
     specialty: barber.specialty,
-    photo_index: photoIndex >= 0 ? photoIndex : 0,
+    photo_index: isStaticPhoto ? Math.max(images.barbers.indexOf(barber.photo), 0) : 0,
+    photo_url: isStaticPhoto ? null : barber.photo || null,
     status: barber.status,
   };
 }
@@ -64,9 +66,9 @@ export function mapCustomerToDb(customer) {
   return {
     id: customer.id,
     name: customer.name,
-    email: customer.email,
-    phone: customer.phone,
-    visits: customer.visits,
+    email: customer.email?.trim().toLowerCase() ?? customer.email,
+    phone: customer.phone ?? '',
+    visits: customer.visits ?? 0,
     last_visit: customer.lastVisit || null,
   };
 }

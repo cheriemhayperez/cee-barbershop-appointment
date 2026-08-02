@@ -1,6 +1,9 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { useFormFieldErrors } from '@/hooks/useFormFieldErrors';
+import { useConfirmDelete } from '@/hooks/useConfirmDelete';
+import { useSubmitting } from '@/hooks/useSubmitting';
 import {
   addService,
   removeService,
@@ -14,13 +17,20 @@ import {
 import {
   DEFAULT_SERVICE_CATEGORY,
 } from '@/static/customer/serviceCatalog';
+import {
+  validateAdminServiceField,
+  validateSubmitAdminService,
+} from '@/validations/admin/services.validate';
+import { hasFormChanges } from '@/utils/hasFormChanges';
 
 const emptyForm = {
   name: '',
   price: '',
-  category: DEFAULT_SERVICE_CATEGORY,
-  status: 'active',
+  category: '',
+  status: '',
 };
+
+const formKeys = ['name', 'price', 'category', 'status'];
 
 export function useAdminServices() {
   const dispatch = useDispatch();
@@ -28,68 +38,129 @@ export function useAdminServices() {
   const [modalOpen, setModalOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [form, setForm] = useState(emptyForm);
+  const [originalForm, setOriginalForm] = useState(null);
   const [syncError, setSyncError] = useState('');
+  const { isSubmitting, runIfChanged } = useSubmitting();
+  const {
+    fieldErrors,
+    resetFieldErrors,
+    validateOnChange,
+    runSubmitValidation,
+  } = useFormFieldErrors(validateAdminServiceField, validateSubmitAdminService);
 
-  const openAdd = () => {
+  const openAdd = useCallback(() => {
     setEditingId(null);
     setForm(emptyForm);
+    setOriginalForm(null);
     setSyncError('');
+    resetFieldErrors();
     setModalOpen(true);
-  };
+  }, [resetFieldErrors]);
 
-  const openEdit = (service) => {
-    setEditingId(service.id);
-    setForm({
+  const openEdit = useCallback((service) => {
+    const snapshot = {
       name: service.name,
       price: service.price,
       category: service.category ?? DEFAULT_SERVICE_CATEGORY,
       status: service.status,
-    });
+    };
+    setEditingId(service.id);
+    setForm(snapshot);
+    setOriginalForm(snapshot);
     setSyncError('');
+    resetFieldErrors();
     setModalOpen(true);
-  };
+  }, [resetFieldErrors]);
 
-  const closeModal = () => setModalOpen(false);
+  const closeModal = useCallback(() => {
+    if (isSubmitting) return;
+    setModalOpen(false);
+  }, [isSubmitting]);
 
-  const handleDelete = async (id, name) => {
-    if (!window.confirm(`Delete service "${name}"?`)) return;
+  const performDelete = useCallback(async (id) => {
     try {
       await syncRemoveService(dispatch, removeService, id);
     } catch (err) {
       setSyncError(err.message || 'Failed to delete service.');
+      throw err;
     }
-  };
+  }, [dispatch]);
 
-  const handleSubmit = async (e) => {
+  const {
+    deleteConfirmOpen,
+    deleteTargetName,
+    requestDelete,
+    closeDeleteConfirm,
+    confirmDelete,
+    deleteLoading,
+  } = useConfirmDelete(performDelete);
+
+  const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
     setSyncError('');
 
+    if (!runSubmitValidation(form)) {
+      return;
+    }
+
+    const hasChanges = !editingId || hasFormChanges(form, originalForm, formKeys);
+
     try {
-      if (editingId) {
-        await syncUpdateService(dispatch, updateService, editingId, form);
-      } else {
-        await syncAddService(dispatch, addService, form);
-      }
-      setModalOpen(false);
+      await runIfChanged({
+        hasChanges,
+        onUnchanged: () => setModalOpen(false),
+        onChanged: async () => {
+          const payload = {
+            ...form,
+            status: form.status || 'active',
+          };
+
+          if (editingId) {
+            await syncUpdateService(dispatch, updateService, editingId, payload);
+          } else {
+            await syncAddService(dispatch, addService, payload);
+          }
+          setModalOpen(false);
+        },
+      });
     } catch (err) {
       setSyncError(err.message || 'Failed to save service.');
     }
-  };
+  }, [
+    dispatch,
+    editingId,
+    form,
+    originalForm,
+    runIfChanged,
+    runSubmitValidation,
+  ]);
 
-  const handleChange = (e) => {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
+  const handleChange = useCallback((e) => {
+    const { name, value } = e.target;
+    setForm((prev) => {
+      const next = { ...prev, [name]: value };
+      validateOnChange(name, value, next);
+      return next;
+    });
+  }, [validateOnChange]);
 
   return {
     services,
     modalOpen,
     editingId,
     form,
+    fieldErrors,
     syncError,
     openAdd,
     openEdit,
     closeModal,
-    handleDelete,
+    handleDelete: requestDelete,
+    deleteConfirmOpen,
+    deleteTargetName,
+    closeDeleteConfirm,
+    confirmDelete,
+    deleteLoading,
+    isSubmitting,
     handleSubmit,
     handleChange,
   };

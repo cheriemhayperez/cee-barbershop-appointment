@@ -1,11 +1,13 @@
 import { AnimatePresence } from 'framer-motion';
-import { AdminPageHeader, RowActions, CBInput, CBModal, CBModalForm, CBSelect, CBTable, CBBadge } from '@/components';
+import { AdminPageHeader, RowActions, CBInput, CBModal, CBModalForm, CBSelect, CBTable, CBBadge, CBConfirmModal, CBLoader, CBBookingSchedule } from '@/components';
 import FadeIn from '@/components/FadeIn/FadeIn';
 import PageTransition from '@/components/PageTransition/PageTransition';
 import { APPOINTMENT_STATUS_BADGE_VARIANTS } from '@/constants/data/appointments.data';
 import { useAdminAppointments } from '@/hooks/admin/appointments';
+import { formatTableDate } from '@/utils/dateUtils';
 import { formatTime12 } from '@/utils/scheduleUtils';
 import styles from '@/pages/admin/Appointments/AdminAppointments.module.css';
+import adminStyles from '@/pages/admin/AdminPage.module.css';
 
 export default function AdminAppointments() {
   const {
@@ -15,12 +17,22 @@ export default function AdminAppointments() {
     modalOpen,
     editingId,
     form,
+    fieldErrors,
+    syncError,
     openAdd,
     openEdit,
     closeModal,
     handleDelete,
+    deleteConfirmOpen,
+    deleteTargetName,
+    closeDeleteConfirm,
+    confirmDelete,
+    deleteLoading,
+    isSubmitting,
     handleSubmit,
     handleChange,
+    handleDateChange,
+    handleTimeChange,
   } = useAdminAppointments();
 
   return (
@@ -28,12 +40,18 @@ export default function AdminAppointments() {
       <AdminPageHeader title="Appointments" onAdd={openAdd} addLabel="Add Appointment" />
 
       <FadeIn delay={0.1}>
-        <CBTable
+        <div className={adminStyles.content} aria-busy={deleteLoading}>
+          {deleteLoading && (
+            <div className={adminStyles.pageOverlay} aria-live="polite">
+              <CBLoader label="Deleting" />
+            </div>
+          )}
+          <CBTable
           columns={[
             { title: 'Customer', dataIndex: 'name', key: 'name' },
             { title: 'Service', dataIndex: 'service', key: 'service' },
             { title: 'Barber', dataIndex: 'barber', key: 'barber' },
-            { title: 'Date', dataIndex: 'date', key: 'date' },
+            { title: 'Date', key: 'date', render: (_, appt) => formatTableDate(appt.date) },
             { title: 'Time', key: 'time', render: (_, appt) => formatTime12(appt.time) },
             {
               title: 'Status',
@@ -56,8 +74,8 @@ export default function AdminAppointments() {
             },
           ]}
           dataSource={appointments}
-          emptyMessage="No appointments yet. Add one to get started."
         />
+        </div>
       </FadeIn>
 
       <AnimatePresence>
@@ -65,22 +83,54 @@ export default function AdminAppointments() {
           <CBModal
             title={editingId ? 'Edit Appointment' : 'Add Appointment'}
             onClose={closeModal}
+            loading={isSubmitting}
+            width={860}
           >
-            <CBModalForm onSubmit={handleSubmit} onCancel={closeModal} editing={Boolean(editingId)}>
-              <CBInput label="Customer Name" name="name" value={form.name} onChange={handleChange} required />
-              <CBSelect label="Service" name="service" value={form.service} onChange={handleChange}>
+            <CBModalForm
+              onSubmit={handleSubmit}
+              onCancel={closeModal}
+              editing={Boolean(editingId)}
+              error={syncError}
+              loading={isSubmitting}
+              loadingLabel={editingId ? 'Updating appointment' : 'Adding appointment'}
+            >
+              <CBInput
+                label="Customer Name"
+                name="name"
+                value={form.name}
+                onChange={handleChange}
+                placeholder="e.g. John Smith"
+                error={fieldErrors.name}
+                required
+              />
+              <CBSelect
+                label="Service"
+                name="service"
+                value={form.service}
+                onChange={handleChange}
+                placeholder="Select Service"
+                error={fieldErrors.service}
+                required
+              >
                 {services.map((s) => (
                   <option key={s.id} value={s.name}>{s.name}</option>
                 ))}
               </CBSelect>
-              <CBSelect label="Barber" name="barber" value={form.barber} onChange={handleChange}>
-                <option>No preference</option>
+              <CBSelect label="Barber" name="barber" value={form.barber} onChange={handleChange} placeholder="Select Barber">
+                <option value="No preference">No preference</option>
                 {barbers.map((b) => (
                   <option key={b.id} value={b.name}>{b.name}</option>
                 ))}
               </CBSelect>
-              <CBInput label="Date" name="date" type="date" value={form.date} onChange={handleChange} required />
-              <CBInput label="Time" name="time" type="time" value={form.time} onChange={handleChange} required />
+              <CBBookingSchedule
+                variant="admin"
+                date={form.date}
+                time={form.time}
+                onDateChange={handleDateChange}
+                onTimeChange={handleTimeChange}
+                dateError={fieldErrors.date}
+                timeError={fieldErrors.time}
+              />
               <CBSelect label="Status" name="status" value={form.status} onChange={handleChange}>
                 <option value="confirmed">Confirmed</option>
                 <option value="completed">Completed</option>
@@ -88,6 +138,17 @@ export default function AdminAppointments() {
               </CBSelect>
             </CBModalForm>
           </CBModal>
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {deleteConfirmOpen && (
+          <CBConfirmModal
+            title="Delete appointment"
+            itemName={deleteTargetName}
+            onCancel={closeDeleteConfirm}
+            onConfirm={confirmDelete}
+            loading={deleteLoading}
+          />
         )}
       </AnimatePresence>
     </PageTransition>

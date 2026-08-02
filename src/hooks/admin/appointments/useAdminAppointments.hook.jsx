@@ -1,7 +1,10 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { APPOINTMENT_STATUS } from '@/constants/data/appointments.data';
+import { useFormFieldErrors } from '@/hooks/useFormFieldErrors';
+import { useConfirmDelete } from '@/hooks/useConfirmDelete';
+import { useSubmitting } from '@/hooks/useSubmitting';
 import {
   addAppointment,
   removeAppointment,
@@ -12,15 +15,22 @@ import {
   syncRemoveAppointment,
   syncUpdateAppointment,
 } from '@/services/dataSync';
+import {
+  validateAdminAppointmentField,
+  validateSubmitAdminAppointment,
+} from '@/validations/admin/appointments.validate';
+import { hasFormChanges } from '@/utils/hasFormChanges';
 
 const emptyForm = {
   name: '',
   service: '',
-  barber: 'No preference',
+  barber: '',
   date: '',
   time: '',
   status: APPOINTMENT_STATUS.CONFIRMED,
 };
+
+const formKeys = ['name', 'service', 'barber', 'date', 'time', 'status'];
 
 export function useAdminAppointments() {
   const dispatch = useDispatch();
@@ -30,59 +40,126 @@ export function useAdminAppointments() {
   const [modalOpen, setModalOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [form, setForm] = useState(emptyForm);
+  const [originalForm, setOriginalForm] = useState(null);
   const [syncError, setSyncError] = useState('');
+  const { isSubmitting, runIfChanged } = useSubmitting();
+  const {
+    fieldErrors,
+    resetFieldErrors,
+    validateOnChange,
+    runSubmitValidation,
+    clearFieldErrors,
+  } = useFormFieldErrors(validateAdminAppointmentField, validateSubmitAdminAppointment);
 
-  const openAdd = () => {
+  const openAdd = useCallback(() => {
     setEditingId(null);
     setForm(emptyForm);
+    setOriginalForm(null);
     setSyncError('');
+    resetFieldErrors();
     setModalOpen(true);
-  };
+  }, [resetFieldErrors]);
 
-  const openEdit = (appointment) => {
-    setEditingId(appointment.id);
-    setForm({
+  const openEdit = useCallback((appointment) => {
+    const snapshot = {
       name: appointment.name,
       service: appointment.service,
       barber: appointment.barber,
       date: appointment.date,
       time: appointment.time,
       status: appointment.status,
-    });
+    };
+    setEditingId(appointment.id);
+    setForm(snapshot);
+    setOriginalForm(snapshot);
     setSyncError('');
+    resetFieldErrors();
     setModalOpen(true);
-  };
+  }, [resetFieldErrors]);
 
-  const closeModal = () => setModalOpen(false);
+  const closeModal = useCallback(() => {
+    if (isSubmitting) return;
+    setModalOpen(false);
+  }, [isSubmitting]);
 
-  const handleDelete = async (id, name) => {
-    if (!window.confirm(`Delete appointment for ${name}?`)) return;
+  const performDelete = useCallback(async (id) => {
     try {
       await syncRemoveAppointment(dispatch, removeAppointment, id);
     } catch (err) {
       setSyncError(err.message || 'Failed to delete appointment.');
+      throw err;
     }
-  };
+  }, [dispatch]);
 
-  const handleSubmit = async (e) => {
+  const {
+    deleteConfirmOpen,
+    deleteTargetName,
+    requestDelete,
+    closeDeleteConfirm,
+    confirmDelete,
+    deleteLoading,
+  } = useConfirmDelete(performDelete);
+
+  const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
     setSyncError('');
 
+    if (!runSubmitValidation(form)) {
+      return;
+    }
+
+    const hasChanges = !editingId || hasFormChanges(form, originalForm, formKeys);
+
     try {
-      if (editingId) {
-        await syncUpdateAppointment(dispatch, updateAppointment, editingId, form);
-      } else {
-        await syncAddAppointment(dispatch, addAppointment, form);
-      }
-      setModalOpen(false);
+      await runIfChanged({
+        hasChanges,
+        onUnchanged: () => setModalOpen(false),
+        onChanged: async () => {
+          const payload = {
+            ...form,
+            barber: form.barber || 'No preference',
+          };
+
+          if (editingId) {
+            const previous = appointments.find((appt) => appt.id === editingId);
+            await syncUpdateAppointment(dispatch, updateAppointment, editingId, payload, { previous });
+          } else {
+            await syncAddAppointment(dispatch, addAppointment, payload);
+          }
+          setModalOpen(false);
+        },
+      });
     } catch (err) {
       setSyncError(err.message || 'Failed to save appointment.');
     }
-  };
+  }, [
+    appointments,
+    dispatch,
+    editingId,
+    form,
+    originalForm,
+    runIfChanged,
+    runSubmitValidation,
+  ]);
 
-  const handleChange = (e) => {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
+  const handleChange = useCallback((e) => {
+    const { name, value } = e.target;
+    setForm((prev) => {
+      const next = { ...prev, [name]: value };
+      validateOnChange(name, value, next);
+      return next;
+    });
+  }, [validateOnChange]);
+
+  const handleDateChange = useCallback((dateValue) => {
+    setForm((prev) => ({ ...prev, date: dateValue, time: '' }));
+    clearFieldErrors('date', 'time');
+  }, [clearFieldErrors]);
+
+  const handleTimeChange = useCallback((timeValue) => {
+    setForm((prev) => ({ ...prev, time: timeValue }));
+    clearFieldErrors('time');
+  }, [clearFieldErrors]);
 
   return {
     appointments,
@@ -91,12 +168,21 @@ export function useAdminAppointments() {
     modalOpen,
     editingId,
     form,
+    fieldErrors,
     syncError,
     openAdd,
     openEdit,
     closeModal,
-    handleDelete,
+    handleDelete: requestDelete,
+    deleteConfirmOpen,
+    deleteTargetName,
+    closeDeleteConfirm,
+    confirmDelete,
+    deleteLoading,
+    isSubmitting,
     handleSubmit,
     handleChange,
+    handleDateChange,
+    handleTimeChange,
   };
 }

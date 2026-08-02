@@ -1,5 +1,5 @@
 import { AnimatePresence } from 'framer-motion';
-import { AdminPageHeader, RowActions, CBBadge, CBInput, CBModal, CBModalForm, CBSelect, CBTable } from '@/components';
+import { AdminPageHeader, RowActions, CBBadge, CBInput, CBModal, CBModalForm, CBSelect, CBTable, CBConfirmModal, CBLoader } from '@/components';
 import PageTransition from '@/components/PageTransition/PageTransition';
 import { useAdminServices } from '@/hooks/admin/services';
 import {
@@ -14,10 +14,18 @@ export default function AdminServices() {
     modalOpen,
     editingId,
     form,
+    fieldErrors,
+    syncError,
     openAdd,
     openEdit,
     closeModal,
     handleDelete,
+    deleteConfirmOpen,
+    deleteTargetName,
+    closeDeleteConfirm,
+    confirmDelete,
+    deleteLoading,
+    isSubmitting,
     handleSubmit,
     handleChange,
   } = useAdminServices();
@@ -25,7 +33,13 @@ export default function AdminServices() {
   return (
     <PageTransition className={styles.page}>
       <AdminPageHeader title="Services" onAdd={openAdd} addLabel="Add Service" />
-      <CBTable
+      <div className={styles.content} aria-busy={deleteLoading}>
+        {deleteLoading && (
+          <div className={styles.pageOverlay} aria-live="polite">
+            <CBLoader label="Deleting" />
+          </div>
+        )}
+        <CBTable
         columns={[
           { title: 'Service', dataIndex: 'name', key: 'name' },
           {
@@ -51,25 +65,44 @@ export default function AdminServices() {
         ]}
         dataSource={services}
       />
+      </div>
       <AnimatePresence>
         {modalOpen && (
-          <CBModal title={editingId ? 'Edit Service' : 'Add Service'} onClose={closeModal}>
-            <CBModalForm onSubmit={handleSubmit} onCancel={closeModal} editing={Boolean(editingId)}>
-              <CBInput label="Service Name" name="name" value={form.name} onChange={handleChange} required />
-              <CBSelect label="Category" name="category" value={form.category} onChange={handleChange} required>
+          <CBModal title={editingId ? 'Edit Service' : 'Add Service'} onClose={closeModal} loading={isSubmitting}>
+            <CBModalForm
+              onSubmit={handleSubmit}
+              onCancel={closeModal}
+              editing={Boolean(editingId)}
+              error={syncError}
+              loading={isSubmitting}
+              loadingLabel={editingId ? 'Updating service' : 'Adding service'}
+            >
+              <CBInput label="Service Name" name="name" value={form.name} onChange={handleChange} placeholder="e.g. Head Shave" error={fieldErrors.name} required />
+              <CBSelect label="Category" name="category" value={form.category} onChange={handleChange} placeholder="Select Category" error={fieldErrors.category} required>
                 {SERVICE_CATEGORIES.map((category) => (
                   <option key={category.value} value={category.value}>
                     {category.label}
                   </option>
                 ))}
               </CBSelect>
-              <CBInput label="Price" name="price" value={form.price} onChange={handleChange} placeholder="$25" required />
-              <CBSelect label="Status" name="status" value={form.status} onChange={handleChange}>
+              <CBInput label="Price" name="price" value={form.price} onChange={handleChange} placeholder="e.g. $25" error={fieldErrors.price} required />
+              <CBSelect label="Status" name="status" value={form.status} onChange={handleChange} placeholder="Select Status">
                 <option value="active">Active</option>
                 <option value="inactive">Inactive</option>
               </CBSelect>
             </CBModalForm>
           </CBModal>
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {deleteConfirmOpen && (
+          <CBConfirmModal
+            title="Delete service"
+            itemName={deleteTargetName}
+            onCancel={closeDeleteConfirm}
+            onConfirm={confirmDelete}
+            loading={deleteLoading}
+          />
         )}
       </AnimatePresence>
     </PageTransition>

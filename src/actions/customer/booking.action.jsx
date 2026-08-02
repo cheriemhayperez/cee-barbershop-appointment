@@ -3,7 +3,7 @@ import { APPOINTMENT_STATUS } from '@/constants/data/appointments.data';
 import { getBarberLabel } from '@/hooks/shared/useCatalogData.hook';
 import { isSupabaseConfigured, supabase } from '@/lib/supabase';
 import { addAppointment } from '@/reducers/appointments/appointments.slice';
-import { syncAddAppointment } from '@/services/dataSync';
+import { syncAddAppointment, syncEnsureCustomerByEmail } from '@/services/dataSync';
 
 function emailErrorMessage(raw) {
   if (!raw) return 'Could not send confirmation emails.';
@@ -60,6 +60,26 @@ function bookingMessage(payload, { customerSent, ownerSent }) {
   return `You're booked for ${payload.date} at ${payload.time}.`;
 }
 
+async function saveBookingCustomer(form, { dispatch }) {
+  if (!form.email?.trim()) return;
+
+  if (dispatch) {
+    await syncEnsureCustomerByEmail(dispatch, {
+      name: form.name.trim(),
+      email: form.email.trim(),
+    });
+    return;
+  }
+
+  if (isSupabaseConfigured && supabase) {
+    const { ensureCustomerByEmail } = await import('@/api/db/customers.api');
+    await ensureCustomerByEmail({
+      name: form.name.trim(),
+      email: form.email.trim(),
+    });
+  }
+}
+
 async function saveBookingAppointment(form, { dispatch, barbers }) {
   const appointment = {
     name: form.name.trim(),
@@ -73,12 +93,14 @@ async function saveBookingAppointment(form, { dispatch, barbers }) {
 
   if (dispatch) {
     await syncAddAppointment(dispatch, addAppointment, appointment);
+    await saveBookingCustomer(form, { dispatch });
     return;
   }
 
   if (isSupabaseConfigured && supabase) {
     const { insertAppointment } = await import('@/api/db/appointments.api');
     await insertAppointment(appointment);
+    await saveBookingCustomer(form, { dispatch });
   }
 }
 

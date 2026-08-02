@@ -9,7 +9,10 @@ import { setBarbers } from '@/reducers/barbers/barbers.slice';
 import { setCustomers } from '@/reducers/customers/customers.slice';
 import { setServices } from '@/reducers/services/services.slice';
 import { setLoadedSchedule } from '@/utils/scheduleBus';
+import { setLoadedShop } from '@/utils/shopBus';
 import { defaultSchedule } from '@/static/shared/scheduleDefaults';
+import defaultShop from '@/static/shop.json';
+import { normalizeShopConfig } from '@/utils/shopUtils';
 
 function isMissingTablesError(err) {
   const message = err?.message ?? '';
@@ -22,6 +25,7 @@ function clearStore(dispatch) {
   dispatch(setServices([]));
   dispatch(setCustomers([]));
   setLoadedSchedule(defaultSchedule);
+  setLoadedShop(normalizeShopConfig(defaultShop));
 }
 
 function LoadingScreen() {
@@ -58,7 +62,7 @@ export function DataProvider({ children }) {
     if (!isSupabaseConfigured) {
       setSetupError({
         title: 'Database not configured',
-        message: 'Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to .env.local, then run supabase/migrations/001_initial_schema.sql in the Supabase SQL Editor.',
+        message: 'Run supabase/migrations/001_initial_schema.sql in the Supabase SQL Editor to create tables.',
       });
       return;
     }
@@ -74,6 +78,7 @@ export function DataProvider({ children }) {
         dispatch(setServices(data.services));
         dispatch(setCustomers(data.customers));
         setLoadedSchedule(data.schedule);
+        setLoadedShop(data.shop);
         setReady(true);
       })
       .catch((err) => {
