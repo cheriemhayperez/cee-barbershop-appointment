@@ -2,11 +2,12 @@ import { motion } from 'framer-motion';
 import FadeIn from '@/components/FadeIn/FadeIn';
 import ServiceIcon from '@/components/ServiceIcon/ServiceIcon';
 import { homeServices, homeServicesIntro } from '@/static/customer/homeContent';
-import shop from '@/static/shop.json';
+import { useShopInfo } from '@/hooks/shop';
 import sectionStyles from '@/pages/customer/Home/SectionLayout.module.css';
 import styles from '@/pages/customer/Home/ServicesSection.module.css';
 
 export default function ServicesSection() {
+  const { shop } = useShopInfo();
   return (
     <section id="services" className={styles.servicesSection}>
       <div className={styles.textureShade} aria-hidden="true" />

@@ -1,12 +1,14 @@
 import FadeIn from '@/components/FadeIn/FadeIn';
 import { useBookingSchedule } from '@/hooks/customer/booking';
-import { shop, phoneHref, mapsEmbedUrl } from '@/static/shop';
+import { useShopInfo } from '@/hooks/shop';
+import { fullAddress, mapsEmbedUrl, phoneHref } from '@/utils/shopUtils';
 import { formatWeeklyHoursForDisplay } from '@/utils/scheduleUtils';
 import sectionStyles from '@/pages/customer/Home/SectionLayout.module.css';
 import styles from '@/pages/customer/Home/ContactSection.module.css';
 
 export default function ContactSection() {
   const { schedule } = useBookingSchedule();
+  const { shop } = useShopInfo();
   const businessHours = formatWeeklyHoursForDisplay(schedule);
 
   return (
@@ -45,7 +47,7 @@ export default function ContactSection() {
             <div className={styles.block}>
               <h2 className={styles.blockTitle}>Phone & Email</h2>
               <p>
-                <a href={`tel:${phoneHref()}`} className={styles.link}>
+                <a href={`tel:${phoneHref(shop)}`} className={styles.link}>
                   {shop.phone}
                 </a>
               </p>
@@ -62,7 +64,7 @@ export default function ContactSection() {
           <div className={styles.mapWrap}>
             <iframe
               title={`${shop.name} location on Google Maps`}
-              src={mapsEmbedUrl()}
+              src={mapsEmbedUrl(shop)}
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
               allowFullScreen

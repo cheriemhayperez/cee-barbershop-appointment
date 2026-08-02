@@ -3,11 +3,13 @@ import { Link } from 'react-router-dom';
 import { ArrowUp2 } from 'iconsax-react';
 import CBLogoMark from '@/components/CBLogoMark/CBLogoMark';
 import { useCustomerFooter } from '@/hooks/customer/layout';
-import { shop, phoneHref } from '@/static/shop';
+import { useShopInfo } from '@/hooks/shop';
+import { phoneHref } from '@/utils/shopUtils';
 import { images } from '@/static/shared/images';
 import styles from '@/layouts/customer/Footer.module.css';
 
 export default function Footer() {
+  const { shop } = useShopInfo();
   const {
     businessHours,
     footerLocation,
@@ -61,7 +63,7 @@ export default function Footer() {
                 <br />
                 {shop.city}
               </p>
-              <a href={`tel:${phoneHref()}`} className={styles.phone}>
+              <a href={`tel:${phoneHref(shop)}`} className={styles.phone}>
                 {shop.phone}
               </a>
             </div>

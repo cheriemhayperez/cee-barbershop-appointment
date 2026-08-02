@@ -1,13 +1,14 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useBookingSchedule } from '@/hooks/customer/booking';
-import { shop } from '@/static/shop';
+import { useShopInfo } from '@/hooks/shop';
 import { formatWeeklyHoursForDisplay } from '@/utils/scheduleUtils';
 
 const PAGES_WITHOUT_VISIT_BAND = ['/book'];
 
 export function useCustomerFooter() {
   const { schedule } = useBookingSchedule();
+  const { shop } = useShopInfo();
   const { pathname } = useLocation();
   const [showBackToTop, setShowBackToTop] = useState(false);
 

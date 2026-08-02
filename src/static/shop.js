@@ -1,16 +1,25 @@
 import shopData from './shop.json';
 
+import {
+  buildMapsUrl,
+  fullAddress as formatFullAddress,
+  mapsEmbedUrl as formatMapsEmbedUrl,
+  phoneHref as formatPhoneHref,
+} from '@/utils/shopUtils';
+
+export const defaultShop = shopData;
 export const shop = shopData;
 
-export function fullAddress() {
-  return `${shop.address}, ${shop.city}`;
+export function fullAddress(shopInfo = shopData) {
+  return formatFullAddress(shopInfo);
 }
 
-export function phoneHref() {
-  return shop.phone.replace(/\D/g, '');
+export function phoneHref(shopInfo = shopData) {
+  return formatPhoneHref(shopInfo);
 }
 
-export function mapsEmbedUrl() {
-  const query = encodeURIComponent(fullAddress());
-  return `https://maps.google.com/maps?q=${query}&output=embed`;
+export function mapsEmbedUrl(shopInfo = shopData) {
+  return formatMapsEmbedUrl(shopInfo);
 }
+
+export { buildMapsUrl };
