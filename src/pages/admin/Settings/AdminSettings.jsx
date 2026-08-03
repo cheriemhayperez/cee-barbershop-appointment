@@ -1,40 +1,8 @@
-import { Fragment } from 'react';
-import { Link } from 'react-router-dom';
-
-import { CBCard, CBButton, CBInput, CBLoader } from '@/components';
+import { CBCard, CBButton, CBInput, CBLoader, CBSaveStatus } from '@/components';
 import { useAdminShopInfo } from '@/hooks/admin/settings';
-import { useBookingSchedule } from '@/hooks/customer/booking';
-import { cn } from '@/utils/cn';
-import { formatWeeklyHoursForDisplay } from '@/utils/scheduleUtils';
 import styles from '@/pages/admin/AdminPage.module.css';
 
-const SAVE_STATUS_LABELS = {
-  saving: 'Saving…',
-  saved: 'Changes saved',
-  error: 'Save failed',
-};
-
-function ShopSaveStatus({ status, error }) {
-  if (status === 'idle') return null;
-
-  return (
-    <span
-      className={cn(
-        styles.saveStatus,
-        status === 'saving' && styles.saveStatusSaving,
-        status === 'saved' && styles.saveStatusSaved,
-        status === 'error' && styles.saveStatusError,
-      )}
-      role="status"
-      aria-live="polite"
-    >
-      {status === 'error' && error ? error : SAVE_STATUS_LABELS[status]}
-    </span>
-  );
-}
-
 export default function AdminSettings() {
-  const { schedule } = useBookingSchedule();
   const {
     loaded,
     form,
@@ -43,10 +11,10 @@ export default function AdminSettings() {
     saveStatus,
     saveError,
     isSaving,
+    hasChanges,
     handleChange,
     handleSubmit,
   } = useAdminShopInfo();
-  const businessHours = formatWeeklyHoursForDisplay(schedule);
 
   if (!loaded) {
     return (
@@ -58,7 +26,7 @@ export default function AdminSettings() {
 
   return (
     <div className={styles.settingsGrid}>
-      <CBCard title="Shop Info">
+      <CBCard title="Shop Info" className={styles.shopInfoCard}>
         <p className={styles.note}>Shown on the customer site footer and contact page.</p>
         <form className={styles.shopForm} onSubmit={handleSubmit} noValidate aria-busy={isSaving}>
           {isSaving && (
@@ -125,29 +93,18 @@ export default function AdminSettings() {
           </fieldset>
 
           <div className={styles.shopFormActions}>
-            <ShopSaveStatus status={saveStatus} error={saveError} />
-            <CBButton variant="primary" size="small" type="submit" loading={isSaving} disabled={isSaving}>
+            <CBSaveStatus status={saveStatus} error={saveError} />
+            <CBButton
+              variant="primary"
+              size="small"
+              type="submit"
+              loading={isSaving}
+              disabled={!hasChanges || isSaving}
+            >
               Save shop info
             </CBButton>
           </div>
         </form>
-      </CBCard>
-
-      <CBCard title="Business Hours">
-        <p className={styles.note}>Shown on the customer site and used for booking.</p>
-        <dl className={styles.dl}>
-          {businessHours.map((row) => (
-            <Fragment key={row.day}>
-              <dt>{row.day}</dt>
-              <dd>{row.hours}</dd>
-            </Fragment>
-          ))}
-        </dl>
-        <p className={styles.hoursEditNote}>
-          <Link to="/admin/settings/schedule" className={styles.editLink}>
-            Edit hours in Booking Schedule →
-          </Link>
-        </p>
       </CBCard>
     </div>
   );

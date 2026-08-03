@@ -4,6 +4,123 @@
   gap: 1rem;
 }
 
+.adminTheme {
+  --text: var(--cb-admin-text);
+  --muted: var(--cb-admin-muted);
+  --border: var(--cb-admin-border);
+  --surface: var(--cb-admin-surface);
+  --bg: var(--cb-admin-bg);
+  flex-direction: row;
+  align-items: stretch;
+  gap: 1rem;
+  min-height: 18.5rem;
+}
+
+.adminTheme .fieldGroup {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.adminTheme .fieldset {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.adminTheme .calendar,
+.adminTheme .timePanel {
+  flex: 1;
+  min-height: 15.5rem;
+}
+
+.adminTheme .calendar {
+  padding: 0.875rem;
+}
+
+.adminTheme .calendarHeader {
+  margin-bottom: 0.75rem;
+}
+
+.adminTheme .monthLabel {
+  font-size: 0.9375rem;
+}
+
+.adminTheme .weekdayRow {
+  margin-bottom: 0.375rem;
+}
+
+.adminTheme .weekday {
+  font-size: 0.625rem;
+}
+
+.adminTheme .daysWrap {
+  gap: 0.25rem;
+}
+
+.adminTheme .weekdayRow,
+.adminTheme .daysGrid {
+  gap: 0.25rem;
+}
+
+.adminTheme .dayBtn:global(.ant-btn) {
+  font-size: 0.8125rem !important;
+  border-radius: 8px !important;
+}
+
+.adminTheme .timePanel {
+  display: flex;
+  flex-direction: column;
+  padding: 0.875rem;
+  border-radius: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+.adminTheme .timePanel .hint {
+  margin: auto 0;
+  text-align: center;
+}
+
+.adminTheme .hoursHint {
+  margin-bottom: 0.625rem;
+  font-size: 0.8125rem;
+}
+
+.adminTheme .timeFieldGroup .slotsGrid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+  flex: 1;
+  align-content: start;
+  max-height: none;
+  overflow-y: auto;
+  padding-right: 0.375rem;
+  scrollbar-gutter: stable;
+}
+
+.adminTheme .slotBtn:global(.ant-btn) {
+  padding: 0.5rem 0.375rem !important;
+  font-size: 0.75rem !important;
+  border-radius: 8px !important;
+  border: 1px solid var(--border) !important;
+  box-sizing: border-box !important;
+  margin: 0 !important;
+  line-height: 1.2 !important;
+}
+
+@media (max-width: 720px) {
+  .adminTheme {
+    flex-direction: column;
+  }
+
+  .adminTheme .timeFieldGroup .slotsGrid {
+    max-height: none;
+    grid-template-columns: repeat(auto-fill, minmax(5.5rem, 1fr));
+  }
+}
+
 .fieldGroup {
   display: flex;
   flex-direction: column;
@@ -153,6 +270,10 @@
   opacity: 0.28 !important;
 }
 
+.daySelectedPast:global(.ant-btn) {
+  opacity: 1 !important;
+}
+
 .hint {
   color: var(--muted);
   font-size: 0.875rem;
@@ -169,30 +290,37 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(5.5rem, 1fr));
   gap: 0.5rem;
+  align-content: start;
 }
 
 .slotBtn:global(.ant-btn) {
   width: 100% !important;
   height: auto !important;
-  min-height: 0 !important;
+  min-height: 2.25rem !important;
   padding: 0.625rem 0.5rem !important;
   border-radius: 10px !important;
   box-shadow: none !important;
+  border: 1px solid var(--border) !important;
+  box-sizing: border-box !important;
+  margin: 0 !important;
   background: var(--surface) !important;
   color: var(--text) !important;
   font-size: 0.8125rem !important;
   font-weight: 600 !important;
+  line-height: 1.2 !important;
 }
 
 .slotBtn:global(.ant-btn:hover:not(:disabled)) {
   border-color: rgba(201, 162, 39, 0.55) !important;
   background: var(--surface) !important;
   color: var(--text) !important;
+  box-shadow: none !important;
 }
 
-.slotSelected:global(.ant-btn) {
-  border-color: var(--gold) !important;
-  box-shadow: 0 0 0 1px var(--gold) !important;
+.slotSelected:global(.ant-btn),
+.slotSelected:global(.ant-btn:hover:not(:disabled)) {
+  border: 1px solid var(--gold) !important;
+  box-shadow: none !important;
   background: rgba(201, 162, 39, 0.12) !important;
 }
 

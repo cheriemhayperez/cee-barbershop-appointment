@@ -10,6 +10,10 @@ import { useBookingSchedule } from '@/hooks/customer/booking/useBookingSchedule.
 export function useAdminScheduleMaintenance() {
   const {
     schedule,
+    loaded,
+    isSaving,
+    saveStatus,
+    saveError,
     setWeeklyHours,
     addDisabledDate,
     removeDisabledDate,
@@ -31,7 +35,7 @@ export function useAdminScheduleMaintenance() {
   };
 
   const handleBlockDate = () => {
-    if (blockDate) {
+    if (blockDate && !isSaving) {
       addDisabledDate(blockDate);
       setBlockDate('');
     }
@@ -39,6 +43,10 @@ export function useAdminScheduleMaintenance() {
 
   return {
     schedule,
+    loaded,
+    isSaving,
+    saveStatus,
+    saveError,
     blockDate,
     setBlockDate,
     slotDate,

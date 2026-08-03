@@ -90,6 +90,7 @@ export function useAdminShopInfo() {
   }, [form, originalForm, updateShop, withSubmitting]);
 
   const busy = isSaving || isSubmitting;
+  const hasChanges = hasFormChanges(form, originalForm, formKeys);
 
   return {
     shop,
@@ -100,6 +101,7 @@ export function useAdminShopInfo() {
     saveStatus,
     saveError,
     isSaving: busy,
+    hasChanges,
     handleChange,
     handleSubmit,
   };

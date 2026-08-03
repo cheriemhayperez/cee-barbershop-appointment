@@ -69,6 +69,39 @@ export function getAvailableSlots(dateStr, schedule) {
     .map((time) => ({ value: time, label: formatTime12(time) }));
 }
 
+function buildSlotOptions(times) {
+  return times.map((time) => ({ value: time, label: formatTime12(time) }));
+}
+
+function getFallbackDayHours(schedule) {
+  return schedule.weeklyHours.find((entry) => !entry.closed) ?? {
+    open: '09:00',
+    close: '19:00',
+  };
+}
+
+function getSlotsForHours(schedule, { open, close }) {
+  const interval = schedule.slotIntervalMinutes || 30;
+  const start = parseTimeToMinutes(open);
+  const end = parseTimeToMinutes(close);
+  const slots = [];
+
+  for (let minutes = start; minutes < end; minutes += interval) {
+    slots.push(formatTime24(minutes));
+  }
+
+  return slots;
+}
+
+export function getAdminSlotsForDate(dateStr, schedule) {
+  const daySchedule = getDaySchedule(dateStr, schedule);
+  const hours = daySchedule && !daySchedule.closed
+    ? daySchedule
+    : getFallbackDayHours(schedule);
+
+  return buildSlotOptions(getSlotsForHours(schedule, hours));
+}
+
 export function isSlotEnabled(dateStr, time, schedule) {
   return getAvailableSlots(dateStr, schedule).some((slot) => slot.value === time);
 }

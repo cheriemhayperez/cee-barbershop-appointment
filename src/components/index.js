@@ -15,6 +15,7 @@ export { default as CBTable } from '@/components/CBTable/CBTable';
 export { default as CBSlotToggle } from '@/components/CBSlotToggle/CBSlotToggle';
 export { default as CBDateCalendar } from '@/components/CBDateCalendar/CBDateCalendar';
 export { default as CBEmptyState } from '@/components/CBEmptyState/CBEmptyState';
+export { default as CBSaveStatus } from '@/components/CBSaveStatus/CBSaveStatus';
 export { default as CBBarChart } from '@/components/CBBarChart/CBBarChart';
 export { default as FadeIn } from '@/components/FadeIn/FadeIn';
 export { default as PageTransition } from '@/components/PageTransition/PageTransition';

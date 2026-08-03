@@ -14,7 +14,9 @@ export default function CBBookingSchedule({
   dateError,
   timeError,
   compactAboveTime = false,
+  variant = 'customer',
 }) {
+  const adminMode = variant === 'admin';
   const { schedule } = useBookingSchedule();
   const {
     today,
@@ -28,14 +30,24 @@ export default function CBBookingSchedule({
     handleDateSelect,
     isDateSelectable,
     toDateString,
-  } = useBookingCalendar({ date, schedule, onDateChange, onTimeChange });
+  } = useBookingCalendar({
+    date,
+    schedule,
+    onDateChange,
+    onTimeChange,
+    adminMode,
+    selectedTime: time,
+  });
+
+  const activeDate = selectedDate || date;
 
   return (
     <div
       className={cn(
         styles.wrap,
+        adminMode && styles.adminTheme,
         compactAboveTime && styles.wrapCompactAboveTime,
-        date && slots.length > 0 && styles.wrapWithSlots
+        activeDate && slots.length > 0 && styles.wrapWithSlots
       )}
     >
       <div className={styles.fieldGroup}>
@@ -87,6 +99,7 @@ export default function CBBookingSchedule({
                   const selectable = isDateSelectable(cell.dateStr);
                   const selected = selectedDate === cell.dateStr;
                   const isToday = cell.dateStr === toDateString(today);
+                  const isSelectedPast = selected && !selectable;
 
                   return (
                     <CBButton
@@ -97,7 +110,8 @@ export default function CBBookingSchedule({
                         styles.dayBtn,
                         selected && styles.daySelected,
                         isToday && styles.dayToday,
-                        !selectable && styles.dayDisabled
+                        !selectable && styles.dayDisabled,
+                        isSelectedPast && styles.daySelectedPast
                       )}
                       disabled={!selectable}
                       onClick={() => handleDateSelect(cell.dateStr)}
@@ -120,16 +134,23 @@ export default function CBBookingSchedule({
             Pick a time
             <span className={styles.requiredMark} aria-hidden="true">*</span>
           </legend>
-        {!date ? (
-          <p className={styles.hint}>Select a date first to see available times.</p>
+        {!activeDate ? (
+          <div className={cn(adminMode && styles.timePanel)}>
+            <p className={styles.hint}>Select a date first to see available times.</p>
+          </div>
         ) : slots.length === 0 ? (
-          <p className={styles.hint}>No times available for this date. Try another day.</p>
+          <div className={cn(adminMode && styles.timePanel)}>
+            <p className={styles.hint}>No times available for this date. Try another day.</p>
+          </div>
         ) : (
-          <>
-            {daySchedule && (
+          <div className={cn(adminMode && styles.timePanel)}>
+            {daySchedule && !daySchedule.closed && (
               <p className={styles.hoursHint}>
                 Open {formatTime12(daySchedule.open)} – {formatTime12(daySchedule.close)}
               </p>
+            )}
+            {adminMode && daySchedule?.closed && (
+              <p className={styles.hoursHint}>Shop closed — showing default hours for admin booking.</p>
             )}
             <div className={styles.slotsGrid}>
               {slots.map((slot) => (
@@ -144,10 +165,10 @@ export default function CBBookingSchedule({
                 </CBButton>
               ))}
             </div>
-          </>
+          </div>
         )}
         </fieldset>
-        {timeError && <p className={styles.error}>{timeError}</p>}
+        {timeError && activeDate && <p className={styles.error}>{timeError}</p>}
       </div>
     </div>
   );

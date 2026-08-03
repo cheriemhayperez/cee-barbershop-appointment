@@ -1,9 +1,11 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { SCHEDULE_STORAGE_KEY } from '@/constants/data/schedule.data';
 import { saveSchedule as saveScheduleDb } from '@/api/db/schedule.api';
 import { isSupabaseConfigured } from '@/lib/supabase';
 import { defaultSchedule } from '@/static/shared/scheduleDefaults';
 import { subscribeSchedule } from '@/utils/scheduleBus';
+
+const DEBOUNCE_MS = 450;
 
 function loadLocalSchedule() {
   try {
@@ -35,6 +37,11 @@ async function persistSchedule(schedule) {
 export function useBookingSchedule() {
   const [schedule, setSchedule] = useState(defaultSchedule);
   const [loaded, setLoaded] = useState(!isSupabaseConfigured);
+  const [saveStatus, setSaveStatus] = useState('idle');
+  const [saveError, setSaveError] = useState(null);
+
+  const debounceRef = useRef(null);
+  const savedTimeoutRef = useRef(null);
 
   useEffect(() => {
     if (!isSupabaseConfigured) {
@@ -43,8 +50,8 @@ export function useBookingSchedule() {
       return;
     }
 
-    const unsubscribe = subscribeSchedule((loaded) => {
-      setSchedule(loaded);
+    const unsubscribe = subscribeSchedule((loadedSchedule) => {
+      setSchedule(loadedSchedule);
       setLoaded(true);
     });
 
@@ -65,13 +72,59 @@ export function useBookingSchedule() {
     };
   }, []);
 
-  const updateSchedule = useCallback((updater) => {
-    setSchedule((prev) => {
-      const next = typeof updater === 'function' ? updater(prev) : { ...prev, ...updater };
-      persistSchedule(next);
-      return next;
-    });
+  useEffect(() => () => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    if (savedTimeoutRef.current) clearTimeout(savedTimeoutRef.current);
   }, []);
+
+  const markSaved = useCallback(() => {
+    setSaveStatus('saved');
+    if (savedTimeoutRef.current) clearTimeout(savedTimeoutRef.current);
+    savedTimeoutRef.current = setTimeout(() => setSaveStatus('idle'), 2000);
+  }, []);
+
+  const persistNow = useCallback(async (nextSchedule) => {
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
+      debounceRef.current = null;
+    }
+
+    setSaveStatus('saving');
+    setSaveError(null);
+
+    try {
+      await persistSchedule(nextSchedule);
+      markSaved();
+    } catch (err) {
+      setSaveStatus('error');
+      setSaveError(err?.message || 'Failed to save schedule.');
+      throw err;
+    }
+  }, [markSaved]);
+
+  const queuePersist = useCallback((nextSchedule) => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      debounceRef.current = null;
+      persistNow(nextSchedule).catch(() => {});
+    }, DEBOUNCE_MS);
+  }, [persistNow]);
+
+  const updateSchedule = useCallback((updater, { immediate = false } = {}) => {
+    let nextSchedule;
+
+    setSchedule((prev) => {
+      nextSchedule = typeof updater === 'function' ? updater(prev) : { ...prev, ...updater };
+      return nextSchedule;
+    });
+
+    if (immediate) {
+      persistNow(nextSchedule).catch(() => {});
+      return;
+    }
+
+    queuePersist(nextSchedule);
+  }, [persistNow, queuePersist]);
 
   const setWeeklyHours = useCallback((weeklyHours) => {
     updateSchedule((prev) => ({ ...prev, weeklyHours }));
@@ -83,7 +136,7 @@ export function useBookingSchedule() {
       disabledDates: prev.disabledDates.includes(dateStr)
         ? prev.disabledDates
         : [...prev.disabledDates, dateStr].sort(),
-    }));
+    }), { immediate: true });
   }, [updateSchedule]);
 
   const removeDisabledDate = useCallback((dateStr) => {
@@ -93,7 +146,7 @@ export function useBookingSchedule() {
       disabledSlots: Object.fromEntries(
         Object.entries(prev.disabledSlots).filter(([key]) => key !== dateStr)
       ),
-    }));
+    }), { immediate: true });
   }, [updateSchedule]);
 
   const toggleSlot = useCallback((dateStr, time) => {
@@ -111,12 +164,15 @@ export function useBookingSchedule() {
       }
 
       return { ...prev, disabledSlots };
-    });
+    }, { immediate: true });
   }, [updateSchedule]);
 
   return {
     schedule,
     loaded,
+    isSaving: saveStatus === 'saving',
+    saveStatus,
+    saveError,
     updateSchedule,
     setWeeklyHours,
     addDisabledDate,

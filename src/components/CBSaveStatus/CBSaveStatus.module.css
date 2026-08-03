@@ -1,0 +1,41 @@
+.saveStatus {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+  padding: 0.4375rem 0.875rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.saveStatusSaving {
+  background: rgba(var(--cb-gold-rgb), 0.14);
+  color: #8a7048;
+}
+
+.saveStatusSaved {
+  background: rgba(46, 125, 50, 0.1);
+  color: var(--cb-success);
+}
+
+.saveStatusError {
+  background: rgba(198, 40, 40, 0.08);
+  color: var(--cb-danger);
+  white-space: normal;
+  max-width: 16rem;
+}
+
+.saveStatusDot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--gold);
+  animation: saveStatusPulse 1s ease-in-out infinite;
+}
+
+@keyframes saveStatusPulse {
+  0%, 100% { opacity: 0.45; }
+  50% { opacity: 1; }
+}

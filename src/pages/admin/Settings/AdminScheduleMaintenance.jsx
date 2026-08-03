@@ -4,16 +4,26 @@ import {
   CBButton,
   CBCheckbox,
   CBCard,
+  CBDateCalendar,
+  CBEmptyState,
   CBInput,
+  CBLoader,
+  CBSaveStatus,
   CBSlotToggle,
   CBTable,
 } from '@/components';
+import { cn } from '@/utils/cn';
+import { formatShortDisplayDate, formatTableDate } from '@/utils/dateUtils';
 import { useAdminScheduleMaintenance } from '@/hooks/admin/settings';
 import scheduleStyles from '@/pages/admin/Settings/AdminScheduleMaintenance.module.css';
 
 export default function AdminScheduleMaintenance() {
   const {
     schedule,
+    loaded,
+    isSaving,
+    saveStatus,
+    saveError,
     blockDate,
     setBlockDate,
     slotDate,
@@ -25,7 +35,6 @@ export default function AdminScheduleMaintenance() {
     removeDisabledDate,
     toggleSlot,
     formatTime12,
-    toDateString,
   } = useAdminScheduleMaintenance();
 
   const weeklyHoursColumns = useMemo(
@@ -42,7 +51,7 @@ export default function AdminScheduleMaintenance() {
           <CBInput
             type="time"
             value={entry.open}
-            disabled={entry.closed}
+            disabled={entry.closed || isSaving}
             onChange={(e) => updateDay(entry.day, 'open', e.target.value)}
             className={scheduleStyles.tableField}
           />
@@ -55,7 +64,7 @@ export default function AdminScheduleMaintenance() {
           <CBInput
             type="time"
             value={entry.close}
-            disabled={entry.closed}
+            disabled={entry.closed || isSaving}
             onChange={(e) => updateDay(entry.day, 'close', e.target.value)}
             className={scheduleStyles.tableField}
           />
@@ -69,6 +78,7 @@ export default function AdminScheduleMaintenance() {
         render: (_, entry) => (
           <CBCheckbox
             checked={entry.closed}
+            disabled={isSaving}
             onChange={(e) => updateDay(entry.day, 'closed', e.target.checked)}
             aria-label={`Mark ${entry.label} as closed`}
             className={scheduleStyles.closedCheckbox}
@@ -76,96 +86,176 @@ export default function AdminScheduleMaintenance() {
         ),
       },
     ],
-    [updateDay]
+    [isSaving, updateDay]
   );
+
+  if (!loaded) {
+    return (
+      <div className={scheduleStyles.loadingWrap} aria-live="polite">
+        <CBLoader size="md" label="Loading schedule" />
+        <p className={scheduleStyles.loadingText}>Loading schedule…</p>
+      </div>
+    );
+  }
 
   return (
     <>
-      <p className={scheduleStyles.intro}>
-        Maintenance for customer booking — controls which dates and times appear on the book page.
-      </p>
+      <div className={scheduleStyles.introRow}>
+        <p className={scheduleStyles.intro}>
+          Maintenance for customer booking — controls which dates and times appear on the book page.
+        </p>
+        <CBSaveStatus status={saveStatus} error={saveError} />
+      </div>
 
-      <div className={scheduleStyles.grid}>
-        <CBCard title="Weekly business hours" className={scheduleStyles.fullWidth}>
-          <p className={scheduleStyles.help}>
-            Customers can only book on open days within these hours. Past dates are always disabled.
-          </p>
-          <div className={scheduleStyles.hoursTableWrap}>
-            <CBTable
-              columns={weeklyHoursColumns}
-              dataSource={schedule.weeklyHours}
-              rowKey="day"
-              pagination={false}
-              minHeight={false}
-            />
+      <div className={scheduleStyles.content} aria-busy={isSaving}>
+        {isSaving && (
+          <div className={scheduleStyles.pageOverlay} aria-live="polite">
+            <CBLoader size="sm" label="Saving schedule" />
+            <p className={scheduleStyles.overlayText}>Saving schedule…</p>
           </div>
-        </CBCard>
+        )}
 
-        <CBCard title="Block entire dates">
-          <p className={scheduleStyles.help}>Holidays, shop closures, or days off.</p>
-          <div className={scheduleStyles.row}>
-            <CBInput
-              label="Date to block"
-              type="date"
+        <div className={scheduleStyles.grid}>
+          <CBCard title="Weekly business hours" className={scheduleStyles.fullWidth}>
+            <p className={scheduleStyles.help}>
+              Customers can only book on open days within these hours. Past dates are always disabled.
+            </p>
+            <div className={scheduleStyles.hoursTableWrap}>
+              <CBTable
+                columns={weeklyHoursColumns}
+                dataSource={schedule.weeklyHours}
+                rowKey="day"
+                pagination={false}
+                minHeight={false}
+              />
+            </div>
+          </CBCard>
+
+          <CBCard title="Block entire dates">
+            <p className={scheduleStyles.help}>Holidays, shop closures, or days off.</p>
+            <CBDateCalendar
+              compact
               value={blockDate}
-              min={toDateString(new Date())}
-              onChange={(e) => setBlockDate(e.target.value)}
+              disabled={isSaving}
+              blockedDates={schedule.disabledDates}
+              isDateDisabled={(dateStr) => schedule.disabledDates.includes(dateStr)}
+              onChange={setBlockDate}
+              aria-label="Choose a date to block"
             />
-            <CBButton variant="secondary" size="small" type="button" onClick={handleBlockDate}>
-              Block date
-            </CBButton>
-          </div>
-          {schedule.disabledDates.length > 0 ? (
-            <ul className={scheduleStyles.tagList}>
-              {schedule.disabledDates.map((dateStr) => (
-                <li key={dateStr} className={scheduleStyles.tag}>
-                  {dateStr}
-                  <CBButton
-                    type="button"
-                    variant="inline"
-                    size="small"
-                    onClick={() => removeDisabledDate(dateStr)}
-                    aria-label={`Unblock ${dateStr}`}
-                  >
-                    ×
-                  </CBButton>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className={scheduleStyles.empty}>No blocked dates.</p>
-          )}
-        </CBCard>
+            <div className={scheduleStyles.calendarActions}>
+              {blockDate ? (
+                <div className={scheduleStyles.selectedBlock}>
+                  <div className={scheduleStyles.selectedRow}>
+                    <div className={scheduleStyles.selectedMeta}>
+                      <span className={scheduleStyles.selectedLabel}>Selected</span>
+                      <strong className={scheduleStyles.selectedValue}>
+                        {formatShortDisplayDate(blockDate)}
+                      </strong>
+                    </div>
+                  </div>
+                  <div className={scheduleStyles.selectedActions}>
+                    <CBButton
+                      variant="cancel"
+                      size="small"
+                      type="button"
+                      className={scheduleStyles.cancelDateBtn}
+                      disabled={isSaving}
+                      onClick={() => setBlockDate('')}
+                    >
+                      Cancel
+                    </CBButton>
+                    <CBButton
+                      variant="primary"
+                      size="small"
+                      type="button"
+                      className={scheduleStyles.blockDateBtn}
+                      loading={isSaving}
+                      disabled={isSaving}
+                      onClick={handleBlockDate}
+                    >
+                      Block date
+                    </CBButton>
+                  </div>
+                </div>
+              ) : (
+                <p className={scheduleStyles.selectedDateMuted}>Pick a date on the calendar to block it</p>
+              )}
+            </div>
+            {schedule.disabledDates.length > 0 ? (
+              <div className={scheduleStyles.blockedSection}>
+                <p className={scheduleStyles.blockedHeading}>Blocked dates</p>
+                <ul className={scheduleStyles.tagList}>
+                  {schedule.disabledDates.map((dateStr) => (
+                    <li key={dateStr} className={scheduleStyles.tag}>
+                      <span>{formatTableDate(dateStr)}</span>
+                      <CBButton
+                        type="button"
+                        variant="inline"
+                        size="small"
+                        className={scheduleStyles.tagRemove}
+                        disabled={isSaving}
+                        onClick={() => removeDisabledDate(dateStr)}
+                        aria-label={`Unblock ${formatTableDate(dateStr)}`}
+                      >
+                        ×
+                      </CBButton>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : (
+              <CBEmptyState className={scheduleStyles.blockedEmpty} message="No blocked dates." />
+            )}
+          </CBCard>
 
-        <CBCard title="Disable time slots">
-          <p className={scheduleStyles.help}>
-            Turn off specific times on a date (lunch break, fully booked, etc.).
-          </p>
-          <CBInput
-            label="Manage date"
-            type="date"
-            value={slotDate}
-            min={toDateString(new Date())}
-            onChange={(e) => setSlotDate(e.target.value)}
-          />
-          <div className={scheduleStyles.slotsGrid}>
-            {slotsForManageDate.map((time) => {
-              const enabled = !disabledForDate.includes(time);
-              return (
-                <CBSlotToggle
-                  key={time}
-                  label={formatTime12(time)}
-                  sublabel={enabled ? 'Available' : 'Disabled'}
-                  enabled={enabled}
-                  onClick={() => toggleSlot(slotDate, time)}
-                />
-              );
-            })}
-          </div>
-          {!slotsForManageDate.length && (
-            <p className={scheduleStyles.empty}>Shop is closed on this day.</p>
-          )}
-        </CBCard>
+          <CBCard title="Disable time slots">
+            <p className={scheduleStyles.help}>
+              Turn off specific times on a date (lunch break, fully booked, etc.).
+            </p>
+            <CBDateCalendar
+              compact
+              value={slotDate}
+              disabled={isSaving}
+              blockedDates={schedule.disabledDates}
+              onChange={setSlotDate}
+              aria-label="Choose a date to manage time slots"
+            />
+            <p className={scheduleStyles.selectedDate}>
+              Managing: <strong>{formatShortDisplayDate(slotDate)}</strong>
+            </p>
+            {slotsForManageDate.length > 0 ? (
+              <div className={scheduleStyles.slotsSection}>
+                <div className={scheduleStyles.slotsLegend}>
+                  <span className={scheduleStyles.legendItem}>
+                    <span className={cn(scheduleStyles.legendSwatch, scheduleStyles.legendAvailable)} />
+                    Available
+                  </span>
+                  <span className={scheduleStyles.legendItem}>
+                    <span className={cn(scheduleStyles.legendSwatch, scheduleStyles.legendDisabled)} />
+                    Disabled
+                  </span>
+                </div>
+                <div className={scheduleStyles.slotsGrid}>
+                  {slotsForManageDate.map((time) => {
+                    const enabled = !disabledForDate.includes(time);
+                    return (
+                      <CBSlotToggle
+                        key={time}
+                        label={formatTime12(time)}
+                        sublabel={enabled ? 'Available' : 'Disabled'}
+                        enabled={enabled}
+                        disabled={isSaving}
+                        onClick={() => toggleSlot(slotDate, time)}
+                      />
+                    );
+                  })}
+                </div>
+              </div>
+            ) : (
+              <p className={scheduleStyles.closedDay}>Shop is closed on this day.</p>
+            )}
+          </CBCard>
+        </div>
       </div>
     </>
   );

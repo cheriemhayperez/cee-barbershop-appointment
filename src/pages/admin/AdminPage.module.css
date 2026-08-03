@@ -60,25 +60,28 @@
 
 .settingsGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: minmax(0, 1fr);
   gap: 1rem;
+  width: 100%;
+  max-width: none;
 }
 
-.dl {
+.shopInfoCard {
+  width: 100%;
+}
+
+.shopFormFields {
   display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 0.375rem 1rem;
-  font-size: 0.9375rem;
-}
-
-.dl dt {
-  color: #888;
-  font-weight: 500;
-}
-
-.dl dd {
-  color: var(--text-dark);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.25rem 1rem;
   margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.shopFormFields > :global(.field),
+.shopFormFields > * {
+  min-width: 0;
 }
 
 .note {
@@ -98,12 +101,6 @@
 
 .editLink:hover {
   color: #8a7048;
-}
-
-.hoursEditNote {
-  margin: 1.25rem 0 0;
-  font-size: 0.8125rem;
-  line-height: 1.5;
 }
 
 .settingsLoading {
@@ -128,15 +125,6 @@
   background: rgba(248, 246, 242, 0.88);
 }
 
-.shopFormFields {
-  display: flex;
-  flex-direction: column;
-  gap: 0.125rem;
-  margin: 0;
-  padding: 0;
-  border: 0;
-}
-
 .formError {
   margin: 0 0 0.75rem;
   padding: 0.75rem 0.875rem;
@@ -157,6 +145,19 @@
   border-top: 1px solid var(--cb-admin-border);
 }
 
+.shopFormActions :global(.ant-btn) {
+  height: 2.5rem !important;
+  min-height: 2.5rem !important;
+  padding: 0 1.125rem !important;
+  border-radius: var(--cb-radius-sm) !important;
+  font-size: 0.875rem !important;
+  font-weight: 600 !important;
+  line-height: 1 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
 .shopFormActions :global(.ant-btn-primary) {
   background: var(--gold) !important;
   border-color: var(--gold) !important;
@@ -169,28 +170,12 @@
   color: #ffffff !important;
 }
 
-.saveStatus {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.375rem 0.75rem;
-  border-radius: 999px;
-  font-size: 0.75rem;
-  font-weight: 600;
-}
-
-.saveStatusSaving {
-  background: rgba(var(--cb-gold-rgb), 0.14);
-  color: #8a7048;
-}
-
-.saveStatusSaved {
-  background: rgba(46, 125, 50, 0.1);
-  color: var(--cb-success);
-}
-
-.saveStatusError {
-  background: rgba(198, 40, 40, 0.08);
-  color: var(--cb-danger);
+.shopFormActions :global(.ant-btn-primary:disabled) {
+  background: rgba(var(--cb-gold-rgb), 0.35) !important;
+  border-color: transparent !important;
+  color: #ffffff !important;
+  opacity: 1 !important;
+  cursor: not-allowed !important;
 }
 
 .emptyState {
@@ -226,11 +211,16 @@
 
   .settingsGrid {
     grid-template-columns: 1fr;
+    max-width: none;
   }
 }
 
 @media (max-width: 640px) {
   .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .shopFormFields {
     grid-template-columns: 1fr;
   }
 }

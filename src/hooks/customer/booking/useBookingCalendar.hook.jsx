@@ -2,20 +2,47 @@ import { useEffect, useMemo, useState } from 'react';
 
 import {
   formatMonthYear,
+  formatTime12,
+  getAdminSlotsForDate,
   getAvailableSlots,
   getCalendarWeeks,
+  getDaySchedule,
   isDateSelectable,
   toDateString,
 } from '@/utils/scheduleUtils';
 
-export function useBookingCalendar({ date, schedule, onDateChange, onTimeChange }) {
+export function useBookingCalendar({
+  date,
+  schedule,
+  onDateChange,
+  onTimeChange,
+  adminMode = false,
+  selectedTime = '',
+}) {
   const today = new Date();
-  const [viewMonth, setViewMonth] = useState(today.getMonth());
-  const [viewYear, setViewYear] = useState(today.getFullYear());
+  const [viewMonth, setViewMonth] = useState(() => {
+    if (date) {
+      const selected = new Date(`${date}T12:00:00`);
+      return selected.getMonth();
+    }
+    return today.getMonth();
+  });
+  const [viewYear, setViewYear] = useState(() => {
+    if (date) {
+      const selected = new Date(`${date}T12:00:00`);
+      return selected.getFullYear();
+    }
+    return today.getFullYear();
+  });
   const [selectedDate, setSelectedDate] = useState(date);
 
   useEffect(() => {
-    setSelectedDate(date);
+    setSelectedDate(date || '');
+    if (date) {
+      const selected = new Date(`${date}T12:00:00`);
+      setViewMonth(selected.getMonth());
+      setViewYear(selected.getFullYear());
+    }
   }, [date]);
 
   const weeks = useMemo(
@@ -23,13 +50,27 @@ export function useBookingCalendar({ date, schedule, onDateChange, onTimeChange 
     [viewYear, viewMonth]
   );
 
-  const slots = useMemo(
-    () => (selectedDate ? getAvailableSlots(selectedDate, schedule) : []),
-    [selectedDate, schedule]
-  );
+  const slots = useMemo(() => {
+    if (!selectedDate) return [];
+
+    const available = getAvailableSlots(selectedDate, schedule);
+    if (available.length > 0) return available;
+
+    if (!adminMode || !selectedTime) return [];
+
+    const adminSlots = getAdminSlotsForDate(selectedDate, schedule);
+    if (adminSlots.some((slot) => slot.value === selectedTime)) {
+      return adminSlots;
+    }
+
+    return [
+      { value: selectedTime, label: formatTime12(selectedTime) },
+      ...adminSlots,
+    ];
+  }, [adminMode, selectedDate, selectedTime, schedule]);
 
   const daySchedule = selectedDate
-    ? schedule.weeklyHours.find((d) => d.day === new Date(`${selectedDate}T12:00:00`).getDay())
+    ? getDaySchedule(selectedDate, schedule)
     : null;
 
   const goMonth = (delta) => {
@@ -40,12 +81,14 @@ export function useBookingCalendar({ date, schedule, onDateChange, onTimeChange 
 
   const handleDateSelect = (dateStr) => {
     if (!isDateSelectable(dateStr, schedule)) return;
+
     setSelectedDate(dateStr);
     onDateChange(dateStr);
+    onTimeChange?.('');
   };
 
-  const canGoPrev =
-    viewYear > today.getFullYear()
+  const canGoPrev = adminMode
+    || viewYear > today.getFullYear()
     || (viewYear === today.getFullYear() && viewMonth > today.getMonth());
 
   return {
