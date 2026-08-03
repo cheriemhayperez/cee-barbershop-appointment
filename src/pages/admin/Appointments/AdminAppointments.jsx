@@ -1,13 +1,13 @@
 import { AnimatePresence } from 'framer-motion';
-import { AdminPageHeader, RowActions, CBInput, CBModal, CBModalForm, CBSelect, CBTable, CBBadge, CBConfirmModal, CBLoader, CBBookingSchedule } from '@/components';
+import { AdminPageHeader, RowActions, CBInput, CBModal, CBModalForm, CBSelect, CBTable, CBBadge, CBConfirmModal, CBBusyOverlay, CBBookingSchedule } from '@/components';
 import FadeIn from '@/components/FadeIn/FadeIn';
 import PageTransition from '@/components/PageTransition/PageTransition';
-import { APPOINTMENT_STATUS_BADGE_VARIANTS } from '@/constants/data/appointments.data';
-import { useAdminAppointments } from '@/hooks/admin/appointments';
+import { APPOINTMENT_STATUS_BADGE_VARIANTS } from '@/constants';
+import { useAdminAppointments } from '@/hooks/admin';
 import { formatTableDate } from '@/utils/dateUtils';
 import { formatTime12 } from '@/utils/scheduleUtils';
 import styles from '@/pages/admin/Appointments/AdminAppointments.module.css';
-import adminStyles from '@/pages/admin/AdminPage.module.css';
+import adminStyles from '@/pages/admin/shared/AdminPage.module.css';
 
 export default function AdminAppointments() {
   const {
@@ -41,11 +41,7 @@ export default function AdminAppointments() {
 
       <FadeIn delay={0.1}>
         <div className={adminStyles.content} aria-busy={deleteLoading}>
-          {deleteLoading && (
-            <div className={adminStyles.pageOverlay} aria-live="polite">
-              <CBLoader label="Deleting" />
-            </div>
-          )}
+          {deleteLoading && <CBBusyOverlay label="Deleting" />}
           <CBTable
           columns={[
             { title: 'Customer', dataIndex: 'name', key: 'name' },

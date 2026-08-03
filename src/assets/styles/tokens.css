@@ -38,7 +38,7 @@
   --cb-admin-sidebar-width: 260px;
   --cb-admin-sidebar-collapsed-width: 72px;
   --cb-table-min-height: 570px;
-  /* Keep in sync with src/constants/admin/breakpoints.js */
+  /* Keep in sync with ADMIN_MOBILE_BREAKPOINT in src/constants/index.js */
   --cb-admin-mobile-breakpoint: 1024px;
   --cb-radius-sm: 8px;
   --cb-radius-md: 12px;

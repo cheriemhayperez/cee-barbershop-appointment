@@ -1,5 +1,5 @@
 import { supabase } from '@/lib/supabase';
-import { defaultSchedule } from '@/static/shared/scheduleDefaults';
+import { defaultSchedule } from '@/constants';
 
 export async function fetchSchedule() {
   const { data, error } = await supabase

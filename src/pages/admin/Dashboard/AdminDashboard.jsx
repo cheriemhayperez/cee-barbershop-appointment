@@ -4,8 +4,8 @@ import { Calendar, Clipboard, Profile2User, Scissor, TickCircle } from 'iconsax-
 import { AdminPageHeader, CBAppointmentCalendar, CBBadge, CBBarChart, CBCard, CBEmptyState, CBModal, CBTable } from '@/components';
 import FadeIn from '@/components/FadeIn/FadeIn';
 import PageTransition from '@/components/PageTransition/PageTransition';
-import { APPOINTMENT_STATUS_BADGE_VARIANTS } from '@/constants/data/appointments.data';
-import { useAdminDashboard } from '@/hooks/admin/dashboard';
+import { APPOINTMENT_STATUS_BADGE_VARIANTS } from '@/constants';
+import { useAdminDashboard } from '@/hooks/admin';
 import { cn } from '@/utils/cn';
 import { formatShortDisplayDate, formatTableDate } from '@/utils/dateUtils';
 import { formatTime12 } from '@/utils/scheduleUtils';

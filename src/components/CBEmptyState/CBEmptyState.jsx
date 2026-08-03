@@ -1,6 +1,6 @@
 import { DocumentText } from 'iconsax-react';
 
-import { ADMIN_EMPTY_MESSAGE } from '@/constants/admin/messages';
+import { ADMIN_EMPTY_MESSAGE } from '@/constants';
 import { cn } from '@/utils/cn';
 import styles from '@/components/CBEmptyState/CBEmptyState.module.css';
 

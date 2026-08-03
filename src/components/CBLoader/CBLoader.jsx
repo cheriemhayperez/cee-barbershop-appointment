@@ -47,6 +47,21 @@ export function CBLoaderBackdrop({ label = 'Loading', size = 'md' }) {
   );
 }
 
+export function CBBusyOverlay({
+  label = 'Loading',
+  size = 'md',
+  className,
+  loaderClassName,
+  children,
+}) {
+  return (
+    <div className={cn(styles.pageOverlay, className)} aria-live="polite">
+      <CBLoader size={size} label={label} className={loaderClassName} />
+      {children}
+    </div>
+  );
+}
+
 export function CBLoaderWrapper({ loading, children, label = 'Loading', fullPage = false }) {
   if (!loading) return children;
 

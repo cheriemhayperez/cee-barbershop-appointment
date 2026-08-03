@@ -7,6 +7,7 @@ import {
   CBDateCalendar,
   CBEmptyState,
   CBInput,
+  CBBusyOverlay,
   CBLoader,
   CBSaveStatus,
   CBSlotToggle,
@@ -14,7 +15,7 @@ import {
 } from '@/components';
 import { cn } from '@/utils/cn';
 import { formatShortDisplayDate, formatTableDate } from '@/utils/dateUtils';
-import { useAdminScheduleMaintenance } from '@/hooks/admin/settings';
+import { useAdminScheduleMaintenance } from '@/hooks/admin';
 import scheduleStyles from '@/pages/admin/Settings/AdminScheduleMaintenance.module.css';
 
 export default function AdminScheduleMaintenance() {
@@ -109,10 +110,9 @@ export default function AdminScheduleMaintenance() {
 
       <div className={scheduleStyles.content} aria-busy={isSaving}>
         {isSaving && (
-          <div className={scheduleStyles.pageOverlay} aria-live="polite">
-            <CBLoader size="sm" label="Saving schedule" />
+          <CBBusyOverlay size="sm" label="Saving schedule">
             <p className={scheduleStyles.overlayText}>Saving schedule…</p>
-          </div>
+          </CBBusyOverlay>
         )}
 
         <div className={scheduleStyles.grid}>

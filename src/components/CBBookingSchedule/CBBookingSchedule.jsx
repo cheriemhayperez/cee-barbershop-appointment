@@ -1,10 +1,9 @@
 import { cn } from '@/utils/cn';
 import CBButton from '@/components/CBButton/CBButton';
-import { useBookingCalendar, useBookingSchedule } from '@/hooks/customer/booking';
+import { useBookingCalendar, useBookingSchedule } from '@/hooks/customer';
+import { CALENDAR_WEEKDAYS } from '@/hooks/shared/useCalendarMonth.hook';
 import { formatTime12 } from '@/utils/scheduleUtils';
 import styles from '@/components/CBBookingSchedule/CBBookingSchedule.module.css';
-
-const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
 export default function CBBookingSchedule({
   date,
@@ -83,7 +82,7 @@ export default function CBBookingSchedule({
           </div>
 
           <div className={styles.weekdayRow}>
-            {WEEKDAYS.map((day) => (
+            {CALENDAR_WEEKDAYS.map((day) => (
               <span key={day} className={styles.weekday}>{day}</span>
             ))}
           </div>

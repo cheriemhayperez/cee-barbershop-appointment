@@ -1,23 +1,25 @@
-import { cn } from '@/utils/cn';
-import { useMemo, useState } from 'react';
-import CBButton from '@/components/CBButton/CBButton';
-import {
-  formatMonthYear,
-  getCalendarWeeks,
-  toDateString,
-} from '@/utils/scheduleUtils';
-import styles from '@/components/CBAppointmentCalendar/CBAppointmentCalendar.module.css';
+import { useMemo } from 'react';
 
-const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+import CBButton from '@/components/CBButton/CBButton';
+import { CALENDAR_WEEKDAYS, useCalendarMonth } from '@/hooks/shared/useCalendarMonth.hook';
+import { cn } from '@/utils/cn';
+import styles from '@/components/CBAppointmentCalendar/CBAppointmentCalendar.module.css';
 
 export default function CBAppointmentCalendar({
   appointments,
   selectedDate,
   onSelectDate,
 }) {
-  const today = new Date();
-  const [viewMonth, setViewMonth] = useState(today.getMonth());
-  const [viewYear, setViewYear] = useState(today.getFullYear());
+  const {
+    todayStr,
+    weeks,
+    monthLabel,
+    goMonth,
+  } = useCalendarMonth({
+    selectedDate,
+    allowPast: true,
+    syncSelected: false,
+  });
 
   const countsByDate = useMemo(() => {
     const map = {};
@@ -26,17 +28,6 @@ export default function CBAppointmentCalendar({
     });
     return map;
   }, [appointments]);
-
-  const weeks = useMemo(
-    () => getCalendarWeeks(viewYear, viewMonth),
-    [viewYear, viewMonth]
-  );
-
-  const goMonth = (delta) => {
-    const next = new Date(viewYear, viewMonth + delta, 1);
-    setViewMonth(next.getMonth());
-    setViewYear(next.getFullYear());
-  };
 
   return (
     <section className={styles.calendar} aria-label="Appointments calendar">
@@ -52,7 +43,7 @@ export default function CBAppointmentCalendar({
           >
             ‹
           </CBButton>
-          <span className={styles.monthLabel}>{formatMonthYear(viewYear, viewMonth)}</span>
+          <span className={styles.monthLabel}>{monthLabel}</span>
           <CBButton
             type="button"
             variant="secondary"
@@ -67,7 +58,7 @@ export default function CBAppointmentCalendar({
       </div>
 
       <div className={styles.weekdayRow}>
-        {WEEKDAYS.map((day) => (
+        {CALENDAR_WEEKDAYS.map((day) => (
           <span key={day} className={styles.weekday}>{day}</span>
         ))}
       </div>
@@ -80,7 +71,7 @@ export default function CBAppointmentCalendar({
 
           const count = countsByDate[cell.dateStr] || 0;
           const isSelected = selectedDate === cell.dateStr;
-          const isToday = cell.dateStr === toDateString(today);
+          const isToday = cell.dateStr === todayStr;
 
           return (
             <CBButton

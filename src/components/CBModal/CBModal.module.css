@@ -127,19 +127,6 @@
   font-weight: 600 !important;
 }
 
-.footer :global(.ant-btn-primary:not(.ant-btn-dangerous)) {
-  background: var(--gold) !important;
-  color: #ffffff !important;
-  border: 1px solid var(--gold) !important;
-  box-shadow: none !important;
-}
-
-.footer :global(.ant-btn-primary:not(.ant-btn-dangerous):hover:not(:disabled)) {
-  background: var(--gold-hover) !important;
-  color: #ffffff !important;
-  border-color: var(--gold-hover) !important;
-}
-
 .footer :global(.ant-btn-dangerous) {
   background: var(--cb-danger) !important;
   border-color: var(--cb-danger) !important;

@@ -39,20 +39,27 @@ export function isDateSelectable(dateStr, schedule) {
   return Boolean(daySchedule && !daySchedule.closed);
 }
 
-export function getAllSlotsForDate(dateStr, schedule) {
-  const daySchedule = getDaySchedule(dateStr, schedule);
-  if (!daySchedule || daySchedule.closed) return [];
-
-  const interval = schedule.slotIntervalMinutes || 30;
-  const start = parseTimeToMinutes(daySchedule.open);
-  const end = parseTimeToMinutes(daySchedule.close);
+export function buildSlotsBetween(open, close, intervalMinutes = 30) {
+  const start = parseTimeToMinutes(open);
+  const end = parseTimeToMinutes(close);
   const slots = [];
 
-  for (let minutes = start; minutes < end; minutes += interval) {
+  for (let minutes = start; minutes < end; minutes += intervalMinutes) {
     slots.push(formatTime24(minutes));
   }
 
   return slots;
+}
+
+export function getAllSlotsForDate(dateStr, schedule) {
+  const daySchedule = getDaySchedule(dateStr, schedule);
+  if (!daySchedule || daySchedule.closed) return [];
+
+  return buildSlotsBetween(
+    daySchedule.open,
+    daySchedule.close,
+    schedule.slotIntervalMinutes || 30
+  );
 }
 
 export function getAvailableSlots(dateStr, schedule) {
@@ -81,16 +88,7 @@ function getFallbackDayHours(schedule) {
 }
 
 function getSlotsForHours(schedule, { open, close }) {
-  const interval = schedule.slotIntervalMinutes || 30;
-  const start = parseTimeToMinutes(open);
-  const end = parseTimeToMinutes(close);
-  const slots = [];
-
-  for (let minutes = start; minutes < end; minutes += interval) {
-    slots.push(formatTime24(minutes));
-  }
-
-  return slots;
+  return buildSlotsBetween(open, close, schedule.slotIntervalMinutes || 30);
 }
 
 export function getAdminSlotsForDate(dateStr, schedule) {

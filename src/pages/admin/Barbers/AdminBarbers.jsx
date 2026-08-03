@@ -1,8 +1,8 @@
 import { AnimatePresence } from 'framer-motion';
-import { AdminPageHeader, RowActions, CBBadge, CBInput, CBModal, CBModalForm, CBSelect, CBTable, CBConfirmModal, CBImageUpload, CBLoader } from '@/components';
+import { AdminPageHeader, RowActions, CBBadge, CBInput, CBModal, CBModalForm, CBSelect, CBTable, CBConfirmModal, CBImageUpload, CBBusyOverlay } from '@/components';
 import PageTransition from '@/components/PageTransition/PageTransition';
-import { useAdminBarbers } from '@/hooks/admin/barbers';
-import styles from '@/pages/admin/AdminPage.module.css';
+import { useAdminBarbers } from '@/hooks/admin';
+import styles from '@/pages/admin/shared/AdminPage.module.css';
 
 export default function AdminBarbers() {
   const {
@@ -33,11 +33,7 @@ export default function AdminBarbers() {
       <AdminPageHeader title="Barbers" onAdd={openAdd} addLabel="Add Barber" />
 
       <div className={styles.content} aria-busy={deleteLoading}>
-        {deleteLoading && (
-          <div className={styles.pageOverlay} aria-live="polite">
-            <CBLoader label="Deleting" />
-          </div>
-        )}
+        {deleteLoading && <CBBusyOverlay label="Deleting" />}
         <CBTable
           columns={[
             {

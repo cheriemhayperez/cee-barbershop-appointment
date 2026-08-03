@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 
 import AppRoutes from '@/routes/index';
 import ErrorBoundary from '@/components/ErrorBoundary/ErrorBoundary';
-import { appName } from '@/constants/app.config';
+import { appName } from '@/constants';
 
 export default function App() {
   useEffect(() => {

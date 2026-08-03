@@ -27,7 +27,7 @@ export function mapBarberToDb(barber) {
   };
 }
 
-import { DEFAULT_SERVICE_CATEGORY, getCategoryIcon } from '@/static/customer/serviceCatalog';
+import { DEFAULT_SERVICE_CATEGORY, getCategoryIcon } from '@/constants';
 
 export function mapServiceFromDb(row) {
   const category = row.category ?? DEFAULT_SERVICE_CATEGORY;

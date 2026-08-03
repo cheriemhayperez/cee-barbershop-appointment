@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { HambergerMenu, CloseCircle } from 'iconsax-react';
 import CBLogoMark from '@/components/CBLogoMark/CBLogoMark';
-import { useCustomerHeader, useVisualViewportHeaderFix } from '@/hooks/customer/layout';
+import { useCustomerHeader, useVisualViewportHeaderFix } from '@/hooks/customer';
 import styles from '@/layouts/customer/Header.module.css';
 
 const customerNav = [

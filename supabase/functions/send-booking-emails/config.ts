@@ -1,4 +1,4 @@
-import shop from "../../../src/static/shop.json" with { type: "json" };
+import shop from "../../../src/static/defaultShop.json" with { type: "json" };
 
 export const SHOP = {
   name: shop.name,

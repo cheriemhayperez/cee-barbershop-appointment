@@ -3,7 +3,7 @@ import { Outlet, Link } from 'react-router-dom';
 import { HambergerMenu, ExportSquare } from 'iconsax-react';
 import { IconUser } from '@/layouts/admin/adminNavIcons';
 import AdminSidebar from '@/layouts/admin/AdminSidebar';
-import { useAdminSidebar } from '@/hooks/admin/layout';
+import { useAdminSidebar } from '@/hooks/admin';
 import { CBLoader } from '@/components';
 import { cn } from '@/utils/cn';
 import styles from '@/layouts/admin/AdminLayout.module.css';

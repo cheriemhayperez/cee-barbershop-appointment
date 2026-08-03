@@ -3,7 +3,7 @@ import { Outlet } from 'react-router-dom';
 import Header from '@/layouts/customer/Header';
 import Footer from '@/layouts/customer/Footer';
 import { CBLoader } from '@/components';
-import { useScrollToTopOnNavigate } from '@/hooks/customer/layout';
+import { useScrollToTopOnNavigate } from '@/hooks/customer';
 import styles from '@/layouts/customer/CustomerLayout.module.css';
 
 function CustomerRouteFallback() {

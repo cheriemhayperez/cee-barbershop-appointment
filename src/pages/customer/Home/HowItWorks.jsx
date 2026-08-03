@@ -1,5 +1,5 @@
 import FadeIn from '@/components/FadeIn/FadeIn';
-import sectionStyles from '@/pages/customer/Home/SectionLayout.module.css';
+import sectionStyles from '@/pages/customer/shared/SectionLayout.module.css';
 import styles from '@/pages/customer/Home/HowItWorks.module.css';
 
 const steps = [

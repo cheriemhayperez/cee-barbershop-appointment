@@ -17,6 +17,11 @@ const VARIANT_MAP = {
 };
 
 const VARIANT_CLASS = {
+  primary: cn(
+    '!bg-gold !border-gold !text-white',
+    'hover:!bg-gold-hover hover:!border-gold-hover hover:!text-white',
+    'disabled:!bg-[rgba(196,161,114,0.35)] disabled:!border-transparent disabled:!text-white disabled:!opacity-100'
+  ),
   outline: 'border-gold text-gold bg-transparent hover:!border-gold hover:!text-gold',
   danger: '!bg-red-700 hover:!bg-red-800 border-red-700',
   success: '!bg-green-700 hover:!bg-green-800 border-green-700',

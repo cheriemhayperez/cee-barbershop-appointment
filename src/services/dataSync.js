@@ -1,5 +1,5 @@
 import { isSupabaseConfigured } from '@/lib/supabase';
-import { APPOINTMENT_STATUS } from '@/constants/data/appointments.data';
+import { APPOINTMENT_STATUS } from '@/constants';
 import { addCustomer, updateCustomer } from '@/reducers/customers/customers.slice';
 import {
   insertAppointment,

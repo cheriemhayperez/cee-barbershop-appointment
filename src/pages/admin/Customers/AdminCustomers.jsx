@@ -1,9 +1,9 @@
 import { AnimatePresence } from 'framer-motion';
-import { AdminPageHeader, RowActions, CBInput, CBModal, CBModalForm, CBTable, CBConfirmModal, CBLoader } from '@/components';
+import { AdminPageHeader, RowActions, CBInput, CBModal, CBModalForm, CBTable, CBConfirmModal, CBBusyOverlay } from '@/components';
 import PageTransition from '@/components/PageTransition/PageTransition';
-import { useAdminCustomers } from '@/hooks/admin/customers';
+import { useAdminCustomers } from '@/hooks/admin';
 import { formatTableDate } from '@/utils/dateUtils';
-import styles from '@/pages/admin/AdminPage.module.css';
+import styles from '@/pages/admin/shared/AdminPage.module.css';
 
 export default function AdminCustomers() {
   const {
@@ -31,11 +31,7 @@ export default function AdminCustomers() {
     <PageTransition className={styles.page}>
       <AdminPageHeader title="Customers" onAdd={openAdd} addLabel="Add Customer" />
       <div className={styles.content} aria-busy={deleteLoading}>
-        {deleteLoading && (
-          <div className={styles.pageOverlay} aria-live="polite">
-            <CBLoader label="Deleting" />
-          </div>
-        )}
+        {deleteLoading && <CBBusyOverlay label="Deleting" />}
         <CBTable
         columns={[
           { title: 'Name', dataIndex: 'name', key: 'name' },

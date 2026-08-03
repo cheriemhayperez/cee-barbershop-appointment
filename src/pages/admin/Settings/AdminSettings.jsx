@@ -1,6 +1,6 @@
-import { CBCard, CBButton, CBInput, CBLoader, CBSaveStatus } from '@/components';
-import { useAdminShopInfo } from '@/hooks/admin/settings';
-import styles from '@/pages/admin/AdminPage.module.css';
+import { CBCard, CBButton, CBInput, CBLoader, CBBusyOverlay, CBSaveStatus } from '@/components';
+import { useAdminShopInfo } from '@/hooks/admin';
+import styles from '@/pages/admin/shared/AdminPage.module.css';
 
 export default function AdminSettings() {
   const {
@@ -30,9 +30,11 @@ export default function AdminSettings() {
         <p className={styles.note}>Shown on the customer site footer and contact page.</p>
         <form className={styles.shopForm} onSubmit={handleSubmit} noValidate aria-busy={isSaving}>
           {isSaving && (
-            <div className={styles.shopFormOverlay} aria-live="polite">
-              <CBLoader size="sm" label="Saving shop info" />
-            </div>
+            <CBBusyOverlay
+              size="sm"
+              label="Saving shop info"
+              className={styles.shopFormOverlay}
+            />
           )}
 
           {(syncError || saveError) && (

@@ -1,7 +1,7 @@
 import { Table } from 'antd';
 
 import CBEmptyState from '@/components/CBEmptyState/CBEmptyState';
-import { ADMIN_EMPTY_MESSAGE } from '@/constants/admin/messages';
+import { ADMIN_EMPTY_MESSAGE } from '@/constants';
 import { cn } from '@/utils/cn';
 import styles from '@/components/CBTable/CBTable.module.css';
 

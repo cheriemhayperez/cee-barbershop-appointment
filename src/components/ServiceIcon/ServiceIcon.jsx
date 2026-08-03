@@ -8,7 +8,7 @@ import {
   IconScissors,
 } from '@tabler/icons-react';
 
-import { DEFAULT_SERVICE_ICON } from '@/static/customer/serviceCatalog';
+import { DEFAULT_SERVICE_ICON } from '@/constants';
 import { ShavingBrushIcon } from '@/components/ServiceIcon/ShavingBrushIcon';
 
 const TABLER_ICONS = {

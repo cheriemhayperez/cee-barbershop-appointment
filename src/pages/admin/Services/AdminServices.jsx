@@ -1,12 +1,12 @@
 import { AnimatePresence } from 'framer-motion';
-import { AdminPageHeader, RowActions, CBBadge, CBInput, CBModal, CBModalForm, CBSelect, CBTable, CBConfirmModal, CBLoader } from '@/components';
+import { AdminPageHeader, RowActions, CBBadge, CBInput, CBModal, CBModalForm, CBSelect, CBTable, CBConfirmModal, CBBusyOverlay } from '@/components';
 import PageTransition from '@/components/PageTransition/PageTransition';
-import { useAdminServices } from '@/hooks/admin/services';
+import { useAdminServices } from '@/hooks/admin';
 import {
   getCategoryLabel,
   SERVICE_CATEGORIES,
-} from '@/static/customer/serviceCatalog';
-import styles from '@/pages/admin/AdminPage.module.css';
+} from '@/constants';
+import styles from '@/pages/admin/shared/AdminPage.module.css';
 
 export default function AdminServices() {
   const {
@@ -34,11 +34,7 @@ export default function AdminServices() {
     <PageTransition className={styles.page}>
       <AdminPageHeader title="Services" onAdd={openAdd} addLabel="Add Service" />
       <div className={styles.content} aria-busy={deleteLoading}>
-        {deleteLoading && (
-          <div className={styles.pageOverlay} aria-live="polite">
-            <CBLoader label="Deleting" />
-          </div>
-        )}
+        {deleteLoading && <CBBusyOverlay label="Deleting" />}
         <CBTable
         columns={[
           { title: 'Service', dataIndex: 'name', key: 'name' },

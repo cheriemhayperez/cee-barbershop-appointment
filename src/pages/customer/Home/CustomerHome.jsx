@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import FadeIn from '@/components/FadeIn/FadeIn';
 import PageTransition from '@/components/PageTransition/PageTransition';
-import { useCustomerHome } from '@/hooks/customer/home';
+import { useCustomerHome } from '@/hooks/customer';
 import { images } from '@/static/shared/images';
 import { testimonials } from '@/static/customer/homeContent';
 import HowItWorks from '@/pages/customer/Home/HowItWorks';

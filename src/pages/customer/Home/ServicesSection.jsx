@@ -2,8 +2,8 @@ import { motion } from 'framer-motion';
 import FadeIn from '@/components/FadeIn/FadeIn';
 import ServiceIcon from '@/components/ServiceIcon/ServiceIcon';
 import { homeServices, homeServicesIntro } from '@/static/customer/homeContent';
-import { useShopInfo } from '@/hooks/shop';
-import sectionStyles from '@/pages/customer/Home/SectionLayout.module.css';
+import { useShopInfo } from '@/hooks/shared';
+import sectionStyles from '@/pages/customer/shared/SectionLayout.module.css';
 import styles from '@/pages/customer/Home/ServicesSection.module.css';
 
 export default function ServicesSection() {

@@ -1,5 +1,5 @@
 import { supabase } from '@/lib/supabase';
-import defaultShop from '@/static/shop.json';
+import defaultShop from '@/static/defaultShop.json';
 import { normalizeShopConfig } from '@/utils/shopUtils';
 
 export async function fetchShop() {

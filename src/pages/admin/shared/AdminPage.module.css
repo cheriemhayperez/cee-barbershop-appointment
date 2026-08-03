@@ -1,0 +1,166 @@
+.page {
+  width: 100%;
+  padding-top: 1.25rem;
+}
+
+.content {
+  position: relative;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.barberCard h3 {
+  margin-bottom: 0.25rem;
+  font-size: 1rem;
+}
+
+.avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 0.75rem;
+}
+
+.tableAvatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+
+.meta {
+  color: #888;
+  font-size: 0.8125rem;
+  margin-bottom: 0.25rem;
+}
+
+.desc {
+  color: #666;
+  font-size: 0.875rem;
+  margin-bottom: 0.75rem;
+}
+
+.settingsGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1rem;
+  width: 100%;
+  max-width: none;
+}
+
+.shopInfoCard {
+  width: 100%;
+}
+
+.shopFormFields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.25rem 1rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.shopFormFields > :global(.field),
+.shopFormFields > * {
+  min-width: 0;
+}
+
+.note {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 0.8125rem;
+  color: #666;
+  line-height: 1.5;
+}
+
+.editLink {
+  color: var(--gold);
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.editLink:hover {
+  color: #8a7048;
+}
+
+.settingsLoading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 16rem;
+}
+
+.shopForm {
+  position: relative;
+}
+
+.shopFormOverlay {
+  z-index: 1;
+  border-radius: 12px;
+}
+
+.formError {
+  margin: 0 0 0.75rem;
+  padding: 0.75rem 0.875rem;
+  border-radius: var(--cb-radius-sm);
+  background: rgba(198, 40, 40, 0.08);
+  color: var(--cb-danger);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+.shopFormActions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--cb-admin-border);
+}
+
+.shopFormActions :global(.ant-btn) {
+  height: 2.5rem !important;
+  min-height: 2.5rem !important;
+  padding: 0 1.125rem !important;
+  border-radius: var(--cb-radius-sm) !important;
+  font-size: 0.875rem !important;
+  font-weight: 600 !important;
+  line-height: 1 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+@media (max-width: 1024px) {
+  .page {
+    padding-top: 1rem;
+  }
+
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  }
+
+  .settingsGrid {
+    grid-template-columns: 1fr;
+    max-width: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .shopFormFields {
+    grid-template-columns: 1fr;
+  }
+}

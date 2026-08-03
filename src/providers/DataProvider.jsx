@@ -10,8 +10,8 @@ import { setCustomers } from '@/reducers/customers/customers.slice';
 import { setServices } from '@/reducers/services/services.slice';
 import { setLoadedSchedule } from '@/utils/scheduleBus';
 import { setLoadedShop } from '@/utils/shopBus';
-import { defaultSchedule } from '@/static/shared/scheduleDefaults';
-import defaultShop from '@/static/shop.json';
+import { defaultSchedule } from '@/constants';
+import defaultShop from '@/static/defaultShop.json';
 import { normalizeShopConfig } from '@/utils/shopUtils';
 
 function isMissingTablesError(err) {
